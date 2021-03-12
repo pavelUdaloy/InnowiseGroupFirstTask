@@ -1,0 +1,29 @@
+GET http://localhost:8080/SimpleWeb_war_exploded/main
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/main/
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/test/
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/test/
+Content-Type: multipart/form-data
+
+{
+
+}
+
+###
+
