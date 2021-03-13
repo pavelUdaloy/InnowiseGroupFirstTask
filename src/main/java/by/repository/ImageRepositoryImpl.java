@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageRepositoryImpl implements ImageRepository {
-    private static final String ADD_TO_IMAGES = "INSERT INTO simple.public.images VALUES (DEFAULT, ?, ?, ?) ";
+    private static final String ADD_TO_IMAGES = "INSERT INTO simple.public.images VALUES (DEFAULT, ?, ?, ?)";
     private static final String DELETE_FROM_IMAGES = "DELETE FROM simple.public.images WHERE (chatid=? AND userid=?)";
     private static final String SELECT_ALL_IMAGES = "SELECT * FROM simple.public.images";
+//    private static final String SELECT_ALL_IMAGES = "SELECT * FROM dblink('hostaddr=xxx.xxx.xxx.xxx dbname=mydb user=postgres',\n" +
+//        "            'select a,b from tableA')";
     private static final String SELECT_IMAGE_BY_IMAGES_ID = "SELECT * FROM simple.public.images WHERE chatid=?";
     private static final String SELECT_IMAGES_BY_CAR_AD_ID = "SELECT * FROM simple.public.images WHERE userid=?";
     private static final String DELETE_ALL_IMAGES = "DELETE FROM simple.public.images";
@@ -30,10 +32,11 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     public static void main(String[] args) {
-//        ImageDAORequest image = new ImageDAORequest();
-//        image.setOwnerId(1);
-//        image.setName("2010-120-120-10-101-10");
-//        image.setFileFormat("png");
+        ImageDAORequest image = new ImageDAORequest();
+        image.setOwnerId(1);
+        image.setName("2010-120-120-10-101-10");
+        image.setFileFormat("png");
+        System.out.println(new ImageRepositoryImpl().add(image));
         System.out.println(new ImageRepositoryImpl().getAll());
     }
 
