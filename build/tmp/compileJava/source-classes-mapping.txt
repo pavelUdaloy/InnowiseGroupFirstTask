@@ -1,28 +1,65 @@
-by/entity/CarAd.java
- by.entity.CarAd
-by/entity/Image.java
- by.entity.Image
-by/filter/MainFilter.java
- by.filter.MainFilter
-by/entity/User.java
- by.entity.User
-by/repository/CarAdRepositoryImpl.java
- by.repository.CarAdRepositoryImpl
+by/entity/abstractive/AbstractImage.java
+ by.entity.abstractive.AbstractImage
+by/entity/dao/response/UserDAOResponse.java
+ by.entity.dao.response.UserDAOResponse
 by/repository/UserRepository.java
  by.repository.UserRepository
-by/repository/TelephoneRepository.java
- by.repository.TelephoneRepository
-by/repository/UserRepositoryImpl.java
- by.repository.UserRepositoryImpl
-by/repository/TelephoneRepositoryImpl.java
- by.repository.TelephoneRepositoryImpl
-by/repository/ImageRepository.java
- by.repository.ImageRepository
-by/repository/ImageRepositoryImpl.java
- by.repository.ImageRepositoryImpl
-by/entity/Telephone.java
- by.entity.Telephone
+by/entity/dto/response/UserDTOResponse.java
+ by.entity.dto.response.UserDTOResponse
+by/entity/dao/response/CarAdDAOResponse.java
+ by.entity.dao.response.CarAdDAOResponse
+by/entity/dto/request/ImageDTORequest.java
+ by.entity.dto.request.ImageDTORequest
+by/entity/dao/request/CarAdDAORequest.java
+ by.entity.dao.request.CarAdDAORequest
+by/entity/dao/response/TelephoneDAOResponse.java
+ by.entity.dao.response.TelephoneDAOResponse
 by/repository/CarAdRepository.java
  by.repository.CarAdRepository
+by/repository/CarAdRepositoryImpl.java
+ by.repository.CarAdRepositoryImpl
+by/entity/dao/response/ImageDAOResponse.java
+ by.entity.dao.response.ImageDAOResponse
+by/entity/dao/request/UserDAORequest.java
+ by.entity.dao.request.UserDAORequest
+by/entity/dto/response/CarAdDTOResponse.java
+ by.entity.dto.response.CarAdDTOResponse
+by/entity/dto/response/ImageDTOResponse.java
+ by.entity.dto.response.ImageDTOResponse
+by/entity/dto/request/TelephoneDTORequest.java
+ by.entity.dto.request.TelephoneDTORequest
+by/repository/UserRepositoryImpl.java
+ by.repository.UserRepositoryImpl
+by/entity/abstractive/AbstractTelephone.java
+ by.entity.abstractive.AbstractTelephone
+by/entity/dto/response/TelephoneDTOResponse.java
+ by.entity.dto.response.TelephoneDTOResponse
+by/entity/abstractive/AbstractCarAd.java
+ by.entity.abstractive.AbstractCarAd
+ by.entity.abstractive.AbstractCarAd$CarCondition
+by/entity/dao/request/TelephoneDAORequest.java
+ by.entity.dao.request.TelephoneDAORequest
+by/entity/dto/request/CarAdDTORequest.java
+ by.entity.dto.request.CarAdDTORequest
+by/repository/ImageRepository.java
+ by.repository.ImageRepository
+by/entity/dao/request/ImageDAORequest.java
+ by.entity.dao.request.ImageDAORequest
+by/filter/MainFilter.java
+ by.filter.MainFilter
+by/util/TextLabels.java
+ by.util.TextLabels
+by/db/ConnectionFactory.java
+ by.db.ConnectionFactory
 by/servlet/MainServlet.java
  by.servlet.MainServlet
+by/repository/TelephoneRepository.java
+ by.repository.TelephoneRepository
+by/entity/abstractive/AbstractUser.java
+ by.entity.abstractive.AbstractUser
+by/repository/TelephoneRepositoryImpl.java
+ by.repository.TelephoneRepositoryImpl
+by/entity/dto/request/UserDTORequest.java
+ by.entity.dto.request.UserDTORequest
+by/repository/ImageRepositoryImpl.java
+ by.repository.ImageRepositoryImpl

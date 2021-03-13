@@ -1,5 +1,6 @@
 package by.servlet;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,9 +19,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class MainServlet extends HttpServlet {
 
     private boolean isMultipart;
-    private String filePath;
-    private int maxFileSize = 1048576;
-    private int maxMemSize = 1048576;
     private File file;
 
     @Override
@@ -35,14 +33,18 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Properties property = new Properties();
-        FileInputStream fis = new FileInputStream("properties.properties");
+        FileInputStream fis = new FileInputStream
+                ("C:\\Users\\user\\IdeaProjects\\SimpleWeb\\src\\main\\resources\\properties.properties");
         property.load(fis);
 
-        isMultipart = ServletFileUpload.isMultipartContent(request);
+//        if (ServletFileUpload.isMultipartContent(request)) {
+//        }
         response.setContentType("text/html");
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setSizeThreshold(Integer.parseInt(property.getProperty("maxMemSize")));
-        factory.setRepository(new File(property.getProperty("basePath")));
+        String basePath = property.getProperty("basePath");
+        String pathForHugeFiles = property.getProperty("pathForHugeFiles");
+        factory.setRepository(new File(pathForHugeFiles));
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setSizeMax(Integer.parseInt(property.getProperty("maxFileSize")));
 
@@ -61,9 +63,9 @@ public class MainServlet extends HttpServlet {
                     long sizeInBytes = item.getSize();
 
                     if (fileName.lastIndexOf("\\") >= 0) {
-                        file = new File(filePath + fileName.substring(fileName.lastIndexOf("\\")));
+                        file = new File(basePath + fileName.substring(fileName.lastIndexOf("\\")));
                     } else {
-                        file = new File(filePath + fileName.substring(fileName.lastIndexOf("\\") + 1));
+                        file = new File(basePath + fileName.substring(fileName.lastIndexOf("\\") + 1));
                     }
                     item.write(file);
                 }
@@ -73,3 +75,4 @@ public class MainServlet extends HttpServlet {
         }
     }
 }
+//доабвиь идентификацию по id

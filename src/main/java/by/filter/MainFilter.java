@@ -18,7 +18,7 @@ public class MainFilter implements Filter {
 
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
-        System.out.println("LogFilter init!");
+//        System.out.println("LogFilter init!");
     }
 
     @Override
