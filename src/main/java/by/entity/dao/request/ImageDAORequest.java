@@ -5,8 +5,7 @@ import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class ImageDAORequest extends AbstractImage {
     private Integer ownerId;
 }
