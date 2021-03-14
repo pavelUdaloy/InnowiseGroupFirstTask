@@ -6,15 +6,15 @@ import by.entity.dao.response.TelephoneDAOResponse;
 import java.util.List;
 
 public interface TelephoneRepository {
-    TelephoneDAOResponse add(TelephoneDAORequest image);
+    TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest);
 
-    TelephoneDAOResponse delete(TelephoneDAORequest image);
+    TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest);
 
     List<TelephoneDAOResponse> deleteAll();
 
-    TelephoneDAOResponse get(TelephoneDAORequest image);
+    TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest);
 
     List<TelephoneDAOResponse> getAll();
 
-    List<TelephoneDAOResponse> set(TelephoneDAORequest image);
+    TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber);
 }

@@ -15,6 +15,4 @@ public interface ImageRepository {
     ImageDAOResponse get(ImageDAORequest image);
 
     List<ImageDAOResponse> getAll();
-
-    List<ImageDAOResponse> set(ImageDAORequest image);
 }

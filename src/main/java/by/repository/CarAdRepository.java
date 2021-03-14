@@ -6,15 +6,15 @@ import by.entity.dao.response.CarAdDAOResponse;
 import java.util.List;
 
 public interface CarAdRepository {
-    CarAdDAOResponse add(CarAdDAORequest image);
+    CarAdDAOResponse add(CarAdDAORequest carAdDAORequest);
 
-    CarAdDAOResponse delete(CarAdDAORequest image);
+    CarAdDAOResponse delete(CarAdDAORequest carAdDAORequest);
 
     List<CarAdDAOResponse> deleteAll();
 
-    CarAdDAOResponse get(CarAdDAORequest image);
+    CarAdDAOResponse get(CarAdDAORequest carAdDAORequest);
 
     List<CarAdDAOResponse> getAll();
 
-    List<CarAdDAOResponse> set(CarAdDAORequest image);
+    CarAdDAOResponse set(CarAdDAORequest carAdDAORequest);
 }

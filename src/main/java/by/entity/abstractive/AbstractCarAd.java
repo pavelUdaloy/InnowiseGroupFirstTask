@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 @Data
 public abstract class AbstractCarAd {
-    private String age;
+    private Integer age;
     private String brand;
     private String model;
     private CarCondition condition;

@@ -6,5 +6,5 @@ import lombok.Data;
 public abstract class AbstractUser {
     private String email;
     private String firstName;
-    private String secondName;
+    private String lastName;
 }

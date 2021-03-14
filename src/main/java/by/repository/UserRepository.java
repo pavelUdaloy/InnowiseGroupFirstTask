@@ -6,15 +6,13 @@ import by.entity.dao.response.UserDAOResponse;
 import java.util.List;
 
 public interface UserRepository {
-    UserDAOResponse add(UserDAORequest image);
+    UserDAOResponse add(UserDAORequest userDAORequest);
 
-    UserDAOResponse delete(UserDAORequest image);
+    UserDAOResponse delete(UserDAORequest userDAORequest);
 
     List<UserDAOResponse> deleteAll();
 
-    UserDAOResponse get(UserDAORequest image);
+    UserDAOResponse get(UserDAORequest userDAORequest);
 
     List<UserDAOResponse> getAll();
-
-    List<UserDAOResponse> set(UserDAORequest image);
 }

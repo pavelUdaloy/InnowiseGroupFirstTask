@@ -6,24 +6,80 @@ import by.entity.dao.response.TelephoneDAOResponse;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static by.util.TextLabels.ADD_TO_TELEPHONES;
+import static by.util.TextLabels.DELETE_ALL_TELEPHONES;
+import static by.util.TextLabels.DELETE_TELEPHONE;
+import static by.util.TextLabels.ID;
+import static by.util.TextLabels.NUMBER;
+import static by.util.TextLabels.OWNER_ID;
+import static by.util.TextLabels.SELECT_ALL_TELEPHONES;
+import static by.util.TextLabels.SELECT_TELEPHONE;
+import static by.util.TextLabels.UPDATE_TELEPHONE_BY_ID;
 
 public class TelephoneRepositoryImpl implements TelephoneRepository {
 
-    private static final String IN_TO_CHAT_PARTICIPATES = "INSERT INTO simple.public.telephones VALUES (DEFAULT, ?, DEFAULT) ";
-
-    private Connection connection = ConnectionFactory.getConnection();
+    private final Connection connection = ConnectionFactory.getConnection();
 
     @Override
-    public TelephoneDAOResponse add(TelephoneDAORequest image) {
+    public TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest) {
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(IN_TO_CHAT_PARTICIPATES);
-//            preparedStatement.setInt(1, chatParticipation.getUserID());
-//            preparedStatement.setInt(2, chatParticipation.getChatID());
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_TELEPHONES);
+            preparedStatement.setString(1, telephoneDAORequest.getNumber());
+            preparedStatement.setInt(2, telephoneDAORequest.getOwnerId());
             preparedStatement.execute();
             connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return get(telephoneDAORequest);
+    }
+
+    @Override
+    public TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest) {
+        TelephoneDAOResponse telephoneDAOResponse = get(telephoneDAORequest);
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE_TELEPHONE);
+            statement.setInt(1, telephoneDAORequest.getOwnerId());
+            statement.setString(2, telephoneDAORequest.getNumber());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return telephoneDAOResponse;
+    }
+
+    @Override
+    public List<TelephoneDAOResponse> deleteAll() {
+        List<TelephoneDAOResponse> telephoneDAOResponses = getAll();
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE_ALL_TELEPHONES);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return telephoneDAOResponses;
+    }
+
+    @Override
+    public TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_TELEPHONE);
+            statement.setInt(1, telephoneDAORequest.getOwnerId());
+            statement.setString(2, telephoneDAORequest.getNumber());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                telephoneDAOResponse.setId(resultSet.getInt(ID));
+                telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
+                return telephoneDAOResponse;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,27 +87,36 @@ public class TelephoneRepositoryImpl implements TelephoneRepository {
     }
 
     @Override
-    public TelephoneDAOResponse delete(TelephoneDAORequest image) {
-        return null;
-    }
-
-    @Override
-    public List<TelephoneDAOResponse> deleteAll() {
-        return null;
-    }
-
-    @Override
-    public TelephoneDAOResponse get(TelephoneDAORequest image) {
-        return null;
-    }
-
-    @Override
     public List<TelephoneDAOResponse> getAll() {
-        return null;
+        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_TELEPHONES);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                telephoneDAOResponse.setId(resultSet.getInt(ID));
+                telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
+                telephoneDAOResponses.add(telephoneDAOResponse);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return telephoneDAOResponses;
     }
 
     @Override
-    public List<TelephoneDAOResponse> set(TelephoneDAORequest image) {
-        return null;
+    public TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber) {
+        TelephoneDAOResponse telephoneDAOResponse = get(telephoneDAORequest);
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_TELEPHONE_BY_ID);
+            statement.setString(1, newNumber);
+            statement.setInt(2, telephoneDAOResponse.getId());
+            statement.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        telephoneDAORequest.setNumber(newNumber);
+        return get(telephoneDAORequest);
     }
 }

@@ -11,34 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.util.TextLabels.ADD_TO_IMAGES;
+import static by.util.TextLabels.DELETE_ALL_IMAGES;
+import static by.util.TextLabels.DELETE_IMAGE;
+import static by.util.TextLabels.FILE_FORMAT;
+import static by.util.TextLabels.ID;
+import static by.util.TextLabels.NAME;
+import static by.util.TextLabels.OWNER_ID;
+import static by.util.TextLabels.SELECT_ALL_IMAGES;
+import static by.util.TextLabels.SELECT_IMAGE;
+
 public class ImageRepositoryImpl implements ImageRepository {
-    private static final String ADD_TO_IMAGES = "INSERT INTO simple.public.images VALUES (DEFAULT, ?, ?, ?)";
-    private static final String DELETE_FROM_IMAGES = "DELETE FROM simple.public.images WHERE (chatid=? AND userid=?)";
-    private static final String SELECT_ALL_IMAGES = "SELECT * FROM simple.public.images";
-//    private static final String SELECT_ALL_IMAGES = "SELECT * FROM dblink('hostaddr=xxx.xxx.xxx.xxx dbname=mydb user=postgres',\n" +
-//        "            'select a,b from tableA')";
-    private static final String SELECT_IMAGE_BY_IMAGES_ID = "SELECT * FROM simple.public.images WHERE chatid=?";
-    private static final String SELECT_IMAGES_BY_CAR_AD_ID = "SELECT * FROM simple.public.images WHERE userid=?";
-    private static final String DELETE_ALL_IMAGES = "DELETE FROM simple.public.images";
 
-    private static final String OWNER_ID = "owner_id";
-    private static final String ID = "id";
-    private static final String NAME = "name";
-    private static final String FILE_FORMAT = "file_format";
-
-    private Connection connection = ConnectionFactory.getConnection();
-
-    public ImageRepositoryImpl() {
-    }
-
-    public static void main(String[] args) {
-        ImageDAORequest image = new ImageDAORequest();
-        image.setOwnerId(1);
-        image.setName("2010-120-120-10-101-10");
-        image.setFileFormat("png");
-        System.out.println(new ImageRepositoryImpl().add(image));
-        System.out.println(new ImageRepositoryImpl().getAll());
-    }
+    private final Connection connection = ConnectionFactory.getConnection();
 
     @Override
     public ImageDAOResponse add(ImageDAORequest image) {
@@ -58,7 +43,16 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public ImageDAOResponse delete(ImageDAORequest image) {
-        return null;
+        ImageDAOResponse imageDAOResponse = get(image);
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE_IMAGE);
+            statement.setInt(1, image.getOwnerId());
+            statement.setString(2, image.getName());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return imageDAOResponse;
     }
 
     @Override
@@ -74,37 +68,43 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public ImageDAOResponse get(ImageDAORequest image) {
+    public ImageDAOResponse get(ImageDAORequest imageDAORequest) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE);
+            statement.setInt(1, imageDAORequest.getOwnerId());
+            statement.setString(2, imageDAORequest.getName());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                ImageDAOResponse image = new ImageDAOResponse();
+                image.setId(resultSet.getInt(ID));
+                image.setName(resultSet.getString(NAME));
+                image.setFileFormat(resultSet.getString(FILE_FORMAT));
+                image.setOwnerId(resultSet.getInt(OWNER_ID));
+                return image;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public List<ImageDAOResponse> getAll() {
-        List<ImageDAOResponse> chatParticipationList = new ArrayList<>();
+        List<ImageDAOResponse> imageDAOResponses = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_IMAGES);
-            get(chatParticipationList, statement);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ImageDAOResponse image = new ImageDAOResponse();
+                image.setId(resultSet.getInt(ID));
+                image.setName(resultSet.getString(NAME));
+                image.setFileFormat(resultSet.getString(FILE_FORMAT));
+                image.setOwnerId(resultSet.getInt(OWNER_ID));
+                imageDAOResponses.add(image);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return chatParticipationList;
+        return imageDAOResponses;
     }
-
-    @Override
-    public List<ImageDAOResponse> set(ImageDAORequest image) {
-        return null;
-    }
-
-    private void get(List<ImageDAOResponse> list, PreparedStatement statement) throws SQLException {
-        ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            ImageDAOResponse image = new ImageDAOResponse();
-            image.setId(resultSet.getInt(ID));
-            image.setName(resultSet.getString(NAME));
-            image.setFileFormat(resultSet.getString(FILE_FORMAT));
-            image.setOwnerId(resultSet.getInt(OWNER_ID));
-            list.add(image);
-        }
-    }
-
 }
