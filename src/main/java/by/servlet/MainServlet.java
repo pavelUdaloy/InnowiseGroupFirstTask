@@ -15,6 +15,12 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Properties;
 
+import static by.util.TextLabels.PROPERTIES_BASE_PATH;
+import static by.util.TextLabels.PROPERTIES_MAX_FILE_SIZE;
+import static by.util.TextLabels.PROPERTIES_MAX_MEMORY_SIZE;
+import static by.util.TextLabels.PROPERTIES_PATH;
+import static by.util.TextLabels.PROPERTIES_PATH_FOR_HUGE_FILES;
+
 @WebServlet(urlPatterns = "/")
 public class MainServlet extends HttpServlet {
 
@@ -33,20 +39,19 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Properties property = new Properties();
-        FileInputStream fis = new FileInputStream
-                ("C:\\Users\\user\\IdeaProjects\\SimpleWeb\\src\\main\\resources\\properties.properties");
+        FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
         property.load(fis);
 
 //        if (ServletFileUpload.isMultipartContent(request)) {
 //        }
         response.setContentType("text/html");
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(Integer.parseInt(property.getProperty("maxMemSize")));
-        String basePath = property.getProperty("basePath");
-        String pathForHugeFiles = property.getProperty("pathForHugeFiles");
+        factory.setSizeThreshold(Integer.parseInt(property.getProperty(PROPERTIES_MAX_MEMORY_SIZE)));
+        String basePath = property.getProperty(PROPERTIES_BASE_PATH);
+        String pathForHugeFiles = property.getProperty(PROPERTIES_PATH_FOR_HUGE_FILES);
         factory.setRepository(new File(pathForHugeFiles));
         ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setSizeMax(Integer.parseInt(property.getProperty("maxFileSize")));
+        upload.setSizeMax(Integer.parseInt(property.getProperty(PROPERTIES_MAX_FILE_SIZE)));
 
         try {
             List<FileItem> fileItems = upload.parseRequest(request);

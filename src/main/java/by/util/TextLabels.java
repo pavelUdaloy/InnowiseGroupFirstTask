@@ -56,5 +56,14 @@ public class TextLabels {
     public static final String OWNER_ID = "owner_id";
     public static final String ID = "id";
 
-
+    //properties
+    public static final String PROPERTIES_PATH = "C:\\Users\\user\\IdeaProjects\\SimpleWeb\\src\\main\\resources\\properties.properties";
+    public static final String PROPERTIES_DB_URL = "dbUrl";
+    public static final String PROPERTIES_DB_USERNAME = "dbUsername";
+    public static final String PROPERTIES_DB_PASSWORD = "dbPassword";
+    public static final String PROPERTIES_MAX_FILE_SIZE = "maxFileSize";
+    public static final String PROPERTIES_MAX_MEMORY_SIZE = "maxMemSize";
+    public static final String PROPERTIES_BASE_PATH = "basePath";
+    public static final String PROPERTIES_PATH_FOR_HUGE_FILES = "pathForHugeFiles";
+    public static final String PROPERTIES_EXTRA_PATH = "extraPath";
 }
