@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Data
-@Getter
-@Setter
+@Data
 public abstract class AbstractImage {
     private String name;
     private String fileFormat;

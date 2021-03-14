@@ -6,6 +6,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
+@ToString(callSuper = true)
 public class CarAdDAORequest extends AbstractCarAd {
     private Integer ownerId;
 }
