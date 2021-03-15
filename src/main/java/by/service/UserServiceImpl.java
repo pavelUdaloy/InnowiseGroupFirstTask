@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDAOResponse get(Integer id) {
+        return userRepository.get(id);
+    }
+
+    @Override
     public List<UserDAOResponse> getAll() {
         return userRepository.getAll();
     }

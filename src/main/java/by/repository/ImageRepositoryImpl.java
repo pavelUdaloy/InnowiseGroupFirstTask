@@ -20,25 +20,30 @@ import static by.util.TextLabels.NAME;
 import static by.util.TextLabels.OWNER_ID;
 import static by.util.TextLabels.SELECT_ALL_IMAGES;
 import static by.util.TextLabels.SELECT_IMAGE;
+import static by.util.TextLabels.SELECT_IMAGE_BY_OWNER_ID;
 
 public class ImageRepositoryImpl implements ImageRepository {
 
     private final Connection connection = ConnectionFactory.getConnection();
 
     @Override
-    public ImageDAOResponse add(ImageDAORequest image) {
-        try {
-            connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_IMAGES);
-            preparedStatement.setInt(1, image.getOwnerId());
-            preparedStatement.setString(2, image.getName());
-            preparedStatement.setString(3, image.getFileFormat());
-            preparedStatement.execute();
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public List<ImageDAOResponse> addAll(List<ImageDAORequest> images) {
+        List<ImageDAOResponse> imageDAOResponses = new ArrayList<>();
+        for (ImageDAORequest image : images) {
+            try {
+                connection.setAutoCommit(false);
+                PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_IMAGES);
+                preparedStatement.setInt(1, image.getOwnerId());
+                preparedStatement.setString(2, image.getName());
+                preparedStatement.setString(3, image.getFileFormat());
+                preparedStatement.execute();
+                connection.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            imageDAOResponses.add(get(image));
         }
-        return get(image);
+        return imageDAOResponses;
     }
 
     @Override
@@ -86,6 +91,27 @@ public class ImageRepositoryImpl implements ImageRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<ImageDAOResponse> getByOwnerId(Integer ownerId) {
+        List<ImageDAOResponse> imageDAOResponses = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE_BY_OWNER_ID);
+            statement.setInt(1, ownerId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ImageDAOResponse image = new ImageDAOResponse();
+                image.setId(resultSet.getInt(ID));
+                image.setName(resultSet.getString(NAME));
+                image.setFileFormat(resultSet.getString(FILE_FORMAT));
+                image.setOwnerId(resultSet.getInt(OWNER_ID));
+                imageDAOResponses.add(image);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return imageDAOResponses;
     }
 
     @Override

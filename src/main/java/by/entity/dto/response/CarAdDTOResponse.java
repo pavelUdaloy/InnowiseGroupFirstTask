@@ -1,7 +1,6 @@
 package by.entity.dto.response;
 
 import by.entity.abstractive.AbstractCarAd;
-import by.entity.abstractive.AbstractImage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,9 +15,10 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 public class CarAdDTOResponse extends AbstractCarAd {
-    private List<AbstractImage> imageList= new ArrayList<>();
-    private List<AbstractImage> telephoneList= new ArrayList<>();
+    private List<TelephoneDTOResponse> telephoneList= new ArrayList<>();
+    private Integer imageQuantity;
 
+    private Integer id;
     private Integer ownerId;
     private Timestamp creationDate;
     private Timestamp lastEditDate;

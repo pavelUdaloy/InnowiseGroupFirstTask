@@ -17,32 +17,52 @@ public class CarAdServiceImpl implements CarAdService {
     @Override
     public CarAdDTOResponse add(CarAdDTORequest carAdDTORequest) {
         CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDAOResponse add = carAdRepository.add(carAdDAORequest);
-        return null;
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.add(carAdDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
     public CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest) {
-        return carAdRepository.delete(carAdDTORequest);
+        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.delete(carAdDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
     public List<CarAdDTOResponse> deleteAll() {
-        return carAdRepository.deleteAll();
+        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.deleteAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
     }
 
     @Override
     public CarAdDTOResponse get(CarAdDTORequest carAdDTORequest) {
-        return carAdRepository.get(carAdDTORequest);
+        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.get(carAdDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
+    }
+
+    @Override
+    public CarAdDTOResponse get(Integer id) {
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.get(id);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
     public List<CarAdDTOResponse> getAll() {
-        return carAdRepository.getAll();
+        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.getAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
     }
 
     @Override
     public CarAdDTOResponse set(CarAdDTORequest carAdDTORequest) {
-        return carAdRepository.set(carAdDTORequest);
+        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.set(carAdDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
+    }
+
+    @Override
+    public List<CarAdDTOResponse> getWithPagination(Integer size, Integer page) {
+        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.getWithPagination(size, page);
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
     }
 }

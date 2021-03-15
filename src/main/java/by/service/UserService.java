@@ -14,5 +14,7 @@ public interface UserService {
 
     UserDAOResponse get(UserDAORequest userDAORequest);
 
+    UserDAOResponse get(Integer id);
+
     List<UserDAOResponse> getAll();
 }

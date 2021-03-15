@@ -1,7 +1,5 @@
 package by.service;
 
-import by.entity.dao.request.TelephoneDAORequest;
-import by.entity.dao.response.TelephoneDAOResponse;
 import by.entity.dto.request.TelephoneDTORequest;
 import by.entity.dto.response.TelephoneDTOResponse;
 
@@ -15,6 +13,8 @@ public interface TelephoneService {
     List<TelephoneDTOResponse> deleteAll();
 
     TelephoneDTOResponse get(TelephoneDTORequest telephoneDTORequest);
+
+    List<TelephoneDTOResponse> getByOwnerId(Integer ownerId);
 
     List<TelephoneDTOResponse> getAll();
 

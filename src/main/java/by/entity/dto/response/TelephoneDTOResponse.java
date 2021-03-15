@@ -11,4 +11,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class TelephoneDTOResponse extends AbstractTelephone {
+    private Integer id;
+    private Integer ownerId;
 }

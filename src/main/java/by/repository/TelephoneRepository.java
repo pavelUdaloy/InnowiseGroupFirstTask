@@ -6,13 +6,15 @@ import by.entity.dao.response.TelephoneDAOResponse;
 import java.util.List;
 
 public interface TelephoneRepository {
-    List<TelephoneDAOResponse> add(List<TelephoneDAORequest> telephoneDAORequests);
+    List<TelephoneDAOResponse> addAll(List<TelephoneDAORequest> telephoneDAORequests);
 
     TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest);
 
     List<TelephoneDAOResponse> deleteAll();
 
     TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest);
+
+    List<TelephoneDAOResponse> getByOwnerId(Integer ownerId);
 
     List<TelephoneDAOResponse> getAll();
 

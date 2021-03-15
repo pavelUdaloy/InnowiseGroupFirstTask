@@ -25,10 +25,11 @@ public class ConnectionFactory {
             e.printStackTrace();
         }
         try {
+            Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection(property.getProperty(PROPERTIES_DB_URL),
                     property.getProperty(PROPERTIES_DB_USERNAME),
                     property.getProperty(PROPERTIES_DB_PASSWORD));
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

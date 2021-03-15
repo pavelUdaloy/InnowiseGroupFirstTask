@@ -19,6 +19,7 @@ import static by.util.TextLabels.NUMBER;
 import static by.util.TextLabels.OWNER_ID;
 import static by.util.TextLabels.SELECT_ALL_TELEPHONES;
 import static by.util.TextLabels.SELECT_TELEPHONE;
+import static by.util.TextLabels.SELECT_TELEPHONE_BY_OWNER_ID;
 import static by.util.TextLabels.UPDATE_TELEPHONE_BY_ID;
 
 public class TelephoneRepositoryImpl implements TelephoneRepository {
@@ -26,18 +27,22 @@ public class TelephoneRepositoryImpl implements TelephoneRepository {
     private final Connection connection = ConnectionFactory.getConnection();
 
     @Override
-    public TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest) {
-        try {
-            connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_TELEPHONES);
-            preparedStatement.setString(1, telephoneDAORequest.getNumber());
-            preparedStatement.setInt(2, telephoneDAORequest.getOwnerId());
-            preparedStatement.execute();
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public List<TelephoneDAOResponse> addAll(List<TelephoneDAORequest> telephoneDAORequests) {
+        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
+        for (TelephoneDAORequest telephoneDAORequest : telephoneDAORequests) {
+            try {
+                connection.setAutoCommit(false);
+                PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_TELEPHONES);
+                preparedStatement.setString(1, telephoneDAORequest.getNumber());
+                preparedStatement.setInt(2, telephoneDAORequest.getOwnerId());
+                preparedStatement.execute();
+                connection.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            telephoneDAOResponses.add(get(telephoneDAORequest));
         }
-        return get(telephoneDAORequest);
+        return telephoneDAOResponses;
     }
 
     @Override
@@ -84,6 +89,26 @@ public class TelephoneRepositoryImpl implements TelephoneRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<TelephoneDAOResponse> getByOwnerId(Integer ownerId) {
+        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_TELEPHONE_BY_OWNER_ID);
+            statement.setInt(1, ownerId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                telephoneDAOResponse.setId(resultSet.getInt(ID));
+                telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
+                telephoneDAOResponses.add(telephoneDAOResponse);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return telephoneDAOResponses;
     }
 
     @Override

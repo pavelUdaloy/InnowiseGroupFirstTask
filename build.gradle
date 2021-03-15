@@ -13,13 +13,10 @@ repositories {
 
 dependencies {
     implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
-
-
-
     compileOnly 'org.projectlombok:lombok:1.18.8'
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
     compile 'org.slf4j:slf4j-api:1.7.21'
     testCompile 'junit:junit:4.12'

@@ -19,7 +19,8 @@ import static by.util.TextLabels.FIRST_NAME;
 import static by.util.TextLabels.ID;
 import static by.util.TextLabels.LAST_NAME;
 import static by.util.TextLabels.SELECT_ALL_USERS;
-import static by.util.TextLabels.SELECT_USER;
+import static by.util.TextLabels.SELECT_USER_BY_EMAIL;
+import static by.util.TextLabels.SELECT_USER_BY_ID;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -69,8 +70,28 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserDAOResponse get(UserDAORequest userDAORequest) {
         try {
-            PreparedStatement statement = connection.prepareStatement(SELECT_USER);
+            PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_EMAIL);
             statement.setString(1, userDAORequest.getEmail());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                UserDAOResponse userDAOResponse = new UserDAOResponse();
+                userDAOResponse.setId(resultSet.getInt(ID));
+                userDAOResponse.setEmail(resultSet.getString(EMAIL));
+                userDAOResponse.setFirstName(resultSet.getString(FIRST_NAME));
+                userDAOResponse.setLastName(resultSet.getString(LAST_NAME));
+                return userDAOResponse;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public UserDAOResponse get(Integer id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_ID);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 UserDAOResponse userDAOResponse = new UserDAOResponse();

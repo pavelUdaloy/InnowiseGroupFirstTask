@@ -14,7 +14,11 @@ public interface CarAdRepository {
 
     CarAdDAOResponse get(CarAdDAORequest carAdDAORequest);
 
+    CarAdDAOResponse get(Integer id);
+
     List<CarAdDAOResponse> getAll();
 
     CarAdDAOResponse set(CarAdDAORequest carAdDAORequest);
+
+    List<CarAdDAOResponse> getWithPagination(Integer size, Integer page);
 }

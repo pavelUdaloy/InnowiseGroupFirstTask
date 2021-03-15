@@ -3,8 +3,6 @@ package by.entity.abstractive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-
 @Data
 @NoArgsConstructor
 public abstract class AbstractCarAd {
@@ -17,6 +15,6 @@ public abstract class AbstractCarAd {
     private Integer enginePower;
 
     public enum CarCondition {
-        NEW,USED,BROKEN
+        NEW, USED, BROKEN
     }
 }

@@ -16,33 +16,47 @@ public class TelephoneServiceImpl implements TelephoneService {
 
     @Override
     public List<TelephoneDTOResponse> addAll(List<TelephoneDTORequest> telephoneDTORequests) {
-        List<TelephoneDAORequest> telephoneDAORequests = DTODAOMapper.convertDTOReqToDAOReq(telephoneDTORequests);
-        List<TelephoneDAOResponse> add = telephoneRepository.add(telephoneDAORequests);
-        return add;
+        List<TelephoneDAORequest> telephoneDAORequests = DTODAOMapper.convertDTOReqsToDAOReqs(telephoneDTORequests);
+        List<TelephoneDAOResponse> telephoneDAOResponses = telephoneRepository.addAll(telephoneDAORequests);
+        return DTODAOMapper.convertDAORespsToDTOResps(telephoneDAOResponses);
     }
 
     @Override
     public TelephoneDTOResponse delete(TelephoneDTORequest telephoneDTORequest) {
-        return telephoneRepository.delete(telephoneDTORequest);
+        TelephoneDAORequest telephoneDAORequest = DTODAOMapper.convertDTOReqToDAOReq(telephoneDTORequest);
+        TelephoneDAOResponse telephoneDAOResponse = telephoneRepository.delete(telephoneDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(telephoneDAOResponse);
     }
 
     @Override
     public List<TelephoneDTOResponse> deleteAll() {
-        return telephoneRepository.deleteAll();
+        List<TelephoneDAOResponse> telephoneDAOResponses = telephoneRepository.deleteAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(telephoneDAOResponses);
     }
 
     @Override
     public TelephoneDTOResponse get(TelephoneDTORequest telephoneDTORequest) {
-        return telephoneRepository.get(telephoneDTORequest);
+        TelephoneDAORequest telephoneDAORequest = DTODAOMapper.convertDTOReqToDAOReq(telephoneDTORequest);
+        TelephoneDAOResponse telephoneDAOResponse = telephoneRepository.get(telephoneDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(telephoneDAOResponse);
+    }
+
+    @Override
+    public List<TelephoneDTOResponse> getByOwnerId(Integer ownerId) {
+        List<TelephoneDAOResponse> telephoneDAOResponses = telephoneRepository.getByOwnerId(ownerId);
+        return DTODAOMapper.convertDAORespsToDTOResps(telephoneDAOResponses);
     }
 
     @Override
     public List<TelephoneDTOResponse> getAll() {
-        return telephoneRepository.getAll();
+        List<TelephoneDAOResponse> telephoneDAOResponses = telephoneRepository.getAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(telephoneDAOResponses);
     }
 
     @Override
     public TelephoneDTOResponse set(TelephoneDTORequest telephoneDTORequest, String newNumber) {
-        return telephoneRepository.set(telephoneDTORequest, newNumber);
+        TelephoneDAORequest telephoneDAORequest = DTODAOMapper.convertDTOReqToDAOReq(telephoneDTORequest);
+        TelephoneDAOResponse telephoneDAOResponse = telephoneRepository.set(telephoneDAORequest, newNumber);
+        return DTODAOMapper.convertDAORespToDTOResp(telephoneDAOResponse);
     }
 }

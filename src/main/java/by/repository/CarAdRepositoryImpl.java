@@ -28,6 +28,8 @@ import static by.util.TextLabels.OWNER_ID;
 import static by.util.TextLabels.POWER;
 import static by.util.TextLabels.SELECT_ALL_CAR_ADS;
 import static by.util.TextLabels.SELECT_CAR_AD;
+import static by.util.TextLabels.SELECT_CAR_AD_BY_ID;
+import static by.util.TextLabels.SELECT_WITH_PAGINATION;
 import static by.util.TextLabels.UPDATE_CAR_AD_AGE_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_BRAND_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_ENGINE_BY_ID;
@@ -95,19 +97,22 @@ public class CarAdRepositoryImpl implements CarAdRepository {
             statement.setTimestamp(2, carAdDAORequest.getCreationDate());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                CarAdDAOResponse carAdDAOResponse = new CarAdDAOResponse();
-                carAdDAOResponse.setId(resultSet.getInt(ID));
-                carAdDAOResponse.setAge(resultSet.getInt(AGE));
-                carAdDAOResponse.setBrand(resultSet.getString(BRAND));
-                carAdDAOResponse.setModel(resultSet.getString(MODEL));
-                carAdDAOResponse.setCondition(AbstractCarAd.CarCondition.valueOf(resultSet.getString(CONDITION)));
-                carAdDAOResponse.setMileage(resultSet.getInt(MILEAGE));
-                carAdDAOResponse.setEngineSize(resultSet.getInt(ENGINE));
-                carAdDAOResponse.setEnginePower(resultSet.getInt(POWER));
-                carAdDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
-                carAdDAOResponse.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
-                carAdDAOResponse.setLastEditDate(resultSet.getTimestamp(LAST_EDIT_DATE));
-                return carAdDAOResponse;
+                return getCarAdDAOResponse(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public CarAdDAOResponse get(Integer id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_CAR_AD_BY_ID);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return getCarAdDAOResponse(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,18 +127,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_CAR_ADS);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                CarAdDAOResponse carAdDAOResponse = new CarAdDAOResponse();
-                carAdDAOResponse.setId(resultSet.getInt(ID));
-                carAdDAOResponse.setAge(resultSet.getInt(AGE));
-                carAdDAOResponse.setBrand(resultSet.getString(BRAND));
-                carAdDAOResponse.setModel(resultSet.getString(MODEL));
-                carAdDAOResponse.setCondition(AbstractCarAd.CarCondition.valueOf(resultSet.getString(CONDITION)));
-                carAdDAOResponse.setMileage(resultSet.getInt(MILEAGE));
-                carAdDAOResponse.setEngineSize(resultSet.getInt(ENGINE));
-                carAdDAOResponse.setEnginePower(resultSet.getInt(POWER));
-                carAdDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
-                carAdDAOResponse.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
-                carAdDAOResponse.setLastEditDate(resultSet.getTimestamp(LAST_EDIT_DATE));
+                CarAdDAOResponse carAdDAOResponse = getCarAdDAOResponse(resultSet);
                 carAdDAOResponses.add(carAdDAOResponse);
             }
         } catch (SQLException e) {
@@ -174,5 +168,40 @@ public class CarAdRepositoryImpl implements CarAdRepository {
             e.printStackTrace();
         }
         return get(carAdDAORequest);
+    }
+
+    @Override
+    public List<CarAdDAOResponse> getWithPagination(Integer size, Integer page) {
+        List<CarAdDAOResponse> carAdDAOResponses = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_WITH_PAGINATION);
+            int offset = (page - 1) * size;
+            statement.setInt(1, offset);
+            statement.setInt(2, size);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                CarAdDAOResponse carAdDAOResponse = getCarAdDAOResponse(resultSet);
+                carAdDAOResponses.add(carAdDAOResponse);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return carAdDAOResponses;
+    }
+
+    private CarAdDAOResponse getCarAdDAOResponse(ResultSet resultSet) throws SQLException {
+        CarAdDAOResponse carAdDAOResponse = new CarAdDAOResponse();
+        carAdDAOResponse.setId(resultSet.getInt(ID));
+        carAdDAOResponse.setAge(resultSet.getInt(AGE));
+        carAdDAOResponse.setBrand(resultSet.getString(BRAND));
+        carAdDAOResponse.setModel(resultSet.getString(MODEL));
+        carAdDAOResponse.setCondition(AbstractCarAd.CarCondition.valueOf(resultSet.getString(CONDITION)));
+        carAdDAOResponse.setMileage(resultSet.getInt(MILEAGE));
+        carAdDAOResponse.setEngineSize(resultSet.getInt(ENGINE));
+        carAdDAOResponse.setEnginePower(resultSet.getInt(POWER));
+        carAdDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+        carAdDAOResponse.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
+        carAdDAOResponse.setLastEditDate(resultSet.getTimestamp(LAST_EDIT_DATE));
+        return carAdDAOResponse;
     }
 }

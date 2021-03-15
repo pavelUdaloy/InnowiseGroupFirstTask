@@ -1,7 +1,5 @@
 package by.service;
 
-import by.entity.dao.request.CarAdDAORequest;
-import by.entity.dao.response.CarAdDAOResponse;
 import by.entity.dto.request.CarAdDTORequest;
 import by.entity.dto.response.CarAdDTOResponse;
 
@@ -16,7 +14,11 @@ public interface CarAdService {
 
     CarAdDTOResponse get(CarAdDTORequest carAdDTORequest);
 
+    CarAdDTOResponse get(Integer id);
+
     List<CarAdDTOResponse> getAll();
 
     CarAdDTOResponse set(CarAdDTORequest carAdDTORequest);
+
+    List<CarAdDTOResponse> getWithPagination(Integer size, Integer page);
 }

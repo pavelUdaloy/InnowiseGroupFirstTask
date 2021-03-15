@@ -1,7 +1,5 @@
 package by.service;
 
-import by.entity.dao.request.ImageDAORequest;
-import by.entity.dao.response.ImageDAOResponse;
 import by.entity.dto.request.ImageDTORequest;
 import by.entity.dto.response.ImageDTOResponse;
 
@@ -15,6 +13,8 @@ public interface ImageService {
     List<ImageDTOResponse> deleteAll();
 
     ImageDTOResponse get(ImageDTORequest image);
+
+    List<ImageDTOResponse> getByOwnerId(Integer ownerId);
 
     List<ImageDTOResponse> getAll();
 }

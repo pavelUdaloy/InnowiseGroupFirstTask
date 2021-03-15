@@ -1,11 +1,13 @@
 package by.service;
 
+import by.entity.dao.request.ImageDAORequest;
+import by.entity.dao.response.ImageDAOResponse;
 import by.entity.dto.request.ImageDTORequest;
 import by.entity.dto.response.ImageDTOResponse;
+import by.mapper.ImageMapper.DTODAOMapper;
 import by.repository.ImageRepository;
 import by.repository.ImageRepositoryImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImageServiceImpl implements ImageService {
@@ -14,30 +16,40 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageDTOResponse> addAll(List<ImageDTORequest> images) {
-        List<ImageDTOResponse> imageDAOResponses = new ArrayList<>();
-        for (ImageDTORequest image : images) {
-            imageDAOResponses.add(imageRepository.add(image));
-        }
-        return imageDAOResponses;
+        List<ImageDAORequest> imageDAORequests = DTODAOMapper.convertDTOReqsToDAOReqs(images);
+        List<ImageDAOResponse> imageDAOResponses = imageRepository.addAll(imageDAORequests);
+        return DTODAOMapper.convertDAORespsToDTOResps(imageDAOResponses);
     }
 
     @Override
-    public ImageDTOResponse delete(ImageDTORequest image) {
-        return imageRepository.delete(image);
+    public ImageDTOResponse delete(ImageDTORequest imageDTORequest) {
+        ImageDAORequest imageDAORequest = DTODAOMapper.convertDTOReqToDAOReq(imageDTORequest);
+        ImageDAOResponse imageDAOResponse = imageRepository.delete(imageDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(imageDAOResponse);
     }
 
     @Override
     public List<ImageDTOResponse> deleteAll() {
-        return imageRepository.deleteAll();
+        List<ImageDAOResponse> imageDAOResponses = imageRepository.deleteAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(imageDAOResponses);
     }
 
     @Override
-    public ImageDTOResponse get(ImageDTORequest image) {
-        return imageRepository.get(image);
+    public ImageDTOResponse get(ImageDTORequest imageDTORequest) {
+        ImageDAORequest imageDAORequest = DTODAOMapper.convertDTOReqToDAOReq(imageDTORequest);
+        ImageDAOResponse imageDAOResponse = imageRepository.get(imageDAORequest);
+        return DTODAOMapper.convertDAORespToDTOResp(imageDAOResponse);
+    }
+
+    @Override
+    public List<ImageDTOResponse> getByOwnerId(Integer ownerId) {
+        List<ImageDAOResponse> imageDAOResponses = imageRepository.getByOwnerId(ownerId);
+        return DTODAOMapper.convertDAORespsToDTOResps(imageDAOResponses);
     }
 
     @Override
     public List<ImageDTOResponse> getAll() {
-        return imageRepository.getAll();
+        List<ImageDAOResponse> imageDAOResponses = imageRepository.getAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(imageDAOResponses);
     }
 }

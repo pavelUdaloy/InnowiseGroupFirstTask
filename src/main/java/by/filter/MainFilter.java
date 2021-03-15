@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebFilter(filterName = "by/filter/MainFilter.java", servletNames =
-        {"by/servlet/CarAdServlet.java", "by/servlet/MainServlet.java", "by/servlet/UserServlet.java"})
+        {"by/servlet/CarAdServlet.java", "by/servlet/UserServlet.java"})
 public class MainFilter extends HttpFilter {
     private static final Logger LOGGER = Logger.getLogger(String.valueOf(MainFilter.class));
 
@@ -21,7 +21,7 @@ public class MainFilter extends HttpFilter {
     }
 
     @Override
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(FilterConfig fConfig) {
         LOGGER.log(Level.INFO, "MainFilter initialized");
     }
 
