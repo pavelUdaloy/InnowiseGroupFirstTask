@@ -42,15 +42,15 @@ by/repository/UserRepositoryImpl.java
  by.repository.UserRepositoryImpl
 by/entity/abstractive/AbstractTelephone.java
  by.entity.abstractive.AbstractTelephone
-by/service/UserServiceImpl.java
- by.service.UserServiceImpl
+by/servlet/UserServlet.java
+ by.servlet.UserServlet
 by/entity/dto/response/TelephoneDTOResponse.java
  by.entity.dto.response.TelephoneDTOResponse
 by/entity/abstractive/AbstractCarAd.java
  by.entity.abstractive.AbstractCarAd
  by.entity.abstractive.AbstractCarAd$CarCondition
-by/repository/ImageRepositoryImpl.java
- by.repository.ImageRepositoryImpl
+by/servlet/CarAdServlet.java
+ by.servlet.CarAdServlet
 by/service/CarAdServiceImpl.java
  by.service.CarAdServiceImpl
 by/entity/dao/request/TelephoneDAORequest.java
@@ -61,14 +61,14 @@ by/repository/ImageRepository.java
  by.repository.ImageRepository
 by/entity/dao/request/ImageDAORequest.java
  by.entity.dao.request.ImageDAORequest
-by/servlet/UserServlet.java
- by.servlet.UserServlet
+by/filter/MainFilter.java
+ by.filter.MainFilter
 by/util/TextLabels.java
  by.util.TextLabels
 by/db/ConnectionFactory.java
  by.db.ConnectionFactory
-by/entity/dto/request/UserDTORequest.java
- by.entity.dto.request.UserDTORequest
+by/servlet/MainServlet.java
+ by.servlet.MainServlet
 by/repository/TelephoneRepository.java
  by.repository.TelephoneRepository
 by/service/TelephoneService.java
@@ -77,9 +77,9 @@ by/entity/abstractive/AbstractUser.java
  by.entity.abstractive.AbstractUser
 by/repository/TelephoneRepositoryImpl.java
  by.repository.TelephoneRepositoryImpl
-by/servlet/MainServlet.java
- by.servlet.MainServlet
-by/servlet/CarAdServlet.java
- by.servlet.CarAdServlet
-by/filter/MainFilter.java
- by.filter.MainFilter
+by/service/UserServiceImpl.java
+ by.service.UserServiceImpl
+by/repository/ImageRepositoryImpl.java
+ by.repository.ImageRepositoryImpl
+by/entity/dto/request/UserDTORequest.java
+ by.entity.dto.request.UserDTORequest

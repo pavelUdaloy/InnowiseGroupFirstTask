@@ -52,6 +52,10 @@ public class TextLabels {
     public static final String CREATION_DATE = "first_name";
     public static final String LAST_EDIT_DATE = "last_name";
 
+
+    public static final String SELECT = "SELECT FruitName, Price FROM SampleFruits ORDER BY Price OFFSET 5 ROWS FETCH NEXT 6 ROWS ONLY";
+
+
     //common
     public static final String OWNER_ID = "owner_id";
     public static final String ID = "id";
@@ -66,4 +70,13 @@ public class TextLabels {
     public static final String PROPERTIES_BASE_PATH = "basePath";
     public static final String PROPERTIES_PATH_FOR_HUGE_FILES = "pathForHugeFiles";
     public static final String PROPERTIES_EXTRA_PATH = "extraPath";
+
+    //symbols
+    public static final String DOT=".";
+    public static final String ANY_NOT_NUMERAL_SYMBOL ="\\D";
+    public static final String EMPTY="";
+
+    //file type
+    public static final String TEXT_FILE="text/plain";
+    public static final String JSON_FILE="application/json";
 }
