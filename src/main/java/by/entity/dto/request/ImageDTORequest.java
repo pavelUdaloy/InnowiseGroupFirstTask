@@ -11,4 +11,5 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class ImageDTORequest extends AbstractImage {
+    private Integer ownerId;
 }

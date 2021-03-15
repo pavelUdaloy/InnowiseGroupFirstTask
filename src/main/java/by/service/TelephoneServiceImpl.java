@@ -2,6 +2,9 @@ package by.service;
 
 import by.entity.dao.request.TelephoneDAORequest;
 import by.entity.dao.response.TelephoneDAOResponse;
+import by.entity.dto.request.TelephoneDTORequest;
+import by.entity.dto.response.TelephoneDTOResponse;
+import by.mapper.TelephoneMapper.DTODAOMapper;
 import by.repository.TelephoneRepository;
 import by.repository.TelephoneRepositoryImpl;
 
@@ -12,32 +15,34 @@ public class TelephoneServiceImpl implements TelephoneService {
     private final TelephoneRepository telephoneRepository = new TelephoneRepositoryImpl();
 
     @Override
-    public TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest) {
-        return telephoneRepository.add(telephoneDAORequest);
+    public List<TelephoneDTOResponse> addAll(List<TelephoneDTORequest> telephoneDTORequests) {
+        List<TelephoneDAORequest> telephoneDAORequests = DTODAOMapper.convertDTOReqToDAOReq(telephoneDTORequests);
+        List<TelephoneDAOResponse> add = telephoneRepository.add(telephoneDAORequests);
+        return add;
     }
 
     @Override
-    public TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest) {
-        return telephoneRepository.delete(telephoneDAORequest);
+    public TelephoneDTOResponse delete(TelephoneDTORequest telephoneDTORequest) {
+        return telephoneRepository.delete(telephoneDTORequest);
     }
 
     @Override
-    public List<TelephoneDAOResponse> deleteAll() {
+    public List<TelephoneDTOResponse> deleteAll() {
         return telephoneRepository.deleteAll();
     }
 
     @Override
-    public TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest) {
-        return telephoneRepository.get(telephoneDAORequest);
+    public TelephoneDTOResponse get(TelephoneDTORequest telephoneDTORequest) {
+        return telephoneRepository.get(telephoneDTORequest);
     }
 
     @Override
-    public List<TelephoneDAOResponse> getAll() {
+    public List<TelephoneDTOResponse> getAll() {
         return telephoneRepository.getAll();
     }
 
     @Override
-    public TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber) {
-        return telephoneRepository.set(telephoneDAORequest, newNumber);
+    public TelephoneDTOResponse set(TelephoneDTORequest telephoneDTORequest, String newNumber) {
+        return telephoneRepository.set(telephoneDTORequest, newNumber);
     }
 }

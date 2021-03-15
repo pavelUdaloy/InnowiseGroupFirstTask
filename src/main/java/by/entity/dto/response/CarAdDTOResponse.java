@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class CarAdDTOResponse extends AbstractCarAd {
     private List<AbstractImage> imageList= new ArrayList<>();
     private List<AbstractImage> telephoneList= new ArrayList<>();
 
-    private Integer id;
     private Integer ownerId;
+    private Timestamp creationDate;
+    private Timestamp lastEditDate;
 }

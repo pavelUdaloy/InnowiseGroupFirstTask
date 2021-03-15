@@ -1,52 +1,40 @@
 package by.filter;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpFilter;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@WebFilter(filterName = "by/filter/MainFilter.java", urlPatterns = "/test")
-public class MainFilter implements Filter {
+@WebFilter(filterName = "by/filter/MainFilter.java", servletNames =
+        {"by/servlet/CarAdServlet.java", "by/servlet/MainServlet.java", "by/servlet/UserServlet.java"})
+public class MainFilter extends HttpFilter {
+    private static final Logger LOGGER = Logger.getLogger(String.valueOf(MainFilter.class));
+
     public MainFilter() {
     }
 
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
-        System.out.println("LogFilter init!");
+        LOGGER.log(Level.INFO, "MainFilter initialized");
     }
 
     @Override
     public void destroy() {
-        System.out.println("LogFilter destroy!");
+        LOGGER.log(Level.INFO, "MainFilter destroyed");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("BBBBBBBBBBBBBB");
-//        String ipAddress = request.getRemoteAddr();
-//        String dateTime = new Date().toString();
-//
-//        System.out.println("\n\n==============================================\n");
-//
-//        System.out.println("Request...");
-//        System.out.println("Date/Time: " + dateTime);
-//        System.out.println("IP:" + ipAddress);
-//
-//        System.out.println("\n==============================================\n");
-//
-//        response.setContentType("text/html");
-//        PrintWriter printWriter = response.getWriter();
-//        printWriter.println("Hello from your mom!");
-//
-//        printWriter.close();
-//
-//        request.setAttribute("hhh", "hello dad");
-
-
+        if (request instanceof HttpServletRequest) {
+            LOGGER.log(Level.INFO, ((HttpServletRequest) request).getRequestURL().toString());
+        }
         chain.doFilter(request, response);
     }
 }

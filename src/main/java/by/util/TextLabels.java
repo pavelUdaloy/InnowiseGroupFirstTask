@@ -76,7 +76,9 @@ public class TextLabels {
     public static final String ANY_NOT_NUMERAL_SYMBOL ="\\D";
     public static final String EMPTY="";
 
-    //file type
+    //file
     public static final String TEXT_FILE="text/plain";
     public static final String JSON_FILE="application/json";
+    public static final String DEF_NAME="def";
+
 }

@@ -6,10 +6,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
 public class CarAdDAORequest extends AbstractCarAd {
     private Integer ownerId;
+    private Timestamp creationDate;
+    private Timestamp lastEditDate;
 }

@@ -1,10 +1,11 @@
 package by.service;
 
-import by.entity.dao.request.ImageDAORequest;
-import by.entity.dao.response.ImageDAOResponse;
+import by.entity.dto.request.ImageDTORequest;
+import by.entity.dto.response.ImageDTOResponse;
 import by.repository.ImageRepository;
 import by.repository.ImageRepositoryImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageServiceImpl implements ImageService {
@@ -12,27 +13,31 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository = new ImageRepositoryImpl();
 
     @Override
-    public ImageDAOResponse add(ImageDAORequest image) {
-        return imageRepository.add(image);
+    public List<ImageDTOResponse> addAll(List<ImageDTORequest> images) {
+        List<ImageDTOResponse> imageDAOResponses = new ArrayList<>();
+        for (ImageDTORequest image : images) {
+            imageDAOResponses.add(imageRepository.add(image));
+        }
+        return imageDAOResponses;
     }
 
     @Override
-    public ImageDAOResponse delete(ImageDAORequest image) {
+    public ImageDTOResponse delete(ImageDTORequest image) {
         return imageRepository.delete(image);
     }
 
     @Override
-    public List<ImageDAOResponse> deleteAll() {
+    public List<ImageDTOResponse> deleteAll() {
         return imageRepository.deleteAll();
     }
 
     @Override
-    public ImageDAOResponse get(ImageDAORequest image) {
+    public ImageDTOResponse get(ImageDTORequest image) {
         return imageRepository.get(image);
     }
 
     @Override
-    public List<ImageDAOResponse> getAll() {
+    public List<ImageDTOResponse> getAll() {
         return imageRepository.getAll();
     }
 }

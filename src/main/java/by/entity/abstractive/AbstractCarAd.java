@@ -1,10 +1,12 @@
 package by.entity.abstractive;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
 public abstract class AbstractCarAd {
     private Integer age;
     private String brand;
@@ -13,8 +15,6 @@ public abstract class AbstractCarAd {
     private Integer mileage;
     private Integer engineSize;
     private Integer enginePower;
-    private Timestamp creationDate;
-    private Timestamp lastEditDate;
 
     public enum CarCondition {
         NEW,USED,BROKEN

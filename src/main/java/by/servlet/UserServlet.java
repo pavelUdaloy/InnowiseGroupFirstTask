@@ -1,5 +1,8 @@
 package by.servlet;
 
+import by.entity.dto.request.CarAdDTORequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +45,15 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        PrintWriter out = resp.getWriter();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            CarAdDTORequest carAdDTORequest = mapper.readValue(req.getReader(), CarAdDTORequest.class);
+            System.out.println(carAdDTORequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.close();
     }
 }

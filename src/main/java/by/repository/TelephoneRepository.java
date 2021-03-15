@@ -6,7 +6,7 @@ import by.entity.dao.response.TelephoneDAOResponse;
 import java.util.List;
 
 public interface TelephoneRepository {
-    TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest);
+    List<TelephoneDAOResponse> add(List<TelephoneDAORequest> telephoneDAORequests);
 
     TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest);
 

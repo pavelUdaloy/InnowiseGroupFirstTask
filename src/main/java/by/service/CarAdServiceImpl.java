@@ -2,6 +2,9 @@ package by.service;
 
 import by.entity.dao.request.CarAdDAORequest;
 import by.entity.dao.response.CarAdDAOResponse;
+import by.entity.dto.request.CarAdDTORequest;
+import by.entity.dto.response.CarAdDTOResponse;
+import by.mapper.CarAdMapper.DTODAOMapper;
 import by.repository.CarAdRepository;
 import by.repository.CarAdRepositoryImpl;
 
@@ -12,32 +15,34 @@ public class CarAdServiceImpl implements CarAdService {
     private final CarAdRepository carAdRepository = new CarAdRepositoryImpl();
 
     @Override
-    public CarAdDAOResponse add(CarAdDAORequest carAdDAORequest) {
-        return carAdRepository.add(carAdDAORequest);
+    public CarAdDTOResponse add(CarAdDTORequest carAdDTORequest) {
+        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDAOResponse add = carAdRepository.add(carAdDAORequest);
+        return null;
     }
 
     @Override
-    public CarAdDAOResponse delete(CarAdDAORequest carAdDAORequest) {
-        return carAdRepository.delete(carAdDAORequest);
+    public CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest) {
+        return carAdRepository.delete(carAdDTORequest);
     }
 
     @Override
-    public List<CarAdDAOResponse> deleteAll() {
+    public List<CarAdDTOResponse> deleteAll() {
         return carAdRepository.deleteAll();
     }
 
     @Override
-    public CarAdDAOResponse get(CarAdDAORequest carAdDAORequest) {
-        return carAdRepository.get(carAdDAORequest);
+    public CarAdDTOResponse get(CarAdDTORequest carAdDTORequest) {
+        return carAdRepository.get(carAdDTORequest);
     }
 
     @Override
-    public List<CarAdDAOResponse> getAll() {
+    public List<CarAdDTOResponse> getAll() {
         return carAdRepository.getAll();
     }
 
     @Override
-    public CarAdDAOResponse set(CarAdDAORequest carAdDAORequest) {
-        return carAdRepository.set(carAdDAORequest);
+    public CarAdDTOResponse set(CarAdDTORequest carAdDTORequest) {
+        return carAdRepository.set(carAdDTORequest);
     }
 }

@@ -2,17 +2,19 @@ package by.service;
 
 import by.entity.dao.request.ImageDAORequest;
 import by.entity.dao.response.ImageDAOResponse;
+import by.entity.dto.request.ImageDTORequest;
+import by.entity.dto.response.ImageDTOResponse;
 
 import java.util.List;
 
 public interface ImageService {
-    ImageDAOResponse add(ImageDAORequest image);
+    List<ImageDTOResponse> addAll(List<ImageDTORequest> images);
 
-    ImageDAOResponse delete(ImageDAORequest image);
+    ImageDTOResponse delete(ImageDTORequest image);
 
-    List<ImageDAOResponse> deleteAll();
+    List<ImageDTOResponse> deleteAll();
 
-    ImageDAOResponse get(ImageDAORequest image);
+    ImageDTOResponse get(ImageDTORequest image);
 
-    List<ImageDAOResponse> getAll();
+    List<ImageDTOResponse> getAll();
 }

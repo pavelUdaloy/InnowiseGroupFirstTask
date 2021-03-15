@@ -1,23 +1,18 @@
 package by.servlet;
 
-import by.entity.dao.request.TelephoneDAORequest;
-import com.google.gson.Gson;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import by.entity.dto.request.CarAdDTORequest;
+import by.entity.dto.request.TelephoneDTORequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import static by.util.TextLabels.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 @WebServlet(name = "by/servlet/MainServlet.java", urlPatterns = "/test")
 public class MainServlet extends HttpServlet {
@@ -42,50 +37,30 @@ public class MainServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Properties property = new Properties();
-        FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
-        property.load(fis);
-
-        if (!ServletFileUpload.isMultipartContent(request)) {
-            response.sendError(400);
-        }
-        response.setContentType("text/html");
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(Integer.parseInt(property.getProperty(PROPERTIES_MAX_MEMORY_SIZE)));
-        String basePath = property.getProperty(PROPERTIES_BASE_PATH);
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setSizeMax(Integer.parseInt(property.getProperty(PROPERTIES_MAX_FILE_SIZE)));
-
-        try {
-            List<FileItem> fileItems = upload.parseRequest(request);
-            for (FileItem item : fileItems) {
-                if (!item.isFormField() && item.getSize() <= upload.getSizeMax()) {
-                    String contentType = item.getContentType();
-                    if (contentType.equals(JSON_FILE)) {
-                        Gson gson = new Gson();
-                        File file = new File("as.txt");
-                        item.write(file);
-                        BufferedReader br = new BufferedReader(
-                                new FileReader(file));
-                        TelephoneDAORequest telephoneDAORequest = gson.fromJson(br, TelephoneDAORequest.class);
-                        System.out.println(telephoneDAORequest);
-                    } else {
-                        file = new File(getNewFileName(basePath, item.getName()));
-                        item.write(file);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-    }
-
-    private String getNewFileName(String savingPath, String oldFileName) {
-        String fileType = oldFileName.substring(oldFileName.lastIndexOf(DOT));
-        Timestamp timestamp = new Timestamp(new Date().getTime());
-        String newName = timestamp.toString().replaceAll(ANY_NOT_NUMERAL_SYMBOL, EMPTY);
-        return savingPath + newName + fileType;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+//        PrintWriter out = response.getWriter();
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+////            CarAdDTORequest carAdDTORequest = mapper.readValue(request.getReader(), CarAdDTORequest.class);
+//            CarAdDTORequest carAdDTORequest = new CarAdDTORequest();
+//            carAdDTORequest.setAge(12);
+//            carAdDTORequest.setMileage(121212);
+//            TelephoneDTORequest telephoneDTORequest = new TelephoneDTORequest();
+//            telephoneDTORequest.setNumber("1212121");
+//            TelephoneDTORequest telephoneDTORequest2 = new TelephoneDTORequest();
+//            telephoneDTORequest2.setNumber("1212121");
+//            ArrayList<TelephoneDTORequest> arrayList = new ArrayList<>();
+//            arrayList.add(telephoneDTORequest);
+//            arrayList.add(telephoneDTORequest2);
+//            carAdDTORequest.setTelephones(arrayList);
+//            String s = mapper.writeValueAsString(carAdDTORequest);
+//            System.out.println(s);
+//            System.out.println(carAdDTORequest);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        out.close();
     }
 
     @Override

@@ -2,19 +2,21 @@ package by.service;
 
 import by.entity.dao.request.TelephoneDAORequest;
 import by.entity.dao.response.TelephoneDAOResponse;
+import by.entity.dto.request.TelephoneDTORequest;
+import by.entity.dto.response.TelephoneDTOResponse;
 
 import java.util.List;
 
 public interface TelephoneService {
-    TelephoneDAOResponse add(TelephoneDAORequest telephoneDAORequest);
+    List<TelephoneDTOResponse> addAll(List<TelephoneDTORequest> telephoneDTORequests);
 
-    TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest);
+    TelephoneDTOResponse delete(TelephoneDTORequest telephoneDTORequest);
 
-    List<TelephoneDAOResponse> deleteAll();
+    List<TelephoneDTOResponse> deleteAll();
 
-    TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest);
+    TelephoneDTOResponse get(TelephoneDTORequest telephoneDTORequest);
 
-    List<TelephoneDAOResponse> getAll();
+    List<TelephoneDTOResponse> getAll();
 
-    TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber);
+    TelephoneDTOResponse set(TelephoneDTORequest telephoneDTORequest, String newNumber);
 }

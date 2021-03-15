@@ -2,19 +2,21 @@ package by.service;
 
 import by.entity.dao.request.CarAdDAORequest;
 import by.entity.dao.response.CarAdDAOResponse;
+import by.entity.dto.request.CarAdDTORequest;
+import by.entity.dto.response.CarAdDTOResponse;
 
 import java.util.List;
 
 public interface CarAdService {
-    CarAdDAOResponse add(CarAdDAORequest carAdDAORequest);
+    CarAdDTOResponse add(CarAdDTORequest carAdDTORequest);
 
-    CarAdDAOResponse delete(CarAdDAORequest carAdDAORequest);
+    CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest);
 
-    List<CarAdDAOResponse> deleteAll();
+    List<CarAdDTOResponse> deleteAll();
 
-    CarAdDAOResponse get(CarAdDAORequest carAdDAORequest);
+    CarAdDTOResponse get(CarAdDTORequest carAdDTORequest);
 
-    List<CarAdDAOResponse> getAll();
+    List<CarAdDTOResponse> getAll();
 
-    CarAdDAOResponse set(CarAdDAORequest carAdDAORequest);
+    CarAdDTOResponse set(CarAdDTORequest carAdDTORequest);
 }

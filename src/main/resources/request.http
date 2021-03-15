@@ -18,11 +18,12 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/test/
-Content-Type: multipart/form-data
+POST http://localhost:8080/simple/ads
+Content-Type: application/json
 
 {
-
+  "age": 12,
+  "model": "12"
 }
 
 ###
