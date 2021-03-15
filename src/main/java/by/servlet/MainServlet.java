@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,19 +22,26 @@ import static by.util.TextLabels.PROPERTIES_MAX_MEMORY_SIZE;
 import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.PROPERTIES_PATH_FOR_HUGE_FILES;
 
-@WebServlet(urlPatterns = "/")
+@WebServlet(name = "by/servlet/MainServlet.java", urlPatterns = "/test")
 public class MainServlet extends HttpServlet {
 
     private boolean isMultipart;
     private File file;
 
     @Override
+    public void init() throws ServletException {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        super.init();
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         System.out.println("AAAAA");
-        resp.setContentType("text/html");
-        PrintWriter printWriter = resp.getWriter();
-        printWriter.write("\n Hello123!");
-        printWriter.close();
+        resp.sendError(401);
+//        resp.setContentType("text/html");
+//        PrintWriter printWriter = resp.getWriter();
+//        printWriter.write("\n Hello123!");
+//        printWriter.close();
     }
 
     @Override
@@ -78,6 +86,16 @@ public class MainServlet extends HttpServlet {
         } catch (Exception ex) {
             System.out.println(ex);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPut(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doDelete(req, resp);
     }
 }
 //доабвиь идентификацию по id

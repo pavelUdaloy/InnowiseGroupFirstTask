@@ -1,10 +1,11 @@
-plugins {
-    id 'java'
-    id 'war'
-}
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'war'
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.7
 
 repositories {
     mavenCentral()
@@ -16,6 +17,9 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.2'
+
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    testCompile 'junit:junit:4.12'
 }

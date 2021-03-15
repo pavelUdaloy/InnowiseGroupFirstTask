@@ -9,14 +9,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/main")
+@WebFilter(filterName = "by/filter/MainFilter.java", urlPatterns = "/test")
 public class MainFilter implements Filter {
     public MainFilter() {
     }
 
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
-//        System.out.println("LogFilter init!");
+        System.out.println("LogFilter init!");
     }
 
     @Override
