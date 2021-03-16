@@ -23,7 +23,7 @@ public interface CarAdService {
 
     List<CarAdDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDtoResponse update(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    CarAdDtoResponse update(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     List<CarAdDtoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

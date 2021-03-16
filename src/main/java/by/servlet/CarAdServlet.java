@@ -92,7 +92,7 @@ public class CarAdServlet extends HttpServlet {
 
     @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String carAdIdInString = request.getParameter(ID);
         if (carAdIdInString != null) {
             try {
@@ -127,30 +127,32 @@ public class CarAdServlet extends HttpServlet {
 
     @SneakyThrows
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
         Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
                 (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
 
-        CarAdDtoRequest carAdDTORequest = new CarAdDtoRequest();
+        int id;
+        int age;
+        String brand;
+        String model;
+        int engineSize;
+        int enginePower;
+        int mileage;
+        try {
+            id = Integer.parseInt(dataMap.get(ID));
+            age = Integer.parseInt(dataMap.get(AGE));
+            brand = dataMap.get(BRAND);
+            model = dataMap.get(MODEL);
+            engineSize = Integer.parseInt(dataMap.get(ENGINE_SIZE_PARAM));
+            enginePower = Integer.parseInt(dataMap.get(ENGINE_POWER_PARAM));
+            mileage = Integer.parseInt(dataMap.get(MILEAGE));
+        } catch (NumberFormatException exception) {
+            return;
+        }
 
-        carAdDTORequest.setId(Integer.valueOf(dataMap.get(ID)));
-        carAdDTORequest.setAge(Integer.valueOf(dataMap.get(AGE)));
-        carAdDTORequest.setBrand(dataMap.get(BRAND));
-        carAdDTORequest.setModel(dataMap.get(MODEL));
-        carAdDTORequest.setEngineSize(Integer.valueOf(dataMap.get(ENGINE_SIZE_PARAM)));
-        carAdDTORequest.setEnginePower(Integer.valueOf(dataMap.get(ENGINE_POWER_PARAM)));
-        carAdDTORequest.setMileage(Integer.valueOf(dataMap.get(MILEAGE)));
-        Timestamp timestamp = new Timestamp(new Date().getTime());
-        carAdDTORequest.setLastEditDate(timestamp);
-
-        CarAdDtoResponse carAdDTOResponse = carAdService.update(carAdDTORequest);
-        List<ImageDtoResponse> imageDtoRespons = imageService.get(carAdDTOResponse.getId());
-        carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
-        List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.get(carAdDTOResponse.getOwnerId());
-        carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
-
-        String jsonString = objectMapper.writeValueAsString(carAdDTOResponse);
+        String jsonString = objectMapper.writeValueAsString
+                (carAdService.update(id, age, brand, model, engineSize, enginePower, mileage));
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();
         resp.setCharacterEncoding(UTF8);
