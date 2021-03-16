@@ -4,6 +4,7 @@ import by.entity.dto.request.CarAdDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
+import by.servlet.CarAdServlet;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface CarAdService {
 
     CarAdDtoResponse get(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDtoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    CarAdServlet.GetResponseBody get(Integer carAdId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     List<CarAdDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 

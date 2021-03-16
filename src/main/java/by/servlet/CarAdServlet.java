@@ -20,8 +20,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -93,22 +93,11 @@ public class CarAdServlet extends HttpServlet {
     @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter(ID);
-        if (id != null) {
+        String carAdIdInString = request.getParameter(ID);
+        if (carAdIdInString != null) {
             try {
-                Integer carAdId = Integer.valueOf(id);
-                CarAdDtoResponse carAdDTOResponse = carAdService.get(carAdId);
-                UserDaoResponse userDAOResponse = userService.get(carAdDTOResponse.getOwnerId());
-                List<ImageDtoResponse> imageDtoResponse = imageService.get(carAdDTOResponse.getId());
-                carAdDTOResponse.setImageQuantity(imageDtoResponse.size());
-                List<String> imagesIds = new ArrayList<>();
-                for (ImageDtoResponse imageDTOResponse : imageDtoResponse) {
-                    imagesIds.add(String.valueOf(imageDTOResponse.getId()));
-                }
-                List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.get(carAdDTOResponse.getOwnerId());
-                carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
-                GetResponseBody getResponseBody = new GetResponseBody
-                        (carAdDTOResponse, userDAOResponse, imagesIds);
+                Integer carAdId = Integer.valueOf(carAdIdInString);
+                GetResponseBody getResponseBody = carAdService.get(carAdId);
                 String jsonString = objectMapper.writeValueAsString(getResponseBody);
                 response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
@@ -122,12 +111,7 @@ public class CarAdServlet extends HttpServlet {
             try {
                 Integer size = Integer.valueOf(request.getParameter(SIZE_PARAM));
                 Integer page = Integer.valueOf(request.getParameter(PAGE_PARAM));
-                List<CarAdDtoResponse> carAdDtoRespons = carAdService.getWithPagination(size, page);
-                for (CarAdDtoResponse carAdDTOResponse : carAdDtoRespons) {
-                    carAdDTOResponse.setImageQuantity(imageService.get(carAdDTOResponse.getId()).size());
-                    carAdDTOResponse.setTelephoneList(telephoneService.get(carAdDTOResponse.getOwnerId()));
-                }
-                String jsonString = objectMapper.writeValueAsString(carAdDtoRespons);
+                String jsonString = objectMapper.writeValueAsString(carAdService.getWithPagination(size, page));
                 PrintWriter out = response.getWriter();
                 response.setContentType(JSON_FILE);
                 response.setCharacterEncoding(UTF8);
@@ -190,8 +174,7 @@ public class CarAdServlet extends HttpServlet {
         CarAdDtoResponse carAdDTOResponse = carAdService.delete(carAdId);
         carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
         carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
-        GetResponseBody getResponseBody = new GetResponseBody
-                (carAdDTOResponse, userDAOResponse, imagesIds);
+        GetResponseBody getResponseBody = new GetResponseBody(carAdDTOResponse, userDAOResponse, imagesIds);
         String jsonString = objectMapper.writeValueAsString(getResponseBody);
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();
@@ -271,11 +254,11 @@ public class CarAdServlet extends HttpServlet {
     }
 
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Data
-    private static class GetResponseBody {
+    @Getter
+    @Setter
+    public static class GetResponseBody {
         CarAdDtoResponse carAdDTOResponse;
         UserDaoResponse userDAOResponse;
         List<String> imageIds;
-    }
+    }//todo annotations
 }
