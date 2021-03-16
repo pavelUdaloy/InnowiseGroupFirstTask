@@ -30,9 +30,9 @@ public class CarAdServiceImpl implements CarAdService {
 
     @Override
     public CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest, List<ImageDtoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoRequest carAdDAORequest = CarAdMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoRequest carAdDAORequest = new CarAdMapper().convertDTOReqToDAOReq(carAdDTORequest);
         CarAdDaoResponse carAdDaoResponse = carAdRepository.add(carAdDAORequest);
-        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDaoResponse);
+        CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDAORespToDTOResp(carAdDaoResponse);
 
         for (ImageDtoRequest image : images) {
             image.setOwnerId(carAdDtoResponse.getId());
@@ -44,15 +44,15 @@ public class CarAdServiceImpl implements CarAdService {
 
     @Override
     public CarAdDtoResponse delete(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoRequest carAdDAORequest = CarAdMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoRequest carAdDAORequest = new CarAdMapper().convertDTOReqToDAOReq(carAdDTORequest);
         CarAdDaoResponse carAdDAOResponse = carAdRepository.delete(carAdDAORequest);
-        return CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+        return new CarAdMapper().convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
     public CarAdServlet.GetResponseBody delete(Integer carAdId, Integer userId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         CarAdDaoResponse carAdDaoResponse = carAdRepository.delete(carAdId);
-        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDaoResponse);
+        CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDAORespToDTOResp(carAdDaoResponse);
 
         UserDaoResponse userDAOResponse = userService.get(userId);
         List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdId);
@@ -70,20 +70,20 @@ public class CarAdServiceImpl implements CarAdService {
     @Override
     public List<CarAdDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         List<CarAdDaoResponse> carAdDAORespons = carAdRepository.deleteAll();
-        return CarAdMapper.convertDAORespsToDTOResps(carAdDAORespons);
+        return new CarAdMapper().convertDAORespsToDTOResps(carAdDAORespons);
     }
 
     @Override
     public CarAdDtoResponse get(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoRequest carAdDAORequest = CarAdMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoRequest carAdDAORequest = new CarAdMapper().convertDTOReqToDAOReq(carAdDTORequest);
         CarAdDaoResponse carAdDAOResponse = carAdRepository.get(carAdDAORequest);
-        return CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+        return new CarAdMapper().convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
     public CarAdServlet.GetResponseBody get(Integer carAdId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         CarAdDaoResponse carAdDAOResponse = carAdRepository.get(carAdId);
-        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+        CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDAORespToDTOResp(carAdDAOResponse);
 
         UserDaoResponse userDAOResponse = userService.get(carAdDtoResponse.getOwnerId());
 
@@ -102,8 +102,8 @@ public class CarAdServiceImpl implements CarAdService {
 
     @Override
     public List<CarAdDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        List<CarAdDaoResponse> carAdDAORespons = carAdRepository.getAll();
-        return CarAdMapper.convertDAORespsToDTOResps(carAdDAORespons);
+        List<CarAdDaoResponse> carAdDAOResponse = carAdRepository.getAll();
+        return new CarAdMapper().convertDAORespsToDTOResps(carAdDAOResponse);
     }
 
     @Override
@@ -120,9 +120,9 @@ public class CarAdServiceImpl implements CarAdService {
         Timestamp timestamp = new Timestamp(new Date().getTime());
         carAdDTORequest.setLastEditDate(timestamp);
 
-        CarAdDaoRequest carAdDAORequest = CarAdMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoRequest carAdDAORequest = new CarAdMapper().convertDTOReqToDAOReq(carAdDTORequest);
         CarAdDaoResponse carAdDAOResponse = carAdRepository.update(carAdDAORequest);
-        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+        CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDAORespToDTOResp(carAdDAOResponse);
 
         List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdDtoResponse.getId());
         carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
@@ -135,7 +135,7 @@ public class CarAdServiceImpl implements CarAdService {
     @Override
     public List<CarAdDtoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         List<CarAdDaoResponse> carAdDaoResponse = carAdRepository.getWithPagination(size, page);
-        List<CarAdDtoResponse> carAdDtoResponses = CarAdMapper.convertDAORespsToDTOResps(carAdDaoResponse);
+        List<CarAdDtoResponse> carAdDtoResponses = new CarAdMapper().convertDAORespsToDTOResps(carAdDaoResponse);
         for (CarAdDtoResponse carAdDtoResponse : carAdDtoResponses) {
             carAdDtoResponse.setImageQuantity(imageService.get(carAdDtoResponse.getId()).size());
             carAdDtoResponse.setTelephoneList(telephoneService.get(carAdDtoResponse.getOwnerId()));

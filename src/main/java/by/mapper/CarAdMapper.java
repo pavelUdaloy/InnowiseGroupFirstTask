@@ -10,15 +10,15 @@ import java.util.List;
 
 public class CarAdMapper {
 
-    public static CarAdDtoResponse convertDAORespToDTOResp(CarAdDaoResponse carAdDAOResponse) {
+    public CarAdDtoResponse convertDAORespToDTOResp(CarAdDaoResponse carAdDAOResponse) {
         return setParamsToDTO(carAdDAOResponse);
     }
 
-    public static CarAdDaoRequest convertDTOReqToDAOReq(CarAdDtoRequest carAdDTORequest) {
+    public CarAdDaoRequest convertDTOReqToDAOReq(CarAdDtoRequest carAdDTORequest) {
         return setParamsToDao(carAdDTORequest);
     }
 
-    public static List<CarAdDaoRequest> convertDTOReqsToDAOReqs(List<CarAdDtoRequest> carAdDtoRequests) {
+    public List<CarAdDaoRequest> convertDTOReqsToDAOReqs(List<CarAdDtoRequest> carAdDtoRequests) {
         List<CarAdDaoRequest> carAdDaoRequests = new ArrayList<>();
         for (CarAdDtoRequest carAdDTORequest : carAdDtoRequests) {
             carAdDaoRequests.add(setParamsToDao(carAdDTORequest));
@@ -26,7 +26,7 @@ public class CarAdMapper {
         return carAdDaoRequests;
     }
 
-    public static List<CarAdDtoResponse> convertDAORespsToDTOResps(List<CarAdDaoResponse> carAdDAORespons) {
+    public List<CarAdDtoResponse> convertDAORespsToDTOResps(List<CarAdDaoResponse> carAdDAORespons) {
         List<CarAdDtoResponse> carAdDtoRespons = new ArrayList<>();
         for (CarAdDaoResponse carAdDAOResponse : carAdDAORespons) {
             carAdDtoRespons.add(setParamsToDTO(carAdDAOResponse));
@@ -34,7 +34,7 @@ public class CarAdMapper {
         return carAdDtoRespons;
     }
 
-    private static CarAdDtoResponse setParamsToDTO(CarAdDaoResponse carAdDAOResponse) {
+    private CarAdDtoResponse setParamsToDTO(CarAdDaoResponse carAdDAOResponse) {
         CarAdDtoResponse carAdDTOResponse = new CarAdDtoResponse();
         carAdDTOResponse.setModel(carAdDAOResponse.getModel());
         carAdDTOResponse.setCreationDate(carAdDAOResponse.getCreationDate());
@@ -50,7 +50,7 @@ public class CarAdMapper {
         return carAdDTOResponse;
     }
 
-    private static CarAdDaoRequest setParamsToDao(CarAdDtoRequest carAdDTORequest) {
+    private CarAdDaoRequest setParamsToDao(CarAdDtoRequest carAdDTORequest) {
         CarAdDaoRequest carAdDAORequest = new CarAdDaoRequest();
         carAdDAORequest.setId(carAdDTORequest.getId());
         carAdDAORequest.setModel(carAdDTORequest.getModel());

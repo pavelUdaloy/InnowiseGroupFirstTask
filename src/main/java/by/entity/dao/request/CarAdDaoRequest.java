@@ -1,17 +1,15 @@
 package by.entity.dao.request;
 
 import by.entity.abstractive.AbstractCarAd;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
-@ToString(callSuper = true)
 public class CarAdDaoRequest extends AbstractCarAd {
     private Integer id;
     private Integer ownerId;

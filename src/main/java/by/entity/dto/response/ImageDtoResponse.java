@@ -1,15 +1,13 @@
 package by.entity.dto.response;
 
 import by.entity.abstractive.AbstractImage;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
-@ToString(callSuper = true)
 public class ImageDtoResponse extends AbstractImage {
     private Integer ownerId;
     private Integer id;

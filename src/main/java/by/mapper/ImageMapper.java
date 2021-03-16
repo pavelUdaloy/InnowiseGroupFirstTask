@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageMapper {
-    public static List<ImageDaoRequest> convertDTOReqsToDAOReqs(List<ImageDtoRequest> imageDtoRequests) {
+    public List<ImageDaoRequest> convertDTOReqsToDAOReqs(List<ImageDtoRequest> imageDtoRequests) {
         List<ImageDaoRequest> imageDaoRequests = new ArrayList<>();
         for (ImageDtoRequest imageDTORequest : imageDtoRequests) {
             ImageDaoRequest imageDAORequest = new ImageDaoRequest();
@@ -22,7 +22,7 @@ public class ImageMapper {
         return imageDaoRequests;
     }
 
-    public static List<ImageDtoResponse> convertDAORespsToDTOResps(List<ImageDaoResponse> imageDaoRespons) {
+    public List<ImageDtoResponse> convertDAORespsToDTOResps(List<ImageDaoResponse> imageDaoRespons) {
         List<ImageDtoResponse> imageDtoRespons = new ArrayList<>();
         for (ImageDaoResponse imageDAOResponse : imageDaoRespons) {
             ImageDtoResponse imageDTOResponse = new ImageDtoResponse();
@@ -35,7 +35,7 @@ public class ImageMapper {
         return imageDtoRespons;
     }
 
-    public static ImageDaoRequest convertDTOReqToDAOReq(ImageDtoRequest imageDTORequest) {
+    public ImageDaoRequest convertDTOReqToDAOReq(ImageDtoRequest imageDTORequest) {
         ImageDaoRequest imageDAORequest = new ImageDaoRequest();
         imageDAORequest.setFileFormat(imageDTORequest.getFileFormat());
         imageDAORequest.setName(imageDTORequest.getName());
@@ -43,7 +43,7 @@ public class ImageMapper {
         return imageDAORequest;
     }
 
-    public static ImageDtoResponse convertDAORespToDTOResp(ImageDaoResponse imageDAOResponse) {
+    public ImageDtoResponse convertDAORespToDTOResp(ImageDaoResponse imageDAOResponse) {
         ImageDtoResponse imageDTOResponse = new ImageDtoResponse();
         imageDTOResponse.setFileFormat(imageDAOResponse.getFileFormat());
         imageDTOResponse.setName(imageDAOResponse.getName());

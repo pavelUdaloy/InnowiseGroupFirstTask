@@ -1,9 +1,11 @@
 package by.entity.abstractive;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public abstract class AbstractTelephone {
     private String number;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TelephoneMapper {
-    public static List<TelephoneDaoRequest> convertDTOReqsToDAOReqs(List<TelephoneDtoRequest> telephoneDtoRequestList) {
+    public List<TelephoneDaoRequest> convertDTOReqsToDAOReqs(List<TelephoneDtoRequest> telephoneDtoRequestList) {
         List<TelephoneDaoRequest> telephoneDaoRequests = new ArrayList<>();
         for (TelephoneDtoRequest telephoneDTORequest : telephoneDtoRequestList) {
             TelephoneDaoRequest telephoneDAORequest = new TelephoneDaoRequest();
@@ -20,7 +20,7 @@ public class TelephoneMapper {
         return telephoneDaoRequests;
     }
 
-    public static List<TelephoneDtoResponse> convertDAORespsToDTOResps(List<TelephoneDaoResponse> telephoneDaoRespons) {
+    public List<TelephoneDtoResponse> convertDAORespsToDTOResps(List<TelephoneDaoResponse> telephoneDaoRespons) {
         List<TelephoneDtoResponse> telephoneDAORequests = new ArrayList<>();
         for (TelephoneDaoResponse telephoneDAOResponse : telephoneDaoRespons) {
             TelephoneDtoResponse telephoneDTOResponse = new TelephoneDtoResponse();
@@ -32,14 +32,14 @@ public class TelephoneMapper {
         return telephoneDAORequests;
     }
 
-    public static TelephoneDaoRequest convertDTOReqToDAOReq(TelephoneDtoRequest telephoneDTORequest) {
+    public TelephoneDaoRequest convertDTOReqToDAOReq(TelephoneDtoRequest telephoneDTORequest) {
         TelephoneDaoRequest telephoneDAORequest = new TelephoneDaoRequest();
         telephoneDAORequest.setNumber(telephoneDTORequest.getNumber());
         telephoneDAORequest.setOwnerId(telephoneDTORequest.getOwnerId());
         return telephoneDAORequest;
     }
 
-    public static TelephoneDtoResponse convertDAORespToDTOResp(TelephoneDaoResponse telephoneDAOResponse) {
+    public TelephoneDtoResponse convertDAORespToDTOResp(TelephoneDaoResponse telephoneDAOResponse) {
         TelephoneDtoResponse telephoneDTOResponse = new TelephoneDtoResponse();
         telephoneDTOResponse.setNumber(telephoneDAOResponse.getNumber());
         telephoneDTOResponse.setOwnerId(telephoneDAOResponse.getOwnerId());

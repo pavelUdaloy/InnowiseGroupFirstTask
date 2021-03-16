@@ -18,40 +18,40 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageDtoResponse> addAll(List<ImageDtoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        List<ImageDaoRequest> imageDaoRequests = ImageMapper.convertDTOReqsToDAOReqs(images);
+        List<ImageDaoRequest> imageDaoRequests = new ImageMapper().convertDTOReqsToDAOReqs(images);
         List<ImageDaoResponse> imageDaoResponse = imageRepository.addAll(imageDaoRequests);
-        return ImageMapper.convertDAORespsToDTOResps(imageDaoResponse);
+        return new ImageMapper().convertDAORespsToDTOResps(imageDaoResponse);
     }
 
     @Override
     public ImageDtoResponse delete(ImageDtoRequest imageDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        ImageDaoRequest imageDAORequest = ImageMapper.convertDTOReqToDAOReq(imageDTORequest);
+        ImageDaoRequest imageDAORequest = new ImageMapper().convertDTOReqToDAOReq(imageDTORequest);
         ImageDaoResponse imageDAOResponse = imageRepository.delete(imageDAORequest);
-        return ImageMapper.convertDAORespToDTOResp(imageDAOResponse);
+        return new ImageMapper().convertDAORespToDTOResp(imageDAOResponse);
     }
 
     @Override
     public List<ImageDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         List<ImageDaoResponse> imageDaoRespons = imageRepository.deleteAll();
-        return ImageMapper.convertDAORespsToDTOResps(imageDaoRespons);
+        return new ImageMapper().convertDAORespsToDTOResps(imageDaoRespons);
     }
 
     @Override
     public ImageDtoResponse get(ImageDtoRequest imageDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        ImageDaoRequest imageDAORequest = ImageMapper.convertDTOReqToDAOReq(imageDTORequest);
+        ImageDaoRequest imageDAORequest = new ImageMapper().convertDTOReqToDAOReq(imageDTORequest);
         ImageDaoResponse imageDAOResponse = imageRepository.get(imageDAORequest);
-        return ImageMapper.convertDAORespToDTOResp(imageDAOResponse);
+        return new ImageMapper().convertDAORespToDTOResp(imageDAOResponse);
     }
 
     @Override
     public List<ImageDtoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         List<ImageDaoResponse> imageDaoResponse = imageRepository.get(ownerId);
-        return ImageMapper.convertDAORespsToDTOResps(imageDaoResponse);
+        return new ImageMapper().convertDAORespsToDTOResps(imageDaoResponse);
     }
 
     @Override
     public List<ImageDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         List<ImageDaoResponse> imageDaoResponse = imageRepository.getAll();
-        return ImageMapper.convertDAORespsToDTOResps(imageDaoResponse);
+        return new ImageMapper().convertDAORespsToDTOResps(imageDaoResponse);
     }
 }

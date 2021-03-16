@@ -1,15 +1,13 @@
 package by.entity.dao.response;
 
 import by.entity.abstractive.AbstractImage;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
-@ToString(callSuper = true)
 public class ImageDaoResponse extends AbstractImage {
     private int id;
     private int ownerId;
