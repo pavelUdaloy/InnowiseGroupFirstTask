@@ -1,4 +1,4 @@
-package by.mapper.ImageMapper;
+package by.mapper;
 
 
 import by.entity.dao.request.ImageDaoRequest;
@@ -9,7 +9,7 @@ import by.entity.dto.response.ImageDtoResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTODAOMapper {
+public class ImageMapper {
     public static List<ImageDaoRequest> convertDTOReqsToDAOReqs(List<ImageDtoRequest> imageDtoRequests) {
         List<ImageDaoRequest> imageDaoRequests = new ArrayList<>();
         for (ImageDtoRequest imageDTORequest : imageDtoRequests) {

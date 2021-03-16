@@ -1,4 +1,4 @@
-package by.mapper.carAdMapper;
+package by.mapper;
 
 import by.entity.dao.request.CarAdDaoRequest;
 import by.entity.dao.response.CarAdDaoResponse;
@@ -8,7 +8,7 @@ import by.entity.dto.response.CarAdDtoResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTODAOMapper {
+public class CarAdMapper {
 
     public static CarAdDtoResponse convertDAORespToDTOResp(CarAdDaoResponse carAdDAOResponse) {
         return setParamsToDTO(carAdDAOResponse);

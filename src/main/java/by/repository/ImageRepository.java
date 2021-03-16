@@ -16,7 +16,7 @@ public interface ImageRepository {
 
     ImageDaoResponse get(ImageDaoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    List<ImageDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     List<ImageDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

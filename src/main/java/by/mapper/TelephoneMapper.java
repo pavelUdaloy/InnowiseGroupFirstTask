@@ -1,4 +1,4 @@
-package by.mapper.TelephoneMapper;
+package by.mapper;
 
 import by.entity.dao.request.TelephoneDaoRequest;
 import by.entity.dao.response.TelephoneDaoResponse;
@@ -8,7 +8,7 @@ import by.entity.dto.response.TelephoneDtoResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTODAOMapper {
+public class TelephoneMapper {
     public static List<TelephoneDaoRequest> convertDTOReqsToDAOReqs(List<TelephoneDtoRequest> telephoneDtoRequestList) {
         List<TelephoneDaoRequest> telephoneDaoRequests = new ArrayList<>();
         for (TelephoneDtoRequest telephoneDTORequest : telephoneDtoRequestList) {

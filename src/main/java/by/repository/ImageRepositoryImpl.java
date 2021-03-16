@@ -98,7 +98,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public List<ImageDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<ImageDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         connection = ConnectionFactory.getConnection();
         List<ImageDaoResponse> imageDaoResponse = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE_BY_OWNER_ID)) {

@@ -16,7 +16,7 @@ public interface TelephoneService {
 
     TelephoneDtoResponse get(TelephoneDtoRequest telephoneDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDtoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    List<TelephoneDtoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     List<TelephoneDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 

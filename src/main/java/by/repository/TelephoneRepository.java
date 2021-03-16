@@ -16,7 +16,7 @@ public interface TelephoneRepository {
 
     TelephoneDaoResponse get(TelephoneDaoRequest telephoneDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    List<TelephoneDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     List<TelephoneDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 

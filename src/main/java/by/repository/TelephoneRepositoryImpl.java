@@ -96,7 +96,7 @@ public class TelephoneRepositoryImpl implements TelephoneRepository {
     }
 
     @Override
-    public List<TelephoneDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<TelephoneDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         connection = ConnectionFactory.getConnection();
         List<TelephoneDaoResponse> telephoneDaoRespons = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_TELEPHONE_BY_OWNER_ID)) {
