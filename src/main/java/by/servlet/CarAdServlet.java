@@ -99,18 +99,16 @@ public class CarAdServlet extends HttpServlet {
                 Integer carAdId = Integer.valueOf(id);
                 CarAdDtoResponse carAdDTOResponse = carAdService.get(carAdId);
                 UserDaoResponse userDAOResponse = userService.get(carAdDTOResponse.getOwnerId());
-                List<ImageDtoResponse> imageDtoRespons = imageService.get(carAdDTOResponse.getId());
-                carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
-                List<String> imagesPaths = new ArrayList<>();
-                for (ImageDtoResponse imageDTOResponse : imageDtoRespons) {
-                    String imagesPath = property.getProperty(PROPERTIES_BASE_PATH)
-                            + imageDTOResponse.getName() + imageDTOResponse.getFileFormat();
-                    imagesPaths.add(imagesPath);
+                List<ImageDtoResponse> imageDtoResponse = imageService.get(carAdDTOResponse.getId());
+                carAdDTOResponse.setImageQuantity(imageDtoResponse.size());
+                List<String> imagesIds = new ArrayList<>();
+                for (ImageDtoResponse imageDTOResponse : imageDtoResponse) {
+                    imagesIds.add(String.valueOf(imageDTOResponse.getId()));
                 }
                 List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.get(carAdDTOResponse.getOwnerId());
                 carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
                 GetResponseBody getResponseBody = new GetResponseBody
-                        (carAdDTOResponse, userDAOResponse, imageDtoRespons, imagesPaths);
+                        (carAdDTOResponse, userDAOResponse, imagesIds);
                 String jsonString = objectMapper.writeValueAsString(getResponseBody);
                 response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
@@ -184,18 +182,16 @@ public class CarAdServlet extends HttpServlet {
         UserDaoResponse userDAOResponse = userService.get(ownerId);
         Integer carAdId = Integer.valueOf(req.getParameter(ID));
         List<ImageDtoResponse> imageDtoRespons = imageService.get(carAdId);
-        List<String> imagesPaths = new ArrayList<>();
+        List<String> imagesIds = new ArrayList<>();
         for (ImageDtoResponse imageDTOResponse : imageDtoRespons) {
-            String imagesPath = property.getProperty(PROPERTIES_BASE_PATH)
-                    + imageDTOResponse.getName() + imageDTOResponse.getFileFormat();
-            imagesPaths.add(imagesPath);
+            imagesIds.add(String.valueOf(imageDTOResponse.getId()));
         }
         List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.get(carAdId);
         CarAdDtoResponse carAdDTOResponse = carAdService.delete(carAdId);
         carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
         carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
         GetResponseBody getResponseBody = new GetResponseBody
-                (carAdDTOResponse, userDAOResponse, imageDtoRespons, imagesPaths);
+                (carAdDTOResponse, userDAOResponse, imagesIds);
         String jsonString = objectMapper.writeValueAsString(getResponseBody);
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();
@@ -280,7 +276,6 @@ public class CarAdServlet extends HttpServlet {
     private static class GetResponseBody {
         CarAdDtoResponse carAdDTOResponse;
         UserDaoResponse userDAOResponse;
-        List<ImageDtoResponse> imageDtoRespons;//todo list images id
-        List<String> imagesPath;
+        List<String> imageIds;
     }
 }
