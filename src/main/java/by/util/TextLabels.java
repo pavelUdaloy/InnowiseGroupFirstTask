@@ -102,4 +102,8 @@ public class TextLabels {
     public static final String FILTER_INIT = "MainFilter initialized";
     public static final String FILTER_DESTROY = "MainFilter destroyed";
 
+    //exception
+    public static final String INCORRECT_SQL_MESSAGE = "Incorrect params for sql request";
+    public static final String DB_LOST_MESSAGE = "Connection with db lost (wrong user, password or url)";
+
 }

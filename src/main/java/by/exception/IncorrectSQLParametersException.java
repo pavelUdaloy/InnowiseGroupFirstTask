@@ -5,10 +5,12 @@ import lombok.ToString;
 
 import java.sql.SQLException;
 
+import static by.util.TextLabels.INCORRECT_SQL_MESSAGE;
+
 @ToString
 public class IncorrectSQLParametersException extends SQLException {
     @Getter
-    private static final String message = "Incorrect params for sql request";
+    private final String message = INCORRECT_SQL_MESSAGE;
 
     private final SQLException exception;
 

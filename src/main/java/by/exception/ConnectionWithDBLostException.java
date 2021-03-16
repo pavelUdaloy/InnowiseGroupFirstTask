@@ -3,10 +3,12 @@ package by.exception;
 import lombok.Getter;
 import lombok.ToString;
 
+import static by.util.TextLabels.DB_LOST_MESSAGE;
+
 @ToString
 public class ConnectionWithDBLostException extends Exception {
     @Getter
-    private static final String message = "Connection with db lost (wrong user, password or url)";
+    private final String message = DB_LOST_MESSAGE;
 
     private final String errorType;
 

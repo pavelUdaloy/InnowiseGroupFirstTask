@@ -6,6 +6,8 @@ import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
 import by.entity.dto.response.ImageDtoResponse;
 import by.entity.dto.response.TelephoneDtoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 import by.service.CarAdService;
 import by.service.CarAdServiceImpl;
 import by.service.ImageService;
@@ -88,6 +90,7 @@ public class CarAdServlet extends HttpServlet {
         upload.setSizeMax(Integer.parseInt(property.getProperty(PROPERTIES_MAX_FILE_SIZE)));
     }
 
+    @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter(ID);
@@ -114,7 +117,7 @@ public class CarAdServlet extends HttpServlet {
                 response.setCharacterEncoding(UTF8);
                 out.print(jsonString);
                 out.flush();
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException | IncorrectSQLParametersException | ConnectionWithDBLostException ex) {
                 response.sendError(400);
             }
         } else {
@@ -140,6 +143,7 @@ public class CarAdServlet extends HttpServlet {
         }
     }
 
+    @SneakyThrows
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
@@ -172,8 +176,9 @@ public class CarAdServlet extends HttpServlet {
         out.flush();
     }
 
+    @SneakyThrows
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         req.getSession().setAttribute(ID, 1);
         Integer ownerId = (Integer) req.getSession().getAttribute(ID);
         UserDaoResponse userDAOResponse = userService.get(ownerId);
