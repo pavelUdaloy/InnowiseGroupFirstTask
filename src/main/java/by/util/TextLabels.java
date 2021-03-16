@@ -106,4 +106,13 @@ public class TextLabels {
     public static final String INCORRECT_SQL_MESSAGE = "Incorrect params for sql request";
     public static final String DB_LOST_MESSAGE = "Connection with db lost (wrong user, password or url)";
 
+    //hikari properties
+    public static final String CACHE_PREP_PROPERTY = "cachePrepStmts";
+    public static final String CACHE_PREP_PROPERTY_VALUE = "true";
+    public static final String PREP_CACHE_SIZE_PROPERTY = "prepStmtCacheSize";
+    public static final String PREP_CACHE_SIZE_PROPERTY_VALUE = "250";
+    public static final String PREP_CACHE_SQL_LIMIT_PROPERTY = "prepStmtCacheSqlLimit";
+    public static final String PREP_CACHE_SQL_LIMIT_PROPERTY_VALUE = "2048";
+    public static final String VALIDATION_PROPERTY = "validationQuery";
+    public static final String VALIDATION_PROPERTY_VALUE = "SELECT 1";
 }
