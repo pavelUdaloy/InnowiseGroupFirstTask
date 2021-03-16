@@ -10,6 +10,8 @@ public interface CarAdRepository {
 
     CarAdDAOResponse delete(CarAdDAORequest carAdDAORequest);
 
+    CarAdDAOResponse delete(Integer id);
+
     List<CarAdDAOResponse> deleteAll();
 
     CarAdDAOResponse get(CarAdDAORequest carAdDAORequest);

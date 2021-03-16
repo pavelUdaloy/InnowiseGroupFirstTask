@@ -26,7 +26,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -206,8 +205,30 @@ public class CarAdServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.getSession().setAttribute(ID, 1);
+        Integer ownerId = (Integer) req.getSession().getAttribute(ID);
+        UserDAOResponse userDAOResponse = userService.get(ownerId);
+        Integer carAdId = Integer.valueOf(req.getParameter(ID));
+        List<ImageDTOResponse> imageDTOResponses = imageService.getByOwnerId(carAdId);
+        List<String> imagesPaths = new ArrayList<>();
+        for (ImageDTOResponse imageDTOResponse : imageDTOResponses) {
+            String imagesPath = property.getProperty(PROPERTIES_BASE_PATH)
+                    + imageDTOResponse.getName() + imageDTOResponse.getFileFormat();
+            imagesPaths.add(imagesPath);
+        }
+        List<TelephoneDTOResponse> telephoneDTOResponses = telephoneService.getByOwnerId(carAdId);
+        CarAdDTOResponse carAdDTOResponse = carAdService.delete(carAdId);
+        carAdDTOResponse.setTelephoneList(telephoneDTOResponses);
+        carAdDTOResponse.setImageQuantity(imageDTOResponses.size());
+        GetResponseBody getResponseBody = new GetResponseBody
+                (carAdDTOResponse, userDAOResponse, imageDTOResponses, imagesPaths);
+        String jsonString = objectMapper.writeValueAsString(getResponseBody);
+        resp.setContentType(JSON_FILE);
+        ServletOutputStream out = resp.getOutputStream();
+        resp.setCharacterEncoding(UTF8);
+        out.print(jsonString);
+        out.flush();
     }
 
     @Override

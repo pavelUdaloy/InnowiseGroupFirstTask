@@ -10,6 +10,8 @@ public interface CarAdService {
 
     CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest);
 
+    CarAdDTOResponse delete(Integer id);
+
     List<CarAdDTOResponse> deleteAll();
 
     CarAdDTOResponse get(CarAdDTORequest carAdDTORequest);

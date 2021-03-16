@@ -79,6 +79,19 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     }
 
     @Override
+    public CarAdDAOResponse delete(Integer id) {
+        CarAdDAOResponse carAdDAOResponse = get(id);
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE_CAR_AD);
+            statement.setInt(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return carAdDAOResponse;
+    }
+
+    @Override
     public List<CarAdDAOResponse> deleteAll() {
         List<CarAdDAOResponse> carAdDAOResponses = getAll();
         try {

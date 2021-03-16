@@ -29,6 +29,12 @@ public class CarAdServiceImpl implements CarAdService {
     }
 
     @Override
+    public CarAdDTOResponse delete(Integer id) {
+        CarAdDAOResponse carAdDAOResponse = carAdRepository.delete(id);
+        return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
+    }
+
+    @Override
     public List<CarAdDTOResponse> deleteAll() {
         List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.deleteAll();
         return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
