@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static by.util.TextLabels.FILTER_DESTROY;
+import static by.util.TextLabels.FILTER_INIT;
 import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.property;
 
@@ -26,9 +28,8 @@ public class MainFilter extends HttpFilter {
 
     @Override
     public void init(FilterConfig fConfig) {
-        LOGGER.log(Level.INFO, "MainFilter initialized");
-        try {
-            FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
+        LOGGER.log(Level.INFO, FILTER_INIT);
+        try (FileInputStream fis = new FileInputStream(PROPERTIES_PATH)) {
             property.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,7 +38,7 @@ public class MainFilter extends HttpFilter {
 
     @Override
     public void destroy() {
-        LOGGER.log(Level.INFO, "MainFilter destroyed");
+        LOGGER.log(Level.INFO, FILTER_DESTROY);
     }
 
     @Override

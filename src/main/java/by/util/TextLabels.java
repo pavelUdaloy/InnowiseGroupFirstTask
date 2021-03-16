@@ -4,7 +4,8 @@ import java.util.Properties;
 
 public class TextLabels {
 
-    public static final Properties property = new Properties();
+    //properties
+    public static Properties property = new Properties();
 
     //images
     public static final String ADD_TO_IMAGES = "INSERT INTO simple.public.images VALUES (DEFAULT, ?, ?, ?)";
@@ -97,5 +98,8 @@ public class TextLabels {
     public static final String ENGINE_SIZE_PARAM = "engineSize";
     public static final String ENGINE_POWER_PARAM = "enginePower";
 
+    //filter
+    public static final String FILTER_INIT = "MainFilter initialized";
+    public static final String FILTER_DESTROY = "MainFilter destroyed";
 
 }
