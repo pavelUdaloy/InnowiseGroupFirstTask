@@ -1,6 +1,7 @@
 package by.service;
 
 import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
@@ -9,7 +10,7 @@ import by.servlet.CarAdServlet;
 import java.util.List;
 
 public interface CarAdService {
-    CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
+    CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest, List<ImageDtoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
     CarAdDtoResponse delete(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 

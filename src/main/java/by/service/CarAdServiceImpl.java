@@ -4,6 +4,7 @@ import by.entity.dao.request.CarAdDaoRequest;
 import by.entity.dao.response.CarAdDaoResponse;
 import by.entity.dao.response.UserDaoResponse;
 import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
 import by.entity.dto.response.ImageDtoResponse;
 import by.entity.dto.response.TelephoneDtoResponse;
@@ -28,10 +29,17 @@ public class CarAdServiceImpl implements CarAdService {
     private final UserService userService = new UserServiceImpl();
 
     @Override
-    public CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest, List<ImageDtoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         CarAdDaoRequest carAdDAORequest = CarAdMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDaoResponse carAdDAOResponse = carAdRepository.add(carAdDAORequest);
-        return CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+        CarAdDaoResponse carAdDaoResponse = carAdRepository.add(carAdDAORequest);
+        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDaoResponse);
+
+        for (ImageDtoRequest image : images) {
+            image.setOwnerId(carAdDtoResponse.getId());
+        }
+        carAdDtoResponse.setImageQuantity(imageService.addAll(images).size());
+
+        return carAdDtoResponse;
     }
 
     @Override

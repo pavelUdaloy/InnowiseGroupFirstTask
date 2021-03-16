@@ -8,12 +8,6 @@ import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
 import by.service.CarAdService;
 import by.service.CarAdServiceImpl;
-import by.service.ImageService;
-import by.service.ImageServiceImpl;
-import by.service.TelephoneService;
-import by.service.TelephoneServiceImpl;
-import by.service.UserService;
-import by.service.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
@@ -72,9 +66,6 @@ public class CarAdServlet extends HttpServlet {
     private ServletFileUpload upload;
 
     private final CarAdService carAdService = new CarAdServiceImpl();
-    private final ImageService imageService = new ImageServiceImpl();
-    private final TelephoneService telephoneService = new TelephoneServiceImpl();
-    private final UserService userService = new UserServiceImpl();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -205,11 +196,9 @@ public class CarAdServlet extends HttpServlet {
                 } else throw new FileUploadException();
             }
             if (carAdDTORequest == null) throw new NullPointerException();
-            CarAdDtoResponse carAdDTOResponse = carAdService.add(carAdDTORequest);
-            for (ImageDtoRequest image : images) {
-                image.setOwnerId(carAdDTOResponse.getId());
-            }
-            carAdDTOResponse.setImageQuantity(imageService.addAll(images).size());
+
+            CarAdDtoResponse carAdDTOResponse = carAdService.add(carAdDTORequest, images);
+
             PrintWriter out = resp.getWriter();
             String jsonString = objectMapper.writeValueAsString(carAdDTOResponse);
             resp.setContentType(JSON_FILE);
@@ -259,4 +248,5 @@ public class CarAdServlet extends HttpServlet {
         UserDaoResponse userDAOResponse;
         List<String> imageIds;
     }//todo annotations
+    //todo excps
 }
