@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class CarAdDTOResponse extends AbstractCarAd {
-    private List<TelephoneDTOResponse> telephoneList= new ArrayList<>();
+public class CarAdDtoResponse extends AbstractCarAd {
+    private List<TelephoneDtoResponse> telephoneList= new ArrayList<>();
     private Integer imageQuantity;
 
     private Integer id;

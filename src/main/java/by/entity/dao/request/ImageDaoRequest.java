@@ -1,6 +1,6 @@
-package by.entity.dto.response;
+package by.entity.dao.request;
 
-import by.entity.abstractive.AbstractUser;
+import by.entity.abstractive.AbstractImage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class UserDTOResponse extends AbstractUser {
-    private Integer id;
+public class ImageDaoRequest extends AbstractImage {
+    private Integer ownerId;
 }

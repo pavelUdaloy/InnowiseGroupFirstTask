@@ -1,41 +1,41 @@
-package by.mapper.CarAdMapper;
+package by.mapper.carAdMapper;
 
-import by.entity.dao.request.CarAdDAORequest;
-import by.entity.dao.response.CarAdDAOResponse;
-import by.entity.dto.request.CarAdDTORequest;
-import by.entity.dto.response.CarAdDTOResponse;
+import by.entity.dao.request.CarAdDaoRequest;
+import by.entity.dao.response.CarAdDaoResponse;
+import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.response.CarAdDtoResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DTODAOMapper {
 
-    public static CarAdDTOResponse convertDAORespToDTOResp(CarAdDAOResponse carAdDAOResponse) {
+    public static CarAdDtoResponse convertDAORespToDTOResp(CarAdDaoResponse carAdDAOResponse) {
         return setParamsToDTO(carAdDAOResponse);
     }
 
-    public static CarAdDAORequest convertDTOReqToDAOReq(CarAdDTORequest carAdDTORequest) {
+    public static CarAdDaoRequest convertDTOReqToDAOReq(CarAdDtoRequest carAdDTORequest) {
         return setParamsToDao(carAdDTORequest);
     }
 
-    public static List<CarAdDAORequest> convertDTOReqsToDAOReqs(List<CarAdDTORequest> carAdDTORequests) {
-        List<CarAdDAORequest> carAdDAORequests = new ArrayList<>();
-        for (CarAdDTORequest carAdDTORequest : carAdDTORequests) {
-            carAdDAORequests.add(setParamsToDao(carAdDTORequest));
+    public static List<CarAdDaoRequest> convertDTOReqsToDAOReqs(List<CarAdDtoRequest> carAdDtoRequests) {
+        List<CarAdDaoRequest> carAdDaoRequests = new ArrayList<>();
+        for (CarAdDtoRequest carAdDTORequest : carAdDtoRequests) {
+            carAdDaoRequests.add(setParamsToDao(carAdDTORequest));
         }
-        return carAdDAORequests;
+        return carAdDaoRequests;
     }
 
-    public static List<CarAdDTOResponse> convertDAORespsToDTOResps(List<CarAdDAOResponse> carAdDAOResponses) {
-        List<CarAdDTOResponse> carAdDTOResponses = new ArrayList<>();
-        for (CarAdDAOResponse carAdDAOResponse : carAdDAOResponses) {
-            carAdDTOResponses.add(setParamsToDTO(carAdDAOResponse));
+    public static List<CarAdDtoResponse> convertDAORespsToDTOResps(List<CarAdDaoResponse> carAdDAORespons) {
+        List<CarAdDtoResponse> carAdDtoRespons = new ArrayList<>();
+        for (CarAdDaoResponse carAdDAOResponse : carAdDAORespons) {
+            carAdDtoRespons.add(setParamsToDTO(carAdDAOResponse));
         }
-        return carAdDTOResponses;
+        return carAdDtoRespons;
     }
 
-    private static CarAdDTOResponse setParamsToDTO(CarAdDAOResponse carAdDAOResponse) {
-        CarAdDTOResponse carAdDTOResponse = new CarAdDTOResponse();
+    private static CarAdDtoResponse setParamsToDTO(CarAdDaoResponse carAdDAOResponse) {
+        CarAdDtoResponse carAdDTOResponse = new CarAdDtoResponse();
         carAdDTOResponse.setModel(carAdDAOResponse.getModel());
         carAdDTOResponse.setCreationDate(carAdDAOResponse.getCreationDate());
         carAdDTOResponse.setOwnerId(carAdDAOResponse.getOwnerId());
@@ -50,8 +50,8 @@ public class DTODAOMapper {
         return carAdDTOResponse;
     }
 
-    private static CarAdDAORequest setParamsToDao(CarAdDTORequest carAdDTORequest) {
-        CarAdDAORequest carAdDAORequest = new CarAdDAORequest();
+    private static CarAdDaoRequest setParamsToDao(CarAdDtoRequest carAdDTORequest) {
+        CarAdDaoRequest carAdDAORequest = new CarAdDaoRequest();
         carAdDAORequest.setId(carAdDTORequest.getId());
         carAdDAORequest.setModel(carAdDTORequest.getModel());
         carAdDAORequest.setCreationDate(carAdDTORequest.getCreationDate());

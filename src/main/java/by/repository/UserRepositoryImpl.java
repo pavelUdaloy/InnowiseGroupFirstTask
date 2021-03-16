@@ -1,8 +1,10 @@
 package by.repository;
 
 import by.db.ConnectionFactory;
-import by.entity.dao.request.UserDAORequest;
-import by.entity.dao.response.UserDAOResponse;
+import by.entity.dao.request.UserDaoRequest;
+import by.entity.dao.response.UserDaoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,23 +13,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.util.TextLabels.ADD_TO_USERS;
-import static by.util.TextLabels.DELETE_ALL_USERS;
-import static by.util.TextLabels.DELETE_USER;
-import static by.util.TextLabels.EMAIL;
-import static by.util.TextLabels.FIRST_NAME;
-import static by.util.TextLabels.ID;
-import static by.util.TextLabels.LAST_NAME;
-import static by.util.TextLabels.SELECT_ALL_USERS;
-import static by.util.TextLabels.SELECT_USER_BY_EMAIL;
-import static by.util.TextLabels.SELECT_USER_BY_ID;
+import static by.util.TextLabels.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private final Connection connection = ConnectionFactory.getConnection();
+    private Connection connection;
 
     @Override
-    public UserDAOResponse add(UserDAORequest userDAORequest) {
+    public UserDaoResponse add(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
         try {
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_USERS);
@@ -37,44 +31,50 @@ public class UserRepositoryImpl implements UserRepository {
             preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return get(userDAORequest);
     }
 
     @Override
-    public UserDAOResponse delete(UserDAORequest userDAORequest) {
-        UserDAOResponse userDAOResponse = get(userDAORequest);
+    public UserDaoResponse delete(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        UserDaoResponse userDAOResponse = get(userDAORequest);
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE_USER);
             statement.setString(1, userDAORequest.getEmail());
             statement.execute();
+            connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return userDAOResponse;
     }
 
     @Override
-    public List<UserDAOResponse> deleteAll() {
-        List<UserDAOResponse> userDAOResponses = getAll();
+    public List<UserDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        List<UserDaoResponse> userDaoRespons = getAll();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE_ALL_USERS);
             statement.execute();
+            connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
-        return userDAOResponses;
+        return userDaoRespons;
     }
 
     @Override
-    public UserDAOResponse get(UserDAORequest userDAORequest) {
+    public UserDaoResponse get(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_EMAIL);
             statement.setString(1, userDAORequest.getEmail());
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             if (resultSet.next()) {
-                UserDAOResponse userDAOResponse = new UserDAOResponse();
+                UserDaoResponse userDAOResponse = new UserDaoResponse();
                 userDAOResponse.setId(resultSet.getInt(ID));
                 userDAOResponse.setEmail(resultSet.getString(EMAIL));
                 userDAOResponse.setFirstName(resultSet.getString(FIRST_NAME));
@@ -82,19 +82,21 @@ public class UserRepositoryImpl implements UserRepository {
                 return userDAOResponse;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return null;
     }
 
     @Override
-    public UserDAOResponse get(Integer id) {
+    public UserDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_ID);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             if (resultSet.next()) {
-                UserDAOResponse userDAOResponse = new UserDAOResponse();
+                UserDaoResponse userDAOResponse = new UserDaoResponse();
                 userDAOResponse.setId(resultSet.getInt(ID));
                 userDAOResponse.setEmail(resultSet.getString(EMAIL));
                 userDAOResponse.setFirstName(resultSet.getString(FIRST_NAME));
@@ -102,28 +104,30 @@ public class UserRepositoryImpl implements UserRepository {
                 return userDAOResponse;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return null;
     }
 
     @Override
-    public List<UserDAOResponse> getAll() {
-        List<UserDAOResponse> userDAOResponses = new ArrayList<>();
+    public List<UserDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        List<UserDaoResponse> userDaoRespons = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USERS);
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             while (resultSet.next()) {
-                UserDAOResponse userDAOResponse = new UserDAOResponse();
+                UserDaoResponse userDAOResponse = new UserDaoResponse();
                 userDAOResponse.setId(resultSet.getInt(ID));
                 userDAOResponse.setEmail(resultSet.getString(EMAIL));
                 userDAOResponse.setFirstName(resultSet.getString(FIRST_NAME));
                 userDAOResponse.setLastName(resultSet.getString(LAST_NAME));
-                userDAOResponses.add(userDAOResponse);
+                userDaoRespons.add(userDAOResponse);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
-        return userDAOResponses;
+        return userDaoRespons;
     }
 }

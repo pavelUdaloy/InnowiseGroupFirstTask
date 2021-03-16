@@ -8,9 +8,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static by.util.TextLabels.PROPERTIES_PATH;
+import static by.util.TextLabels.property;
 
 @WebFilter(filterName = "by/filter/MainFilter.java", servletNames =
         {"by/servlet/CarAdServlet.java", "by/servlet/UserServlet.java"})
@@ -23,6 +27,12 @@ public class MainFilter extends HttpFilter {
     @Override
     public void init(FilterConfig fConfig) {
         LOGGER.log(Level.INFO, "MainFilter initialized");
+        try {
+            FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
+            property.load(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

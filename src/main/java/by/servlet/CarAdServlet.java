@@ -1,11 +1,11 @@
 package by.servlet;
 
-import by.entity.dao.response.UserDAOResponse;
-import by.entity.dto.request.CarAdDTORequest;
-import by.entity.dto.request.ImageDTORequest;
-import by.entity.dto.response.CarAdDTOResponse;
-import by.entity.dto.response.ImageDTOResponse;
-import by.entity.dto.response.TelephoneDTOResponse;
+import by.entity.dao.response.UserDaoResponse;
+import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.request.ImageDtoRequest;
+import by.entity.dto.response.CarAdDtoResponse;
+import by.entity.dto.response.ImageDtoResponse;
+import by.entity.dto.response.TelephoneDtoResponse;
 import by.service.CarAdService;
 import by.service.CarAdServiceImpl;
 import by.service.ImageService;
@@ -66,11 +66,11 @@ import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.SIZE_PARAM;
 import static by.util.TextLabels.SPLITTER;
 import static by.util.TextLabels.UTF8;
+import static by.util.TextLabels.property;
 
 @WebServlet(name = "by/servlet/CarAdServlet.java", urlPatterns = "/ads")
 public class CarAdServlet extends HttpServlet {
 
-    private Properties property = new Properties();
     private String basePath;
     private ServletFileUpload upload;
 
@@ -84,8 +84,6 @@ public class CarAdServlet extends HttpServlet {
     @SneakyThrows
     @Override
     public void init() {
-        FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
-        property.load(fis);
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setSizeThreshold(Integer.parseInt(property.getProperty(PROPERTIES_MAX_MEMORY_SIZE)));
         basePath = property.getProperty(PROPERTIES_BASE_PATH);
@@ -99,20 +97,20 @@ public class CarAdServlet extends HttpServlet {
         if (id != null) {
             try {
                 Integer carAdId = Integer.valueOf(id);
-                CarAdDTOResponse carAdDTOResponse = carAdService.get(carAdId);
-                UserDAOResponse userDAOResponse = userService.get(carAdDTOResponse.getOwnerId());
-                List<ImageDTOResponse> imageDTOResponses = imageService.getByOwnerId(carAdDTOResponse.getId());
-                carAdDTOResponse.setImageQuantity(imageDTOResponses.size());
+                CarAdDtoResponse carAdDTOResponse = carAdService.get(carAdId);
+                UserDaoResponse userDAOResponse = userService.get(carAdDTOResponse.getOwnerId());
+                List<ImageDtoResponse> imageDtoRespons = imageService.getByOwnerId(carAdDTOResponse.getId());
+                carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
                 List<String> imagesPaths = new ArrayList<>();
-                for (ImageDTOResponse imageDTOResponse : imageDTOResponses) {
+                for (ImageDtoResponse imageDTOResponse : imageDtoRespons) {
                     String imagesPath = property.getProperty(PROPERTIES_BASE_PATH)
                             + imageDTOResponse.getName() + imageDTOResponse.getFileFormat();
                     imagesPaths.add(imagesPath);
                 }
-                List<TelephoneDTOResponse> telephoneDTOResponses = telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId());
-                carAdDTOResponse.setTelephoneList(telephoneDTOResponses);
+                List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId());
+                carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
                 GetResponseBody getResponseBody = new GetResponseBody
-                        (carAdDTOResponse, userDAOResponse, imageDTOResponses, imagesPaths);
+                        (carAdDTOResponse, userDAOResponse, imageDtoRespons, imagesPaths);
                 String jsonString = objectMapper.writeValueAsString(getResponseBody);
                 response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
@@ -153,12 +151,12 @@ public class CarAdServlet extends HttpServlet {
             try {
                 Integer size = Integer.valueOf(request.getParameter(SIZE_PARAM));
                 Integer page = Integer.valueOf(request.getParameter(PAGE_PARAM));
-                List<CarAdDTOResponse> carAdDTOResponses = carAdService.getWithPagination(size, page);
-                for (CarAdDTOResponse carAdDTOResponse : carAdDTOResponses) {
+                List<CarAdDtoResponse> carAdDtoRespons = carAdService.getWithPagination(size, page);
+                for (CarAdDtoResponse carAdDTOResponse : carAdDtoRespons) {
                     carAdDTOResponse.setImageQuantity(imageService.getByOwnerId(carAdDTOResponse.getId()).size());
                     carAdDTOResponse.setTelephoneList(telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId()));
                 }
-                String jsonString = objectMapper.writeValueAsString(carAdDTOResponses);
+                String jsonString = objectMapper.writeValueAsString(carAdDtoRespons);
                 PrintWriter out = response.getWriter();
                 response.setContentType(JSON_FILE);
                 response.setCharacterEncoding(UTF8);
@@ -178,7 +176,7 @@ public class CarAdServlet extends HttpServlet {
         Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
                 (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
 
-        CarAdDTORequest carAdDTORequest = new CarAdDTORequest();
+        CarAdDtoRequest carAdDTORequest = new CarAdDtoRequest();
 
         carAdDTORequest.setId(Integer.valueOf(dataMap.get(ID)));
         carAdDTORequest.setAge(Integer.valueOf(dataMap.get(AGE)));
@@ -190,11 +188,11 @@ public class CarAdServlet extends HttpServlet {
         Timestamp timestamp = new Timestamp(new Date().getTime());
         carAdDTORequest.setLastEditDate(timestamp);
 
-        CarAdDTOResponse carAdDTOResponse = carAdService.set(carAdDTORequest);
-        List<ImageDTOResponse> imageDTOResponses = imageService.getByOwnerId(carAdDTOResponse.getId());
-        carAdDTOResponse.setImageQuantity(imageDTOResponses.size());
-        List<TelephoneDTOResponse> telephoneDTOResponses = telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId());
-        carAdDTOResponse.setTelephoneList(telephoneDTOResponses);
+        CarAdDtoResponse carAdDTOResponse = carAdService.update(carAdDTORequest);
+        List<ImageDtoResponse> imageDtoRespons = imageService.getByOwnerId(carAdDTOResponse.getId());
+        carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
+        List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId());
+        carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
 
         String jsonString = objectMapper.writeValueAsString(carAdDTOResponse);
         resp.setContentType(JSON_FILE);
@@ -208,21 +206,21 @@ public class CarAdServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().setAttribute(ID, 1);
         Integer ownerId = (Integer) req.getSession().getAttribute(ID);
-        UserDAOResponse userDAOResponse = userService.get(ownerId);
+        UserDaoResponse userDAOResponse = userService.get(ownerId);
         Integer carAdId = Integer.valueOf(req.getParameter(ID));
-        List<ImageDTOResponse> imageDTOResponses = imageService.getByOwnerId(carAdId);
+        List<ImageDtoResponse> imageDtoRespons = imageService.getByOwnerId(carAdId);
         List<String> imagesPaths = new ArrayList<>();
-        for (ImageDTOResponse imageDTOResponse : imageDTOResponses) {
+        for (ImageDtoResponse imageDTOResponse : imageDtoRespons) {
             String imagesPath = property.getProperty(PROPERTIES_BASE_PATH)
                     + imageDTOResponse.getName() + imageDTOResponse.getFileFormat();
             imagesPaths.add(imagesPath);
         }
-        List<TelephoneDTOResponse> telephoneDTOResponses = telephoneService.getByOwnerId(carAdId);
-        CarAdDTOResponse carAdDTOResponse = carAdService.delete(carAdId);
-        carAdDTOResponse.setTelephoneList(telephoneDTOResponses);
-        carAdDTOResponse.setImageQuantity(imageDTOResponses.size());
+        List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.getByOwnerId(carAdId);
+        CarAdDtoResponse carAdDTOResponse = carAdService.delete(carAdId);
+        carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
+        carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
         GetResponseBody getResponseBody = new GetResponseBody
-                (carAdDTOResponse, userDAOResponse, imageDTOResponses, imagesPaths);
+                (carAdDTOResponse, userDAOResponse, imageDtoRespons, imagesPaths);
         String jsonString = objectMapper.writeValueAsString(getResponseBody);
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();
@@ -239,8 +237,8 @@ public class CarAdServlet extends HttpServlet {
             resp.sendError(400);
         }
         try {
-            CarAdDTORequest carAdDTORequest = null;
-            List<ImageDTORequest> images = new ArrayList<>();
+            CarAdDtoRequest carAdDTORequest = null;
+            List<ImageDtoRequest> images = new ArrayList<>();
             List<FileItem> fileItems = upload.parseRequest(req);
             for (int inc = 0, fileItemsSize = fileItems.size(); inc < fileItemsSize; inc++) {
                 FileItem fileItem = fileItems.get(inc);
@@ -249,14 +247,14 @@ public class CarAdServlet extends HttpServlet {
                     if (contentType.equals(JSON_FILE)) {
                         carAdDTORequest = getCarAdDTORequest(ownerId, inc, fileItem);
                     } else {
-                        ImageDTORequest image = getImageDTORequest(fileItem);
+                        ImageDtoRequest image = getImageDTORequest(fileItem);
                         images.add(image);
                     }
                 } else throw new FileUploadException();
             }
             if (carAdDTORequest == null) throw new NullPointerException();
-            CarAdDTOResponse carAdDTOResponse = carAdService.add(carAdDTORequest);
-            for (ImageDTORequest image : images) {
+            CarAdDtoResponse carAdDTOResponse = carAdService.add(carAdDTORequest);
+            for (ImageDtoRequest image : images) {
                 image.setOwnerId(carAdDTOResponse.getId());
             }
             carAdDTOResponse.setImageQuantity(imageService.addAll(images).size());
@@ -275,24 +273,24 @@ public class CarAdServlet extends HttpServlet {
         }
     }
 
-    private ImageDTORequest getImageDTORequest(FileItem item) throws Exception {
+    private ImageDtoRequest getImageDTORequest(FileItem item) throws Exception {
         String oldName = item.getName();
         String fileType = oldName.substring(oldName.lastIndexOf(DOT));
         Timestamp timestamp = new Timestamp(new Date().getTime());
         String newName = timestamp.toString().replaceAll(ANY_NOT_NUMERAL_SYMBOL, EMPTY);
         item.write(new File(basePath + newName + fileType));
-        ImageDTORequest image = new ImageDTORequest();
+        ImageDtoRequest image = new ImageDtoRequest();
         image.setName(newName);
         image.setFileFormat(fileType);
         return image;
     }
 
-    private CarAdDTORequest getCarAdDTORequest(Integer ownerId, int inc, FileItem jsonFile) throws Exception {
-        CarAdDTORequest carAdDTORequest;
+    private CarAdDtoRequest getCarAdDTORequest(Integer ownerId, int inc, FileItem jsonFile) throws Exception {
+        CarAdDtoRequest carAdDTORequest;
         File fileForRead = new File(DEF_NAME);
         jsonFile.write(fileForRead);
         BufferedReader reader = new BufferedReader(new FileReader(fileForRead));
-        carAdDTORequest = objectMapper.readValue(reader, CarAdDTORequest.class);
+        carAdDTORequest = objectMapper.readValue(reader, CarAdDtoRequest.class);
         Timestamp timestamp = new Timestamp(new Date().getTime());
         timestamp.setNanos(timestamp.getNanos() + 100000000 + inc * 2);
         carAdDTORequest.setCreationDate(timestamp);
@@ -305,9 +303,9 @@ public class CarAdServlet extends HttpServlet {
     @NoArgsConstructor
     @Data
     private static class GetResponseBody {
-        CarAdDTOResponse carAdDTOResponse;
-        UserDAOResponse userDAOResponse;
-        List<ImageDTOResponse> imageDTOResponses;
+        CarAdDtoResponse carAdDTOResponse;
+        UserDaoResponse userDAOResponse;
+        List<ImageDtoResponse> imageDtoRespons;//todo list images id
         List<String> imagesPath;
     }
 }

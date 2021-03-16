@@ -1,20 +1,22 @@
 package by.repository;
 
-import by.entity.dao.request.ImageDAORequest;
-import by.entity.dao.response.ImageDAOResponse;
+import by.entity.dao.request.ImageDaoRequest;
+import by.entity.dao.response.ImageDaoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.util.List;
 
 public interface ImageRepository {
-    List<ImageDAOResponse> addAll(List<ImageDAORequest> images);
+    List<ImageDaoResponse> addAll(List<ImageDaoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    ImageDAOResponse delete(ImageDAORequest image);
+    ImageDaoResponse delete(ImageDaoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDAOResponse> deleteAll();
+    List<ImageDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    ImageDAOResponse get(ImageDAORequest image);
+    ImageDaoResponse get(ImageDaoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDAOResponse> getByOwnerId(Integer ownerId);
+    List<ImageDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDAOResponse> getAll();
+    List<ImageDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

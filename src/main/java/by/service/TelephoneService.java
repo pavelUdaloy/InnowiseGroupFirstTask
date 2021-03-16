@@ -1,22 +1,24 @@
 package by.service;
 
-import by.entity.dto.request.TelephoneDTORequest;
-import by.entity.dto.response.TelephoneDTOResponse;
+import by.entity.dto.request.TelephoneDtoRequest;
+import by.entity.dto.response.TelephoneDtoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.util.List;
 
 public interface TelephoneService {
-    List<TelephoneDTOResponse> addAll(List<TelephoneDTORequest> telephoneDTORequests);
+    List<TelephoneDtoResponse> addAll(List<TelephoneDtoRequest> telephoneDtoRequests) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDTOResponse delete(TelephoneDTORequest telephoneDTORequest);
+    TelephoneDtoResponse delete(TelephoneDtoRequest telephoneDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDTOResponse> deleteAll();
+    List<TelephoneDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDTOResponse get(TelephoneDTORequest telephoneDTORequest);
+    TelephoneDtoResponse get(TelephoneDtoRequest telephoneDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDTOResponse> getByOwnerId(Integer ownerId);
+    List<TelephoneDtoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDTOResponse> getAll();
+    List<TelephoneDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDTOResponse set(TelephoneDTORequest telephoneDTORequest, String newNumber);
+    TelephoneDtoResponse update(TelephoneDtoRequest telephoneDTORequest, String newNumber) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

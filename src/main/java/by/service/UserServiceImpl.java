@@ -1,7 +1,9 @@
 package by.service;
 
-import by.entity.dao.request.UserDAORequest;
-import by.entity.dao.response.UserDAOResponse;
+import by.entity.dao.request.UserDaoRequest;
+import by.entity.dao.response.UserDaoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 import by.repository.UserRepository;
 import by.repository.UserRepositoryImpl;
 
@@ -12,32 +14,32 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
-    public UserDAOResponse add(UserDAORequest userDAORequest) {
+    public UserDaoResponse add(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.add(userDAORequest);
     }
 
     @Override
-    public UserDAOResponse delete(UserDAORequest userDAORequest) {
+    public UserDaoResponse delete(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.delete(userDAORequest);
     }
 
     @Override
-    public List<UserDAOResponse> deleteAll() {
+    public List<UserDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.deleteAll();
     }
 
     @Override
-    public UserDAOResponse get(UserDAORequest userDAORequest) {
+    public UserDaoResponse get(UserDaoRequest userDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.get(userDAORequest);
     }
 
     @Override
-    public UserDAOResponse get(Integer id) {
+    public UserDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.get(id);
     }
 
     @Override
-    public List<UserDAOResponse> getAll() {
+    public List<UserDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
         return userRepository.getAll();
     }
 }

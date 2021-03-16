@@ -1,22 +1,24 @@
 package by.repository;
 
-import by.entity.dao.request.TelephoneDAORequest;
-import by.entity.dao.response.TelephoneDAOResponse;
+import by.entity.dao.request.TelephoneDaoRequest;
+import by.entity.dao.response.TelephoneDaoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.util.List;
 
 public interface TelephoneRepository {
-    List<TelephoneDAOResponse> addAll(List<TelephoneDAORequest> telephoneDAORequests);
+    List<TelephoneDaoResponse> addAll(List<TelephoneDaoRequest> telephoneDaoRequests) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest);
+    TelephoneDaoResponse delete(TelephoneDaoRequest telephoneDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDAOResponse> deleteAll();
+    List<TelephoneDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest);
+    TelephoneDaoResponse get(TelephoneDaoRequest telephoneDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDAOResponse> getByOwnerId(Integer ownerId);
+    List<TelephoneDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<TelephoneDAOResponse> getAll();
+    List<TelephoneDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber);
+    TelephoneDaoResponse update(TelephoneDaoRequest telephoneDAORequest, String newNumber) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

@@ -1,20 +1,22 @@
 package by.service;
 
-import by.entity.dto.request.ImageDTORequest;
-import by.entity.dto.response.ImageDTOResponse;
+import by.entity.dto.request.ImageDtoRequest;
+import by.entity.dto.response.ImageDtoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.util.List;
 
 public interface ImageService {
-    List<ImageDTOResponse> addAll(List<ImageDTORequest> images);
+    List<ImageDtoResponse> addAll(List<ImageDtoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    ImageDTOResponse delete(ImageDTORequest image);
+    ImageDtoResponse delete(ImageDtoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDTOResponse> deleteAll();
+    List<ImageDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    ImageDTOResponse get(ImageDTORequest image);
+    ImageDtoResponse get(ImageDtoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDTOResponse> getByOwnerId(Integer ownerId);
+    List<ImageDtoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<ImageDTOResponse> getAll();
+    List<ImageDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }

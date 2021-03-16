@@ -1,6 +1,6 @@
 package by.entity.dao.response;
 
-import by.entity.abstractive.AbstractUser;
+import by.entity.abstractive.AbstractTelephone;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class UserDAOResponse extends AbstractUser {
+public class TelephoneDaoResponse extends AbstractTelephone {
     private Integer id;
+    private Integer ownerId;
 }

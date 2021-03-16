@@ -1,4 +1,4 @@
-package by.entity.dto.request;
+package by.entity.dao.request;
 
 import by.entity.abstractive.AbstractCarAd;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class CarAdDTORequest extends AbstractCarAd {
+public class CarAdDaoRequest extends AbstractCarAd {
     private Integer id;
     private Integer ownerId;
     private Timestamp creationDate;

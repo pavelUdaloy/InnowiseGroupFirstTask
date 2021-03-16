@@ -1,6 +1,6 @@
-package by.entity.dao.response;
+package by.entity.dto.response;
 
-import by.entity.abstractive.AbstractTelephone;
+import by.entity.abstractive.AbstractImage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class TelephoneDAOResponse extends AbstractTelephone {
-    private Integer id;
+public class ImageDtoResponse extends AbstractImage {
     private Integer ownerId;
+    private Integer id;
 }

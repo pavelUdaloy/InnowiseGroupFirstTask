@@ -1,8 +1,10 @@
 package by.repository;
 
 import by.db.ConnectionFactory;
-import by.entity.dao.request.TelephoneDAORequest;
-import by.entity.dao.response.TelephoneDAOResponse;
+import by.entity.dao.request.TelephoneDaoRequest;
+import by.entity.dao.response.TelephoneDaoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,12 +26,13 @@ import static by.util.TextLabels.UPDATE_TELEPHONE_BY_ID;
 
 public class TelephoneRepositoryImpl implements TelephoneRepository {
 
-    private final Connection connection = ConnectionFactory.getConnection();
+    private Connection connection;
 
     @Override
-    public List<TelephoneDAOResponse> addAll(List<TelephoneDAORequest> telephoneDAORequests) {
-        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
-        for (TelephoneDAORequest telephoneDAORequest : telephoneDAORequests) {
+    public List<TelephoneDaoResponse> addAll(List<TelephoneDaoRequest> telephoneDaoRequests) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        List<TelephoneDaoResponse> telephoneDaoRespons = new ArrayList<>();
+        connection = ConnectionFactory.getConnection();
+        for (TelephoneDaoRequest telephoneDAORequest : telephoneDaoRequests) {
             try {
                 connection.setAutoCommit(false);
                 PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_TELEPHONES);
@@ -38,106 +41,118 @@ public class TelephoneRepositoryImpl implements TelephoneRepository {
                 preparedStatement.execute();
                 connection.commit();
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new IncorrectSQLParametersException(e);
             }
-            telephoneDAOResponses.add(get(telephoneDAORequest));
+            telephoneDaoRespons.add(get(telephoneDAORequest));
         }
-        return telephoneDAOResponses;
+        return telephoneDaoRespons;
     }
 
     @Override
-    public TelephoneDAOResponse delete(TelephoneDAORequest telephoneDAORequest) {
-        TelephoneDAOResponse telephoneDAOResponse = get(telephoneDAORequest);
+    public TelephoneDaoResponse delete(TelephoneDaoRequest telephoneDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        TelephoneDaoResponse telephoneDAOResponse = get(telephoneDAORequest);
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE_TELEPHONE);
             statement.setInt(1, telephoneDAORequest.getOwnerId());
             statement.setString(2, telephoneDAORequest.getNumber());
             statement.execute();
+            connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return telephoneDAOResponse;
     }
 
     @Override
-    public List<TelephoneDAOResponse> deleteAll() {
-        List<TelephoneDAOResponse> telephoneDAOResponses = getAll();
+    public List<TelephoneDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        List<TelephoneDaoResponse> telephoneDaoRespons = getAll();
         try {
             PreparedStatement statement = connection.prepareStatement(DELETE_ALL_TELEPHONES);
             statement.execute();
+            connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
-        return telephoneDAOResponses;
+        return telephoneDaoRespons;
     }
 
     @Override
-    public TelephoneDAOResponse get(TelephoneDAORequest telephoneDAORequest) {
+    public TelephoneDaoResponse get(TelephoneDaoRequest telephoneDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_TELEPHONE);
             statement.setInt(1, telephoneDAORequest.getOwnerId());
             statement.setString(2, telephoneDAORequest.getNumber());
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             if (resultSet.next()) {
-                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                TelephoneDaoResponse telephoneDAOResponse = new TelephoneDaoResponse();
                 telephoneDAOResponse.setId(resultSet.getInt(ID));
                 telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
                 telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
                 return telephoneDAOResponse;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
         return null;
     }
 
     @Override
-    public List<TelephoneDAOResponse> getByOwnerId(Integer ownerId) {
-        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
+    public List<TelephoneDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        List<TelephoneDaoResponse> telephoneDaoRespons = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_TELEPHONE_BY_OWNER_ID);
             statement.setInt(1, ownerId);
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             while (resultSet.next()) {
-                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                TelephoneDaoResponse telephoneDAOResponse = new TelephoneDaoResponse();
                 telephoneDAOResponse.setId(resultSet.getInt(ID));
                 telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
                 telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
-                telephoneDAOResponses.add(telephoneDAOResponse);
+                telephoneDaoRespons.add(telephoneDAOResponse);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
-        return telephoneDAOResponses;
+        return telephoneDaoRespons;
     }
 
     @Override
-    public List<TelephoneDAOResponse> getAll() {
-        List<TelephoneDAOResponse> telephoneDAOResponses = new ArrayList<>();
+    public List<TelephoneDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        List<TelephoneDaoResponse> telephoneDaoRespons = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_TELEPHONES);
             ResultSet resultSet = statement.executeQuery();
+            connection.commit();
             while (resultSet.next()) {
-                TelephoneDAOResponse telephoneDAOResponse = new TelephoneDAOResponse();
+                TelephoneDaoResponse telephoneDAOResponse = new TelephoneDaoResponse();
                 telephoneDAOResponse.setId(resultSet.getInt(ID));
                 telephoneDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
                 telephoneDAOResponse.setNumber(resultSet.getString(NUMBER));
-                telephoneDAOResponses.add(telephoneDAOResponse);
+                telephoneDaoRespons.add(telephoneDAOResponse);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IncorrectSQLParametersException(e);
         }
-        return telephoneDAOResponses;
+        return telephoneDaoRespons;
     }
 
     @Override
-    public TelephoneDAOResponse set(TelephoneDAORequest telephoneDAORequest, String newNumber) {
-        TelephoneDAOResponse telephoneDAOResponse = get(telephoneDAORequest);
+    public TelephoneDaoResponse update(TelephoneDaoRequest telephoneDAORequest, String newNumber) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        connection = ConnectionFactory.getConnection();
+        TelephoneDaoResponse telephoneDAOResponse = get(telephoneDAORequest);
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE_TELEPHONE_BY_ID);
             statement.setString(1, newNumber);
             statement.setInt(2, telephoneDAOResponse.getId());
             statement.execute();
+            connection.commit();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

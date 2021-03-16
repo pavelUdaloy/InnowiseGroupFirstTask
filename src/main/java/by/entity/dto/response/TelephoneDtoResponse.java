@@ -1,20 +1,16 @@
-package by.entity.dao.request;
+package by.entity.dto.response;
 
-import by.entity.abstractive.AbstractCarAd;
+import by.entity.abstractive.AbstractTelephone;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.sql.Timestamp;
-
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class CarAdDAORequest extends AbstractCarAd {
+public class TelephoneDtoResponse extends AbstractTelephone {
     private Integer id;
     private Integer ownerId;
-    private Timestamp creationDate;
-    private Timestamp lastEditDate;
 }

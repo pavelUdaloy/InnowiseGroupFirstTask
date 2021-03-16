@@ -1,37 +1,29 @@
 package by.db;
 
+import by.exception.ConnectionWithDBLostException;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
+import static by.util.TextLabels.PROPERTIES_DB_DRIVER;
 import static by.util.TextLabels.PROPERTIES_DB_PASSWORD;
 import static by.util.TextLabels.PROPERTIES_DB_URL;
 import static by.util.TextLabels.PROPERTIES_DB_USERNAME;
-import static by.util.TextLabels.PROPERTIES_PATH;
-
+import static by.util.TextLabels.property;
 
 public class ConnectionFactory {
-    private static final Properties property = new Properties();
-
-    public static Connection getConnection() {
+    public static Connection getConnection() throws ConnectionWithDBLostException {
         try {
-            FileInputStream fis = new FileInputStream(PROPERTIES_PATH);
-            property.load(fis);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            Class.forName("org.postgresql.Driver");
-            return DriverManager.getConnection(property.getProperty(PROPERTIES_DB_URL),
+            Class.forName(property.getProperty(PROPERTIES_DB_DRIVER));
+            Connection connection = DriverManager.getConnection(property.getProperty(PROPERTIES_DB_URL),
                     property.getProperty(PROPERTIES_DB_USERNAME),
                     property.getProperty(PROPERTIES_DB_PASSWORD));
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            connection.setAutoCommit(false);
+            return connection;
+
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new ConnectionWithDBLostException(e.toString());
         }
-        return null;
     }
 }

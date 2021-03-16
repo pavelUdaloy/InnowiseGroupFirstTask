@@ -1,4 +1,4 @@
-package by.entity.dao.request;
+package by.entity.dto.response;
 
 import by.entity.abstractive.AbstractUser;
 import lombok.Data;
@@ -10,5 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString(callSuper = true)
-public class UserDAORequest extends AbstractUser {
+public class UserDtoResponse extends AbstractUser {
+    private Integer id;
 }

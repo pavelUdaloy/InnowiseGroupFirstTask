@@ -1,10 +1,12 @@
 package by.service;
 
-import by.entity.dao.request.CarAdDAORequest;
-import by.entity.dao.response.CarAdDAOResponse;
-import by.entity.dto.request.CarAdDTORequest;
-import by.entity.dto.response.CarAdDTOResponse;
-import by.mapper.CarAdMapper.DTODAOMapper;
+import by.entity.dao.request.CarAdDaoRequest;
+import by.entity.dao.response.CarAdDaoResponse;
+import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.response.CarAdDtoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
+import by.mapper.carAdMapper.DTODAOMapper;
 import by.repository.CarAdRepository;
 import by.repository.CarAdRepositoryImpl;
 
@@ -15,60 +17,60 @@ public class CarAdServiceImpl implements CarAdService {
     private final CarAdRepository carAdRepository = new CarAdRepositoryImpl();
 
     @Override
-    public CarAdDTOResponse add(CarAdDTORequest carAdDTORequest) {
-        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.add(carAdDAORequest);
+    public CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoRequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.add(carAdDAORequest);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest) {
-        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.delete(carAdDAORequest);
+    public CarAdDtoResponse delete(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoRequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.delete(carAdDAORequest);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public CarAdDTOResponse delete(Integer id) {
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.delete(id);
+    public CarAdDtoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.delete(id);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public List<CarAdDTOResponse> deleteAll() {
-        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.deleteAll();
-        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
+    public List<CarAdDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        List<CarAdDaoResponse> carAdDAORespons = carAdRepository.deleteAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAORespons);
     }
 
     @Override
-    public CarAdDTOResponse get(CarAdDTORequest carAdDTORequest) {
-        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.get(carAdDAORequest);
+    public CarAdDtoResponse get(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoRequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.get(carAdDAORequest);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public CarAdDTOResponse get(Integer id) {
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.get(id);
+    public CarAdDtoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.get(id);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public List<CarAdDTOResponse> getAll() {
-        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.getAll();
-        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
+    public List<CarAdDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        List<CarAdDaoResponse> carAdDAORespons = carAdRepository.getAll();
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAORespons);
     }
 
     @Override
-    public CarAdDTOResponse set(CarAdDTORequest carAdDTORequest) {
-        CarAdDAORequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
-        CarAdDAOResponse carAdDAOResponse = carAdRepository.set(carAdDAORequest);
+    public CarAdDtoResponse update(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoRequest carAdDAORequest = DTODAOMapper.convertDTOReqToDAOReq(carAdDTORequest);
+        CarAdDaoResponse carAdDAOResponse = carAdRepository.update(carAdDAORequest);
         return DTODAOMapper.convertDAORespToDTOResp(carAdDAOResponse);
     }
 
     @Override
-    public List<CarAdDTOResponse> getWithPagination(Integer size, Integer page) {
-        List<CarAdDAOResponse> carAdDAOResponses = carAdRepository.getWithPagination(size, page);
-        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAOResponses);
+    public List<CarAdDtoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        List<CarAdDaoResponse> carAdDAORespons = carAdRepository.getWithPagination(size, page);
+        return DTODAOMapper.convertDAORespsToDTOResps(carAdDAORespons);
     }
 }

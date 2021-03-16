@@ -1,26 +1,28 @@
 package by.service;
 
-import by.entity.dto.request.CarAdDTORequest;
-import by.entity.dto.response.CarAdDTOResponse;
+import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.response.CarAdDtoResponse;
+import by.exception.ConnectionWithDBLostException;
+import by.exception.IncorrectSQLParametersException;
 
 import java.util.List;
 
 public interface CarAdService {
-    CarAdDTOResponse add(CarAdDTORequest carAdDTORequest);
+    CarAdDtoResponse add(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDTOResponse delete(CarAdDTORequest carAdDTORequest);
+    CarAdDtoResponse delete(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDTOResponse delete(Integer id);
+    CarAdDtoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<CarAdDTOResponse> deleteAll();
+    List<CarAdDtoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDTOResponse get(CarAdDTORequest carAdDTORequest);
+    CarAdDtoResponse get(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDTOResponse get(Integer id);
+    CarAdDtoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<CarAdDTOResponse> getAll();
+    List<CarAdDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    CarAdDTOResponse set(CarAdDTORequest carAdDTORequest);
+    CarAdDtoResponse update(CarAdDtoRequest carAdDTORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 
-    List<CarAdDTOResponse> getWithPagination(Integer size, Integer page);
+    List<CarAdDtoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException;
 }
