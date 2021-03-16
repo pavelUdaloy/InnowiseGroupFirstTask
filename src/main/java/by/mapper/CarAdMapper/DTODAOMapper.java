@@ -52,6 +52,7 @@ public class DTODAOMapper {
 
     private static CarAdDAORequest setParamsToDao(CarAdDTORequest carAdDTORequest) {
         CarAdDAORequest carAdDAORequest = new CarAdDAORequest();
+        carAdDAORequest.setId(carAdDTORequest.getId());
         carAdDAORequest.setModel(carAdDTORequest.getModel());
         carAdDAORequest.setCreationDate(carAdDTORequest.getCreationDate());
         carAdDAORequest.setOwnerId(carAdDTORequest.getOwnerId());

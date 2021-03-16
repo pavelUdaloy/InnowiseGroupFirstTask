@@ -47,6 +47,7 @@ public class TextLabels {
     public static final String UPDATE_CAR_AD_ENGINE_BY_ID = "UPDATE simple.public.car_ads SET engine=? WHERE id=?";
     public static final String UPDATE_CAR_AD_POWER_BY_ID = "UPDATE simple.public.car_ads SET power=? WHERE id=?";
     public static final String UPDATE_CAR_AD_MILEAGE_BY_ID = "UPDATE simple.public.car_ads SET mileage=? WHERE id=?";
+    public static final String UPDATE_CAR_AD_LAST_EDIT_DATE_BY_ID = "UPDATE simple.public.car_ads SET last_edit_date=? WHERE id=?";
     public static final String AGE = "age";
     public static final String BRAND = "brand";
     public static final String MODEL = "model";
@@ -75,10 +76,21 @@ public class TextLabels {
     public static final String DOT = ".";
     public static final String ANY_NOT_NUMERAL_SYMBOL = "\\D";
     public static final String EMPTY = "";
+    public static final String EQUALLY = "=";
+
+    public static final String SPLITTER = "&";
 
     //file
     public static final String TEXT_FILE = "text/plain";
     public static final String JSON_FILE = "application/json";
     public static final String DEF_NAME = "def";
+    public static final String UTF8 = "UTF-8";
+
+    //servlet
+    public static final String SIZE_PARAM = "size";
+    public static final String PAGE_PARAM = "page";
+    public static final String ENGINE_SIZE_PARAM = "engineSize";
+    public static final String ENGINE_POWER_PARAM = "enginePower";
+
 
 }

@@ -16,6 +16,7 @@ import by.service.UserService;
 import by.service.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Splitter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,22 +37,36 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
+import static by.util.TextLabels.AGE;
 import static by.util.TextLabels.ANY_NOT_NUMERAL_SYMBOL;
+import static by.util.TextLabels.BRAND;
 import static by.util.TextLabels.DEF_NAME;
 import static by.util.TextLabels.DOT;
 import static by.util.TextLabels.EMPTY;
+import static by.util.TextLabels.ENGINE_POWER_PARAM;
+import static by.util.TextLabels.ENGINE_SIZE_PARAM;
+import static by.util.TextLabels.EQUALLY;
+import static by.util.TextLabels.ID;
 import static by.util.TextLabels.JSON_FILE;
+import static by.util.TextLabels.MILEAGE;
+import static by.util.TextLabels.MODEL;
+import static by.util.TextLabels.PAGE_PARAM;
 import static by.util.TextLabels.PROPERTIES_BASE_PATH;
 import static by.util.TextLabels.PROPERTIES_MAX_FILE_SIZE;
 import static by.util.TextLabels.PROPERTIES_MAX_MEMORY_SIZE;
 import static by.util.TextLabels.PROPERTIES_PATH;
+import static by.util.TextLabels.SIZE_PARAM;
+import static by.util.TextLabels.SPLITTER;
+import static by.util.TextLabels.UTF8;
 
 @WebServlet(name = "by/servlet/CarAdServlet.java", urlPatterns = "/ads")
 public class CarAdServlet extends HttpServlet {
@@ -80,8 +95,8 @@ public class CarAdServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter(ID);
         if (id != null) {
             try {
                 Integer carAdId = Integer.valueOf(id);
@@ -100,9 +115,9 @@ public class CarAdServlet extends HttpServlet {
                 GetResponseBody getResponseBody = new GetResponseBody
                         (carAdDTOResponse, userDAOResponse, imageDTOResponses, imagesPaths);
                 String jsonString = objectMapper.writeValueAsString(getResponseBody);
-                response.setContentType("application/json");
+                response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
-                response.setCharacterEncoding("UTF-8");
+                response.setCharacterEncoding(UTF8);
                 out.print(jsonString);
                 out.flush();
 
@@ -137,8 +152,8 @@ public class CarAdServlet extends HttpServlet {
             }
         } else {
             try {
-                Integer size = Integer.valueOf(request.getParameter("size"));
-                Integer page = Integer.valueOf(request.getParameter("page"));
+                Integer size = Integer.valueOf(request.getParameter(SIZE_PARAM));
+                Integer page = Integer.valueOf(request.getParameter(PAGE_PARAM));
                 List<CarAdDTOResponse> carAdDTOResponses = carAdService.getWithPagination(size, page);
                 for (CarAdDTOResponse carAdDTOResponse : carAdDTOResponses) {
                     carAdDTOResponse.setImageQuantity(imageService.getByOwnerId(carAdDTOResponse.getId()).size());
@@ -146,8 +161,8 @@ public class CarAdServlet extends HttpServlet {
                 }
                 String jsonString = objectMapper.writeValueAsString(carAdDTOResponses);
                 PrintWriter out = response.getWriter();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
+                response.setContentType(JSON_FILE);
+                response.setCharacterEncoding(UTF8);
                 out.print(jsonString);
                 out.flush();
             } catch (NumberFormatException ex) {
@@ -159,8 +174,35 @@ public class CarAdServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+        Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
+                (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
+
+        CarAdDTORequest carAdDTORequest = new CarAdDTORequest();
+
+        carAdDTORequest.setId(Integer.valueOf(dataMap.get(ID)));
+        carAdDTORequest.setAge(Integer.valueOf(dataMap.get(AGE)));
+        carAdDTORequest.setBrand(dataMap.get(BRAND));
+        carAdDTORequest.setModel(dataMap.get(MODEL));
+        carAdDTORequest.setEngineSize(Integer.valueOf(dataMap.get(ENGINE_SIZE_PARAM)));
+        carAdDTORequest.setEnginePower(Integer.valueOf(dataMap.get(ENGINE_POWER_PARAM)));
+        carAdDTORequest.setMileage(Integer.valueOf(dataMap.get(MILEAGE)));
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        carAdDTORequest.setLastEditDate(timestamp);
+
+        CarAdDTOResponse carAdDTOResponse = carAdService.set(carAdDTORequest);
+        List<ImageDTOResponse> imageDTOResponses = imageService.getByOwnerId(carAdDTOResponse.getId());
+        carAdDTOResponse.setImageQuantity(imageDTOResponses.size());
+        List<TelephoneDTOResponse> telephoneDTOResponses = telephoneService.getByOwnerId(carAdDTOResponse.getOwnerId());
+        carAdDTOResponse.setTelephoneList(telephoneDTOResponses);
+
+        String jsonString = objectMapper.writeValueAsString(carAdDTOResponse);
+        resp.setContentType(JSON_FILE);
+        ServletOutputStream out = resp.getOutputStream();
+        resp.setCharacterEncoding(UTF8);
+        out.print(jsonString);
+        out.flush();
     }
 
     @Override
@@ -170,8 +212,8 @@ public class CarAdServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.getSession().setAttribute("id", 1);
-        Integer ownerId = (Integer) req.getSession().getAttribute("id");
+        req.getSession().setAttribute(ID, 1);
+        Integer ownerId = (Integer) req.getSession().getAttribute(ID);
         if (!ServletFileUpload.isMultipartContent(req)) {
             resp.sendError(400);
         }
@@ -199,8 +241,8 @@ public class CarAdServlet extends HttpServlet {
             carAdDTOResponse.setImageQuantity(imageService.addAll(images).size());
             PrintWriter out = resp.getWriter();
             String jsonString = objectMapper.writeValueAsString(carAdDTOResponse);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType(JSON_FILE);
+            resp.setCharacterEncoding(UTF8);
             out.print(jsonString);
             out.flush();
         } catch (FileUploadException ex) {

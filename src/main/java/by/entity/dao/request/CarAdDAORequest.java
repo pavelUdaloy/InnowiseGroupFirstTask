@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Data
 @ToString(callSuper = true)
 public class CarAdDAORequest extends AbstractCarAd {
+    private Integer id;
     private Integer ownerId;
     private Timestamp creationDate;
     private Timestamp lastEditDate;

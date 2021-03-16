@@ -73,8 +73,6 @@ by/util/TextLabels.java
  by.util.TextLabels
 by/db/ConnectionFactory.java
  by.db.ConnectionFactory
-by/servlet/MainServlet.java
- by.servlet.MainServlet
 by/repository/TelephoneRepository.java
  by.repository.TelephoneRepository
 by/service/TelephoneService.java

@@ -33,6 +33,7 @@ import static by.util.TextLabels.SELECT_WITH_PAGINATION;
 import static by.util.TextLabels.UPDATE_CAR_AD_AGE_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_BRAND_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_ENGINE_BY_ID;
+import static by.util.TextLabels.UPDATE_CAR_AD_LAST_EDIT_DATE_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_MILEAGE_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_MODEL_BY_ID;
 import static by.util.TextLabels.UPDATE_CAR_AD_POWER_BY_ID;
@@ -138,36 +139,39 @@ public class CarAdRepositoryImpl implements CarAdRepository {
 
     @Override
     public CarAdDAOResponse set(CarAdDAORequest carAdDAORequest) {
-        CarAdDAOResponse carAdDAOResponse = get(carAdDAORequest);
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE_CAR_AD_AGE_BY_ID);
             statement.setInt(1, carAdDAORequest.getAge());
-            statement.setInt(2, carAdDAOResponse.getId());
+            statement.setInt(2, carAdDAORequest.getId());
             statement.execute();
             PreparedStatement statement2 = connection.prepareStatement(UPDATE_CAR_AD_BRAND_BY_ID);
             statement2.setString(1, carAdDAORequest.getBrand());
-            statement2.setInt(2, carAdDAOResponse.getId());
+            statement2.setInt(2, carAdDAORequest.getId());
             statement2.execute();
             PreparedStatement statement3 = connection.prepareStatement(UPDATE_CAR_AD_MODEL_BY_ID);
             statement3.setString(1, carAdDAORequest.getModel());
-            statement3.setInt(2, carAdDAOResponse.getId());
+            statement3.setInt(2, carAdDAORequest.getId());
             statement3.execute();
             PreparedStatement statement4 = connection.prepareStatement(UPDATE_CAR_AD_ENGINE_BY_ID);
             statement4.setInt(1, carAdDAORequest.getEngineSize());
-            statement4.setInt(2, carAdDAOResponse.getId());
+            statement4.setInt(2, carAdDAORequest.getId());
             statement4.execute();
             PreparedStatement statement5 = connection.prepareStatement(UPDATE_CAR_AD_POWER_BY_ID);
             statement5.setInt(1, carAdDAORequest.getEnginePower());
-            statement5.setInt(2, carAdDAOResponse.getId());
+            statement5.setInt(2, carAdDAORequest.getId());
             statement5.execute();
             PreparedStatement statement6 = connection.prepareStatement(UPDATE_CAR_AD_MILEAGE_BY_ID);
             statement6.setInt(1, carAdDAORequest.getMileage());
-            statement6.setInt(2, carAdDAOResponse.getId());
+            statement6.setInt(2, carAdDAORequest.getId());
             statement6.execute();
+            PreparedStatement statement7 = connection.prepareStatement(UPDATE_CAR_AD_LAST_EDIT_DATE_BY_ID);
+            statement7.setTimestamp(1, carAdDAORequest.getLastEditDate());
+            statement7.setInt(2, carAdDAORequest.getId());
+            statement7.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return get(carAdDAORequest);
+        return get(carAdDAORequest.getId());
     }
 
     @Override
