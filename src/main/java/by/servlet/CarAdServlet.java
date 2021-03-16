@@ -4,8 +4,6 @@ import by.entity.dao.response.UserDaoResponse;
 import by.entity.dto.request.CarAdDtoRequest;
 import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
-import by.entity.dto.response.ImageDtoResponse;
-import by.entity.dto.response.TelephoneDtoResponse;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
 import by.service.CarAdService;
@@ -97,7 +95,9 @@ public class CarAdServlet extends HttpServlet {
         if (carAdIdInString != null) {
             try {
                 Integer carAdId = Integer.valueOf(carAdIdInString);
+
                 GetResponseBody getResponseBody = carAdService.get(carAdId);
+
                 String jsonString = objectMapper.writeValueAsString(getResponseBody);
                 response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
@@ -111,7 +111,10 @@ public class CarAdServlet extends HttpServlet {
             try {
                 Integer size = Integer.valueOf(request.getParameter(SIZE_PARAM));
                 Integer page = Integer.valueOf(request.getParameter(PAGE_PARAM));
-                String jsonString = objectMapper.writeValueAsString(carAdService.getWithPagination(size, page));
+
+                List<CarAdDtoResponse> withPagination = carAdService.getWithPagination(size, page);
+
+                String jsonString = objectMapper.writeValueAsString(withPagination);
                 PrintWriter out = response.getWriter();
                 response.setContentType(JSON_FILE);
                 response.setCharacterEncoding(UTF8);
@@ -131,7 +134,6 @@ public class CarAdServlet extends HttpServlet {
         BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
         Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
                 (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
-
         int id;
         int age;
         String brand;
@@ -151,8 +153,10 @@ public class CarAdServlet extends HttpServlet {
             return;
         }
 
+        CarAdDtoResponse update = carAdService.update(id, age, brand, model, engineSize, enginePower, mileage);
+
         String jsonString = objectMapper.writeValueAsString
-                (carAdService.update(id, age, brand, model, engineSize, enginePower, mileage));
+                (update);
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();
         resp.setCharacterEncoding(UTF8);
@@ -165,18 +169,10 @@ public class CarAdServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         req.getSession().setAttribute(ID, 1);
         Integer ownerId = (Integer) req.getSession().getAttribute(ID);
-        UserDaoResponse userDAOResponse = userService.get(ownerId);
         Integer carAdId = Integer.valueOf(req.getParameter(ID));
-        List<ImageDtoResponse> imageDtoRespons = imageService.get(carAdId);
-        List<String> imagesIds = new ArrayList<>();
-        for (ImageDtoResponse imageDTOResponse : imageDtoRespons) {
-            imagesIds.add(String.valueOf(imageDTOResponse.getId()));
-        }
-        List<TelephoneDtoResponse> telephoneDtoRespons = telephoneService.get(carAdId);
-        CarAdDtoResponse carAdDTOResponse = carAdService.delete(carAdId);
-        carAdDTOResponse.setTelephoneList(telephoneDtoRespons);
-        carAdDTOResponse.setImageQuantity(imageDtoRespons.size());
-        GetResponseBody getResponseBody = new GetResponseBody(carAdDTOResponse, userDAOResponse, imagesIds);
+
+        GetResponseBody getResponseBody = carAdService.delete(carAdId, ownerId);
+
         String jsonString = objectMapper.writeValueAsString(getResponseBody);
         resp.setContentType(JSON_FILE);
         ServletOutputStream out = resp.getOutputStream();

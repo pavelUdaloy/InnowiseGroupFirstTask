@@ -42,9 +42,21 @@ public class CarAdServiceImpl implements CarAdService {
     }
 
     @Override
-    public CarAdDtoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoResponse carAdDAOResponse = carAdRepository.delete(id);
-        return CarAdMapper.convertDAORespToDTOResp(carAdDAOResponse);
+    public CarAdServlet.GetResponseBody delete(Integer carAdId, Integer userId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+        CarAdDaoResponse carAdDaoResponse = carAdRepository.delete(carAdId);
+        CarAdDtoResponse carAdDtoResponse = CarAdMapper.convertDAORespToDTOResp(carAdDaoResponse);
+
+        UserDaoResponse userDAOResponse = userService.get(userId);
+        List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdId);
+        List<String> imagesIds = new ArrayList<>();
+        for (ImageDtoResponse imageDTOResponse : imageDtoResponses) {
+            imagesIds.add(String.valueOf(imageDTOResponse.getId()));
+        }
+        List<TelephoneDtoResponse> telephoneDtoResponses = telephoneService.get(carAdId);
+        carAdDtoResponse.setTelephoneList(telephoneDtoResponses);
+        carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
+
+        return new CarAdServlet.GetResponseBody(carAdDtoResponse, userDAOResponse, imagesIds);
     }
 
     @Override
