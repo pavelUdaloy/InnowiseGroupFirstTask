@@ -3,17 +3,26 @@ package by.exception.abstract_model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static by.util.TextLabels.CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL;
+import static by.util.TextLabels.FILE_JSON_EXCEPTION_LABEL;
+import static by.util.TextLabels.INCORRECT_SQL_PARAMETERS_EXCEPTION_LABEL;
+import static by.util.TextLabels.JSON_PARSER_EXCEPTION_LABEL;
+import static by.util.TextLabels.NULL_SQL_QUERY_EXCEPTION_LABEL;
+import static by.util.TextLabels.REQUEST_EXCEPTION_LABEL;
+import static by.util.TextLabels.REQUEST_PARSER_EXCEPTION_LABEL;
+import static by.util.TextLabels.RESPONSE_EXCEPTION_LABEL;
+
 @Getter
 @RequiredArgsConstructor
 public enum BaseErrorCodes implements ExceptionErrorCode {
-    CONNECTION_WITH_DB_LOST_EXCEPTION("Connection with db lost"),
-    INCORRECT_SQL_PARAMETERS_EXCEPTION("Incorrect sql parameter(s)"),
-    NULL_SQL_QUERY_EXCEPTION("Sql query for this parameter(s) returns null"),
-    JSON_PARSER_EXCEPTION("Object can't parse to JSON format"),
-    RESPONSE_EXCEPTION("An input or output exception occurred in response"),
-    REQUEST_EXCEPTION("An input or output exception occurred in request"),
-    FILE_JSON_EXCEPTION("Cannot import this file to json"),
-    REQUEST_PARSER_EXCEPTION("Incorrect parameter(s) in request");
+    CONNECTION_WITH_DB_LOST_EXCEPTION(CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL),
+    INCORRECT_SQL_PARAMETERS_EXCEPTION(INCORRECT_SQL_PARAMETERS_EXCEPTION_LABEL),
+    NULL_SQL_QUERY_EXCEPTION(NULL_SQL_QUERY_EXCEPTION_LABEL),
+    JSON_PARSER_EXCEPTION(JSON_PARSER_EXCEPTION_LABEL),
+    RESPONSE_EXCEPTION(RESPONSE_EXCEPTION_LABEL),
+    REQUEST_EXCEPTION(REQUEST_EXCEPTION_LABEL),
+    FILE_JSON_EXCEPTION(FILE_JSON_EXCEPTION_LABEL),
+    REQUEST_PARSER_EXCEPTION(REQUEST_PARSER_EXCEPTION_LABEL);
 
     private final String code;
 }

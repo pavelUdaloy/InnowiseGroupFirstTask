@@ -103,8 +103,14 @@ public class TextLabels {
     public static final String FILTER_DESTROY = "MainFilter destroyed";
 
     //exception
-    public static final String INCORRECT_SQL_MESSAGE = "Incorrect params for sql request";
-    public static final String DB_LOST_MESSAGE = "Connection with db lost (wrong user, password or url)";
+    public static final String CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL = "Connection with db lost";
+    public static final String INCORRECT_SQL_PARAMETERS_EXCEPTION_LABEL = "Incorrect sql parameter(s)";
+    public static final String NULL_SQL_QUERY_EXCEPTION_LABEL = "Sql query for this parameter(s) returns null";
+    public static final String JSON_PARSER_EXCEPTION_LABEL = "Object can't parse to JSON format";
+    public static final String RESPONSE_EXCEPTION_LABEL = "An input or output exception occurred in response";
+    public static final String REQUEST_EXCEPTION_LABEL = "An input or output exception occurred in request";
+    public static final String FILE_JSON_EXCEPTION_LABEL = "Cannot import this file to json";
+    public static final String REQUEST_PARSER_EXCEPTION_LABEL = "Incorrect parameter(s) in request";
 
     //hikari properties
     public static final String CACHE_PREP_PROPERTY = "cachePrepStmts";
