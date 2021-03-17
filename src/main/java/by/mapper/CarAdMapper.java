@@ -10,59 +10,59 @@ import java.util.List;
 
 public class CarAdMapper {
 
-    public CarAdDtoResponse convertDAORespToDTOResp(CarAdDaoResponse carAdDAOResponse) {
-        return setParamsToDTO(carAdDAOResponse);
+    public CarAdDtoResponse convertDaoResponseToDtoResponse(CarAdDaoResponse carAdDaoResponse) {
+        return setParametersToDto(carAdDaoResponse);
     }
 
-    public CarAdDaoRequest convertDTOReqToDAOReq(CarAdDtoRequest carAdDTORequest) {
-        return setParamsToDao(carAdDTORequest);
+    public CarAdDaoRequest convertDtoRequestToDaoRequest(CarAdDtoRequest carAdDtoRequest) {
+        return setParametersToDao(carAdDtoRequest);
     }
 
-    public List<CarAdDaoRequest> convertDTOReqsToDAOReqs(List<CarAdDtoRequest> carAdDtoRequests) {
+    public List<CarAdDaoRequest> convertDtoRequestsToDaoRequests(List<CarAdDtoRequest> carAdDtoRequests) {
         List<CarAdDaoRequest> carAdDaoRequests = new ArrayList<>();
-        for (CarAdDtoRequest carAdDTORequest : carAdDtoRequests) {
-            carAdDaoRequests.add(setParamsToDao(carAdDTORequest));
+        for (CarAdDtoRequest carAdDtoRequest : carAdDtoRequests) {
+            carAdDaoRequests.add(setParametersToDao(carAdDtoRequest));
         }
         return carAdDaoRequests;
     }
 
-    public List<CarAdDtoResponse> convertDAORespsToDTOResps(List<CarAdDaoResponse> carAdDAORespons) {
-        List<CarAdDtoResponse> carAdDtoRespons = new ArrayList<>();
-        for (CarAdDaoResponse carAdDAOResponse : carAdDAORespons) {
-            carAdDtoRespons.add(setParamsToDTO(carAdDAOResponse));
+    public List<CarAdDtoResponse> convertDaoResponsesToDtoResponses(List<CarAdDaoResponse> carAdDaoResponses) {
+        List<CarAdDtoResponse> carAdDtoResponses = new ArrayList<>();
+        for (CarAdDaoResponse carAdDAOResponse : carAdDaoResponses) {
+            carAdDtoResponses.add(setParametersToDto(carAdDAOResponse));
         }
-        return carAdDtoRespons;
+        return carAdDtoResponses;
     }
 
-    private CarAdDtoResponse setParamsToDTO(CarAdDaoResponse carAdDAOResponse) {
-        CarAdDtoResponse carAdDTOResponse = new CarAdDtoResponse();
-        carAdDTOResponse.setModel(carAdDAOResponse.getModel());
-        carAdDTOResponse.setCreationDate(carAdDAOResponse.getCreationDate());
-        carAdDTOResponse.setOwnerId(carAdDAOResponse.getOwnerId());
-        carAdDTOResponse.setLastEditDate(carAdDAOResponse.getLastEditDate());
-        carAdDTOResponse.setAge(carAdDAOResponse.getAge());
-        carAdDTOResponse.setCondition(carAdDAOResponse.getCondition());
-        carAdDTOResponse.setBrand(carAdDAOResponse.getBrand());
-        carAdDTOResponse.setEnginePower(carAdDAOResponse.getEnginePower());
-        carAdDTOResponse.setEngineSize(carAdDAOResponse.getEngineSize());
-        carAdDTOResponse.setMileage(carAdDAOResponse.getMileage());
-        carAdDTOResponse.setId(carAdDAOResponse.getId());
-        return carAdDTOResponse;
+    private CarAdDtoResponse setParametersToDto(CarAdDaoResponse carAdDaoResponse) {
+        CarAdDtoResponse carAdDtoResponse = new CarAdDtoResponse();
+        carAdDtoResponse.setModel(carAdDaoResponse.getModel());
+        carAdDtoResponse.setCreationDate(carAdDaoResponse.getCreationDate());
+        carAdDtoResponse.setOwnerId(carAdDaoResponse.getOwnerId());
+        carAdDtoResponse.setLastEditDate(carAdDaoResponse.getLastEditDate());
+        carAdDtoResponse.setAge(carAdDaoResponse.getAge());
+        carAdDtoResponse.setCondition(carAdDaoResponse.getCondition());
+        carAdDtoResponse.setBrand(carAdDaoResponse.getBrand());
+        carAdDtoResponse.setEnginePower(carAdDaoResponse.getEnginePower());
+        carAdDtoResponse.setEngineSize(carAdDaoResponse.getEngineSize());
+        carAdDtoResponse.setMileage(carAdDaoResponse.getMileage());
+        carAdDtoResponse.setId(carAdDaoResponse.getId());
+        return carAdDtoResponse;
     }
 
-    private CarAdDaoRequest setParamsToDao(CarAdDtoRequest carAdDTORequest) {
-        CarAdDaoRequest carAdDAORequest = new CarAdDaoRequest();
-        carAdDAORequest.setId(carAdDTORequest.getId());
-        carAdDAORequest.setModel(carAdDTORequest.getModel());
-        carAdDAORequest.setCreationDate(carAdDTORequest.getCreationDate());
-        carAdDAORequest.setOwnerId(carAdDTORequest.getOwnerId());
-        carAdDAORequest.setLastEditDate(carAdDTORequest.getLastEditDate());
-        carAdDAORequest.setAge(carAdDTORequest.getAge());
-        carAdDAORequest.setCondition(carAdDTORequest.getCondition());
-        carAdDAORequest.setBrand(carAdDTORequest.getBrand());
-        carAdDAORequest.setEnginePower(carAdDTORequest.getEnginePower());
-        carAdDAORequest.setEngineSize(carAdDTORequest.getEngineSize());
-        carAdDAORequest.setMileage(carAdDTORequest.getMileage());
-        return carAdDAORequest;
+    private CarAdDaoRequest setParametersToDao(CarAdDtoRequest carAdDtoRequest) {
+        CarAdDaoRequest carAdDaoRequest = new CarAdDaoRequest();
+        carAdDaoRequest.setId(carAdDtoRequest.getId());
+        carAdDaoRequest.setModel(carAdDtoRequest.getModel());
+        carAdDaoRequest.setCreationDate(carAdDtoRequest.getCreationDate());
+        carAdDaoRequest.setOwnerId(carAdDtoRequest.getOwnerId());
+        carAdDaoRequest.setLastEditDate(carAdDtoRequest.getLastEditDate());
+        carAdDaoRequest.setAge(carAdDtoRequest.getAge());
+        carAdDaoRequest.setCondition(carAdDtoRequest.getCondition());
+        carAdDaoRequest.setBrand(carAdDtoRequest.getBrand());
+        carAdDaoRequest.setEnginePower(carAdDtoRequest.getEnginePower());
+        carAdDaoRequest.setEngineSize(carAdDtoRequest.getEngineSize());
+        carAdDaoRequest.setMileage(carAdDtoRequest.getMileage());
+        return carAdDaoRequest;
     }
 }

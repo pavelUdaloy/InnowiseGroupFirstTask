@@ -9,41 +9,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TelephoneMapper {
-    public List<TelephoneDaoRequest> convertDTOReqsToDAOReqs(List<TelephoneDtoRequest> telephoneDtoRequestList) {
+
+    public List<TelephoneDaoRequest> convertDtoRequestsToDAORequests(List<TelephoneDtoRequest> telephoneDtoRequests) {
         List<TelephoneDaoRequest> telephoneDaoRequests = new ArrayList<>();
-        for (TelephoneDtoRequest telephoneDTORequest : telephoneDtoRequestList) {
-            TelephoneDaoRequest telephoneDAORequest = new TelephoneDaoRequest();
-            telephoneDAORequest.setNumber(telephoneDTORequest.getNumber());
-            telephoneDAORequest.setOwnerId(telephoneDTORequest.getOwnerId());
-            telephoneDaoRequests.add(telephoneDAORequest);
+        for (TelephoneDtoRequest telephoneDtoRequest : telephoneDtoRequests) {
+            TelephoneDaoRequest telephoneDaoRequest = new TelephoneDaoRequest();
+            telephoneDaoRequest.setNumber(telephoneDtoRequest.getNumber());
+            telephoneDaoRequest.setOwnerId(telephoneDtoRequest.getOwnerId());
+            telephoneDaoRequests.add(telephoneDaoRequest);
         }
         return telephoneDaoRequests;
     }
 
-    public List<TelephoneDtoResponse> convertDAORespsToDTOResps(List<TelephoneDaoResponse> telephoneDaoRespons) {
-        List<TelephoneDtoResponse> telephoneDAORequests = new ArrayList<>();
-        for (TelephoneDaoResponse telephoneDAOResponse : telephoneDaoRespons) {
-            TelephoneDtoResponse telephoneDTOResponse = new TelephoneDtoResponse();
-            telephoneDTOResponse.setNumber(telephoneDAOResponse.getNumber());
-            telephoneDTOResponse.setId(telephoneDAOResponse.getId());
-            telephoneDTOResponse.setOwnerId(telephoneDAOResponse.getOwnerId());
-            telephoneDAORequests.add(telephoneDTOResponse);
+    public List<TelephoneDtoResponse> convertDaoResponsesToDtoResponses(List<TelephoneDaoResponse> telephoneDaoResponses) {
+        List<TelephoneDtoResponse> telephoneDtoResponses = new ArrayList<>();
+        for (TelephoneDaoResponse telephoneDaoResponse : telephoneDaoResponses) {
+            TelephoneDtoResponse telephoneDtoResponse = new TelephoneDtoResponse();
+            telephoneDtoResponse.setNumber(telephoneDaoResponse.getNumber());
+            telephoneDtoResponse.setId(telephoneDaoResponse.getId());
+            telephoneDtoResponse.setOwnerId(telephoneDaoResponse.getOwnerId());
+            telephoneDtoResponses.add(telephoneDtoResponse);
         }
-        return telephoneDAORequests;
+        return telephoneDtoResponses;
     }
 
-    public TelephoneDaoRequest convertDTOReqToDAOReq(TelephoneDtoRequest telephoneDTORequest) {
-        TelephoneDaoRequest telephoneDAORequest = new TelephoneDaoRequest();
-        telephoneDAORequest.setNumber(telephoneDTORequest.getNumber());
-        telephoneDAORequest.setOwnerId(telephoneDTORequest.getOwnerId());
-        return telephoneDAORequest;
+    public TelephoneDaoRequest convertDtoRequestToDaoRequest(TelephoneDtoRequest telephoneDtoRequest) {
+        TelephoneDaoRequest telephoneDaoRequest = new TelephoneDaoRequest();
+        telephoneDaoRequest.setNumber(telephoneDtoRequest.getNumber());
+        telephoneDaoRequest.setOwnerId(telephoneDtoRequest.getOwnerId());
+        return telephoneDaoRequest;
     }
 
-    public TelephoneDtoResponse convertDAORespToDTOResp(TelephoneDaoResponse telephoneDAOResponse) {
-        TelephoneDtoResponse telephoneDTOResponse = new TelephoneDtoResponse();
-        telephoneDTOResponse.setNumber(telephoneDAOResponse.getNumber());
-        telephoneDTOResponse.setOwnerId(telephoneDAOResponse.getOwnerId());
-        telephoneDTOResponse.setId(telephoneDAOResponse.getId());
-        return telephoneDTOResponse;
+    public TelephoneDtoResponse convertDaoResponseToDtoResponse(TelephoneDaoResponse telephoneDaoResponse) {
+        TelephoneDtoResponse telephoneDtoResponse = new TelephoneDtoResponse();
+        telephoneDtoResponse.setNumber(telephoneDaoResponse.getNumber());
+        telephoneDtoResponse.setOwnerId(telephoneDaoResponse.getOwnerId());
+        telephoneDtoResponse.setId(telephoneDaoResponse.getId());
+        return telephoneDtoResponse;
     }
 }

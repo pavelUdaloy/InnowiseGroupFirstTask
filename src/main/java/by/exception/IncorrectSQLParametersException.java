@@ -1,21 +1,14 @@
 package by.exception;
 
-import lombok.Getter;
-import lombok.ToString;
+import by.exception.abstract_model.AbstractException;
+import by.exception.abstract_model.BaseErrorCodes;
 
-import java.sql.SQLException;
+public class IncorrectSQLParametersException extends AbstractException {
+    public IncorrectSQLParametersException(Throwable cause) {
+        super(cause, BaseErrorCodes.INCORRECT_SQL_PARAMETERS_EXCEPTION);
+    }
 
-import static by.util.TextLabels.INCORRECT_SQL_MESSAGE;
-
-@ToString
-public class IncorrectSQLParametersException extends SQLException {
-    @Getter
-    private final String message = INCORRECT_SQL_MESSAGE;
-
-    private final SQLException exception;
-
-    public IncorrectSQLParametersException(SQLException exception) {
-        super(exception.getNextException());
-        this.exception = exception;
+    public IncorrectSQLParametersException() {
+        super(BaseErrorCodes.INCORRECT_SQL_PARAMETERS_EXCEPTION);
     }
 }

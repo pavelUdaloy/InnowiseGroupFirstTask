@@ -43,7 +43,7 @@ public class ConnectionFactory {
                 DataSource datasource = new HikariDataSource(config);
                 connection = datasource.getConnection();
             } catch (SQLException | ClassNotFoundException e) {
-                throw new ConnectionWithDBLostException(e.toString());
+                throw new ConnectionWithDBLostException();
             }
         }
         return connection;

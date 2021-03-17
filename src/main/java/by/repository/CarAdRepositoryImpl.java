@@ -6,6 +6,7 @@ import by.entity.dao.request.CarAdDaoRequest;
 import by.entity.dao.response.CarAdDaoResponse;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
+import by.exception.NullQueryException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,44 +47,44 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     private Connection connection;
 
     @Override
-    public CarAdDaoResponse add(CarAdDaoRequest carAdDAORequest) throws ConnectionWithDBLostException, IncorrectSQLParametersException {
+    public CarAdDaoResponse add(CarAdDaoRequest carAdDaoRequest) throws ConnectionWithDBLostException, IncorrectSQLParametersException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_CAR_ADS)) {
-            preparedStatement.setInt(1, carAdDAORequest.getAge());
-            preparedStatement.setString(2, carAdDAORequest.getBrand());
-            preparedStatement.setString(3, carAdDAORequest.getModel());
-            preparedStatement.setString(4, carAdDAORequest.getCondition().toString());
-            preparedStatement.setInt(5, carAdDAORequest.getMileage());
-            preparedStatement.setInt(6, carAdDAORequest.getEngineSize());
-            preparedStatement.setInt(7, carAdDAORequest.getEnginePower());
-            preparedStatement.setInt(8, carAdDAORequest.getOwnerId());
-            preparedStatement.setTimestamp(9, carAdDAORequest.getCreationDate());
-            preparedStatement.setTimestamp(10, carAdDAORequest.getLastEditDate());
+            preparedStatement.setInt(1, carAdDaoRequest.getAge());
+            preparedStatement.setString(2, carAdDaoRequest.getBrand());
+            preparedStatement.setString(3, carAdDaoRequest.getModel());
+            preparedStatement.setString(4, carAdDaoRequest.getCondition().toString());
+            preparedStatement.setInt(5, carAdDaoRequest.getMileage());
+            preparedStatement.setInt(6, carAdDaoRequest.getEngineSize());
+            preparedStatement.setInt(7, carAdDaoRequest.getEnginePower());
+            preparedStatement.setInt(8, carAdDaoRequest.getOwnerId());
+            preparedStatement.setTimestamp(9, carAdDaoRequest.getCreationDate());
+            preparedStatement.setTimestamp(10, carAdDaoRequest.getLastEditDate());
             preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
-            throw new IncorrectSQLParametersException(e);
+            throw new IncorrectSQLParametersException();
         }
-        return get(carAdDAORequest);
+        return get(carAdDaoRequest);
     }
 
     @Override
-    public CarAdDaoResponse delete(CarAdDaoRequest carAdDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoResponse carAdDAOResponse = get(carAdDAORequest);
+    public CarAdDaoResponse delete(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        CarAdDaoResponse carAdDaoResponse = get(carAdDaoRequest);
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_CAR_AD)) {
-            statement.setInt(1, carAdDAOResponse.getId());
+            statement.setInt(1, carAdDaoResponse.getId());
             statement.execute();
             connection.commit();
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return carAdDAOResponse;
+        return carAdDaoResponse;
     }
 
     @Override
-    public CarAdDaoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        CarAdDaoResponse carAdDAOResponse = get(id);
+    public CarAdDaoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        CarAdDaoResponse carAdDaoResponse = get(id);
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_CAR_AD)) {
             statement.setInt(1, id);
@@ -92,12 +93,12 @@ public class CarAdRepositoryImpl implements CarAdRepository {
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return carAdDAOResponse;
+        return carAdDaoResponse;
     }
 
     @Override
-    public List<CarAdDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
-        List<CarAdDaoResponse> carAdDAORespons = getAll();
+    public List<CarAdDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        List<CarAdDaoResponse> carAdDaoResponses = getAll();
         connection = ConnectionFactory.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.execute(DELETE_ALL_CAR_ADS);
@@ -105,59 +106,62 @@ public class CarAdRepositoryImpl implements CarAdRepository {
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return carAdDAORespons;
+        return carAdDaoResponses;
     }
 
     @Override
-    public CarAdDaoResponse get(CarAdDaoRequest carAdDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public CarAdDaoResponse get(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CAR_AD)) {
-            statement.setInt(1, carAdDAORequest.getOwnerId());
-            statement.setTimestamp(2, carAdDAORequest.getCreationDate());
+            statement.setInt(1, carAdDaoRequest.getOwnerId());
+            statement.setTimestamp(2, carAdDaoRequest.getCreationDate());
             ResultSet resultSet = statement.executeQuery();
             connection.commit();
             if (resultSet.next()) {
-                return getCarAdDAOResponse(resultSet);
-            } else return null;
+                return getCarAdDaoResponse(resultSet);
+            } else throw new NullQueryException();
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
     }
 
     @Override
-    public CarAdDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public CarAdDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CAR_AD_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             connection.commit();
             if (resultSet.next()) {
-                return getCarAdDAOResponse(resultSet);
-            } else return null;
+                return getCarAdDaoResponse(resultSet);
+            } else throw new NullQueryException();
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
     }
 
     @Override
-    public List<CarAdDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<CarAdDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
-        List<CarAdDaoResponse> carAdDAORespons = new ArrayList<>();
+        List<CarAdDaoResponse> carAdDaoResponses = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_CAR_ADS);
             connection.commit();
             while (resultSet.next()) {
-                CarAdDaoResponse carAdDAOResponse = getCarAdDAOResponse(resultSet);
-                carAdDAORespons.add(carAdDAOResponse);
+                CarAdDaoResponse carAdDaoResponse = getCarAdDaoResponse(resultSet);
+                carAdDaoResponses.add(carAdDaoResponse);
             }
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return carAdDAORespons;
+        if (carAdDaoResponses.size() == 0) {
+            throw new NullQueryException();
+        }
+        return carAdDaoResponses;
     }
 
     @Override
-    public CarAdDaoResponse update(CarAdDaoRequest carAdDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public CarAdDaoResponse update(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_CAR_AD_AGE_BY_ID);
              PreparedStatement statement2 = connection.prepareStatement(UPDATE_CAR_AD_BRAND_BY_ID);
@@ -166,38 +170,38 @@ public class CarAdRepositoryImpl implements CarAdRepository {
              PreparedStatement statement5 = connection.prepareStatement(UPDATE_CAR_AD_POWER_BY_ID);
              PreparedStatement statement6 = connection.prepareStatement(UPDATE_CAR_AD_LAST_EDIT_DATE_BY_ID);
              PreparedStatement statement7 = connection.prepareStatement(UPDATE_CAR_AD_MILEAGE_BY_ID)) {
-            statement.setInt(1, carAdDAORequest.getAge());
-            statement.setInt(2, carAdDAORequest.getId());
+            statement.setInt(1, carAdDaoRequest.getAge());
+            statement.setInt(2, carAdDaoRequest.getId());
             statement.execute();
-            statement2.setString(1, carAdDAORequest.getBrand());
-            statement2.setInt(2, carAdDAORequest.getId());
+            statement2.setString(1, carAdDaoRequest.getBrand());
+            statement2.setInt(2, carAdDaoRequest.getId());
             statement2.execute();
-            statement3.setString(1, carAdDAORequest.getModel());
-            statement3.setInt(2, carAdDAORequest.getId());
+            statement3.setString(1, carAdDaoRequest.getModel());
+            statement3.setInt(2, carAdDaoRequest.getId());
             statement3.execute();
-            statement4.setInt(1, carAdDAORequest.getEngineSize());
-            statement4.setInt(2, carAdDAORequest.getId());
+            statement4.setInt(1, carAdDaoRequest.getEngineSize());
+            statement4.setInt(2, carAdDaoRequest.getId());
             statement4.execute();
-            statement5.setInt(1, carAdDAORequest.getEnginePower());
-            statement5.setInt(2, carAdDAORequest.getId());
+            statement5.setInt(1, carAdDaoRequest.getEnginePower());
+            statement5.setInt(2, carAdDaoRequest.getId());
             statement5.execute();
-            statement6.setTimestamp(1, carAdDAORequest.getLastEditDate());
-            statement6.setInt(2, carAdDAORequest.getId());
+            statement6.setTimestamp(1, carAdDaoRequest.getLastEditDate());
+            statement6.setInt(2, carAdDaoRequest.getId());
             statement6.execute();
-            statement7.setInt(1, carAdDAORequest.getMileage());
-            statement7.setInt(2, carAdDAORequest.getId());
+            statement7.setInt(1, carAdDaoRequest.getMileage());
+            statement7.setInt(2, carAdDaoRequest.getId());
             statement7.execute();
             connection.commit();
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return get(carAdDAORequest.getId());
+        return get(carAdDaoRequest.getId());
     }
 
     @Override
-    public List<CarAdDaoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<CarAdDaoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
-        List<CarAdDaoResponse> carAdDAORespons = new ArrayList<>();
+        List<CarAdDaoResponse> carAdDaoResponses = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_WITH_PAGINATION)) {
             int offset = (page - 1) * size;
             statement.setInt(1, offset);
@@ -205,28 +209,35 @@ public class CarAdRepositoryImpl implements CarAdRepository {
             ResultSet resultSet = statement.executeQuery();
             connection.commit();
             while (resultSet.next()) {
-                CarAdDaoResponse carAdDAOResponse = getCarAdDAOResponse(resultSet);
-                carAdDAORespons.add(carAdDAOResponse);
+                CarAdDaoResponse carAdDaoResponse = getCarAdDaoResponse(resultSet);
+                carAdDaoResponses.add(carAdDaoResponse);
             }
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return carAdDAORespons;
+        if (carAdDaoResponses.size() == 0) {
+            throw new NullQueryException();
+        }
+        return carAdDaoResponses;
     }
 
-    private CarAdDaoResponse getCarAdDAOResponse(ResultSet resultSet) throws SQLException {
-        CarAdDaoResponse carAdDAOResponse = new CarAdDaoResponse();
-        carAdDAOResponse.setId(resultSet.getInt(ID));
-        carAdDAOResponse.setAge(resultSet.getInt(AGE));
-        carAdDAOResponse.setBrand(resultSet.getString(BRAND));
-        carAdDAOResponse.setModel(resultSet.getString(MODEL));
-        carAdDAOResponse.setCondition(AbstractCarAd.CarCondition.valueOf(resultSet.getString(CONDITION)));
-        carAdDAOResponse.setMileage(resultSet.getInt(MILEAGE));
-        carAdDAOResponse.setEngineSize(resultSet.getInt(ENGINE));
-        carAdDAOResponse.setEnginePower(resultSet.getInt(POWER));
-        carAdDAOResponse.setOwnerId(resultSet.getInt(OWNER_ID));
-        carAdDAOResponse.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
-        carAdDAOResponse.setLastEditDate(resultSet.getTimestamp(LAST_EDIT_DATE));
-        return carAdDAOResponse;
+    private CarAdDaoResponse getCarAdDaoResponse(ResultSet resultSet) throws IncorrectSQLParametersException {
+        try {
+            CarAdDaoResponse carAdDaoResponse = new CarAdDaoResponse();
+            carAdDaoResponse.setId(resultSet.getInt(ID));
+            carAdDaoResponse.setAge(resultSet.getInt(AGE));
+            carAdDaoResponse.setBrand(resultSet.getString(BRAND));
+            carAdDaoResponse.setModel(resultSet.getString(MODEL));
+            carAdDaoResponse.setCondition(AbstractCarAd.CarCondition.valueOf(resultSet.getString(CONDITION)));
+            carAdDaoResponse.setMileage(resultSet.getInt(MILEAGE));
+            carAdDaoResponse.setEngineSize(resultSet.getInt(ENGINE));
+            carAdDaoResponse.setEnginePower(resultSet.getInt(POWER));
+            carAdDaoResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+            carAdDaoResponse.setCreationDate(resultSet.getTimestamp(CREATION_DATE));
+            carAdDaoResponse.setLastEditDate(resultSet.getTimestamp(LAST_EDIT_DATE));
+            return carAdDaoResponse;
+        } catch (SQLException ex) {
+            throw new IncorrectSQLParametersException();
+        }
     }
 }

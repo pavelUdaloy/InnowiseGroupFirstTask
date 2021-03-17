@@ -5,7 +5,14 @@ import by.entity.dto.request.CarAdDtoRequest;
 import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
 import by.exception.ConnectionWithDBLostException;
+import by.exception.CustomFileToJsonException;
+import by.exception.CustomRequestException;
+import by.exception.CustomResponseException;
+import by.exception.IncorrectRequestParameterException;
 import by.exception.IncorrectSQLParametersException;
+import by.exception.JsonParserException;
+import by.exception.NullQueryException;
+import by.exception.abstract_model.AbstractException;
 import by.service.CarAdService;
 import by.service.CarAdServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.fileupload.FileItem;
@@ -79,27 +87,22 @@ public class CarAdServlet extends HttpServlet {
         upload.setSizeMax(Integer.parseInt(property.getProperty(PROPERTIES_MAX_FILE_SIZE)));
     }
 
-    @SneakyThrows
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String carAdIdInString = request.getParameter(ID);
-        if (carAdIdInString != null) {
-            try {
+        try {
+            String carAdIdInString = request.getParameter(ID);
+            if (carAdIdInString != null) {
                 Integer carAdId = Integer.valueOf(carAdIdInString);
 
-                GetResponseBody getResponseBody = carAdService.get(carAdId);
+                ResponseBody responseBody = carAdService.get(carAdId);
 
-                String jsonString = objectMapper.writeValueAsString(getResponseBody);
+                String jsonString = objectMapper.writeValueAsString(responseBody);
                 response.setContentType(JSON_FILE);
                 ServletOutputStream out = response.getOutputStream();
                 response.setCharacterEncoding(UTF8);
                 out.print(jsonString);
                 out.flush();
-            } catch (NumberFormatException | IncorrectSQLParametersException | ConnectionWithDBLostException ex) {
-                response.sendError(400);
-            }
-        } else {
-            try {
+            } else {
                 Integer size = Integer.valueOf(request.getParameter(SIZE_PARAM));
                 Integer page = Integer.valueOf(request.getParameter(PAGE_PARAM));
 
@@ -111,28 +114,31 @@ public class CarAdServlet extends HttpServlet {
                 response.setCharacterEncoding(UTF8);
                 out.print(jsonString);
                 out.flush();
-            } catch (NumberFormatException ex) {
-                response.sendError(400);
-            } catch (JsonProcessingException ex) {
-                response.sendError(418);
             }
+        } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
+            sendErrorJson(response, ex);
+        } catch (NumberFormatException ex) {
+            sendErrorJson(response, new IncorrectRequestParameterException());
+        } catch (JsonProcessingException ex) {
+            sendErrorJson(response, new JsonParserException());
+        } catch (IOException ex) {
+            sendErrorJson(response, new CustomResponseException());
         }
     }
 
-    @SneakyThrows
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
-        Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
-                (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
-        int id;
-        int age;
-        String brand;
-        String model;
-        int engineSize;
-        int enginePower;
-        int mileage;
         try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
+            Map<String, String> dataMap = Splitter.on(SPLITTER).trimResults().withKeyValueSeparator
+                    (Splitter.on(EQUALLY).limit(2).trimResults()).split(br.readLine());
+            int id;
+            int age;
+            String brand;
+            String model;
+            int engineSize;
+            int enginePower;
+            int mileage;
             id = Integer.parseInt(dataMap.get(ID));
             age = Integer.parseInt(dataMap.get(AGE));
             brand = dataMap.get(BRAND);
@@ -140,46 +146,60 @@ public class CarAdServlet extends HttpServlet {
             engineSize = Integer.parseInt(dataMap.get(ENGINE_SIZE_PARAM));
             enginePower = Integer.parseInt(dataMap.get(ENGINE_POWER_PARAM));
             mileage = Integer.parseInt(dataMap.get(MILEAGE));
+
+            CarAdDtoResponse update = carAdService.update(id, age, brand, model, engineSize, enginePower, mileage);
+
+            String jsonString = objectMapper.writeValueAsString(update);
+            resp.setContentType(JSON_FILE);
+            ServletOutputStream out = resp.getOutputStream();
+            resp.setCharacterEncoding(UTF8);
+            out.print(jsonString);
+            out.flush();
+        } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
+            sendErrorJson(resp, ex);
         } catch (NumberFormatException exception) {
-            return;
+            sendErrorJson(resp, new IncorrectRequestParameterException());
+        } catch (JsonProcessingException ex) {
+            sendErrorJson(resp, new JsonParserException());
+        } catch (IOException ex) {
+            sendErrorJson(resp, new CustomResponseException());
         }
-
-        CarAdDtoResponse update = carAdService.update(id, age, brand, model, engineSize, enginePower, mileage);
-
-        String jsonString = objectMapper.writeValueAsString
-                (update);
-        resp.setContentType(JSON_FILE);
-        ServletOutputStream out = resp.getOutputStream();
-        resp.setCharacterEncoding(UTF8);
-        out.print(jsonString);
-        out.flush();
     }
 
-    @SneakyThrows
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
-        req.getSession().setAttribute(ID, 1);
-        Integer ownerId = (Integer) req.getSession().getAttribute(ID);
-        Integer carAdId = Integer.valueOf(req.getParameter(ID));
+        try {
+            req.getSession().setAttribute(ID, 1);
+            Integer ownerId = (Integer) req.getSession().getAttribute(ID);
+            Integer carAdId = Integer.valueOf(req.getParameter(ID));
 
-        GetResponseBody getResponseBody = carAdService.delete(carAdId, ownerId);
+            ResponseBody responseBody = carAdService.delete(carAdId, ownerId);
 
-        String jsonString = objectMapper.writeValueAsString(getResponseBody);
-        resp.setContentType(JSON_FILE);
-        ServletOutputStream out = resp.getOutputStream();
-        resp.setCharacterEncoding(UTF8);
-        out.print(jsonString);
-        out.flush();
+            String jsonString = objectMapper.writeValueAsString(responseBody);
+            resp.setContentType(JSON_FILE);
+            ServletOutputStream out = resp.getOutputStream();
+            resp.setCharacterEncoding(UTF8);
+            out.print(jsonString);
+            out.flush();
+        } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
+            sendErrorJson(resp, ex);
+        } catch (NumberFormatException exception) {
+            sendErrorJson(resp, new IncorrectRequestParameterException());
+        } catch (JsonProcessingException ex) {
+            sendErrorJson(resp, new JsonParserException());
+        } catch (IOException ex) {
+            sendErrorJson(resp, new CustomResponseException());
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.getSession().setAttribute(ID, 1);
-        Integer ownerId = (Integer) req.getSession().getAttribute(ID);
-        if (!ServletFileUpload.isMultipartContent(req)) {
-            resp.sendError(400);
-        }
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
+            req.getSession().setAttribute(ID, 1);
+            Integer ownerId = (Integer) req.getSession().getAttribute(ID);
+            if (!ServletFileUpload.isMultipartContent(req)) {
+                throw new FileUploadException();
+            }
             CarAdDtoRequest carAdDTORequest = null;
             List<ImageDtoRequest> images = new ArrayList<>();
             List<FileItem> fileItems = upload.parseRequest(req);
@@ -193,7 +213,7 @@ public class CarAdServlet extends HttpServlet {
                         ImageDtoRequest image = getImageDTORequest(fileItem);
                         images.add(image);
                     }
-                } else throw new FileUploadException();
+                } else throw new CustomRequestException();
             }
             if (carAdDTORequest == null) throw new NullPointerException();
 
@@ -205,33 +225,50 @@ public class CarAdServlet extends HttpServlet {
             resp.setCharacterEncoding(UTF8);
             out.print(jsonString);
             out.flush();
-        } catch (FileUploadException ex) {
-            resp.sendError(422);
+        } catch (CustomFileToJsonException | CustomRequestException | ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException | JsonParserException ex) {
+            sendErrorJson(resp, ex);
+        } catch (NumberFormatException exception) {
+            sendErrorJson(resp, new IncorrectRequestParameterException());
         } catch (JsonProcessingException ex) {
-            resp.sendError(418);
-        } catch (Exception ex) {
-            resp.sendError(400);
+            sendErrorJson(resp, new JsonParserException());
+        } catch (IOException ex) {
+            sendErrorJson(resp, new CustomResponseException());
+        } catch (FileUploadException e) {
+            sendErrorJson(resp, new CustomRequestException());
         }
     }
 
-    private ImageDtoRequest getImageDTORequest(FileItem item) throws Exception {
+    private ImageDtoRequest getImageDTORequest(FileItem item) throws CustomFileToJsonException {
         String oldName = item.getName();
         String fileType = oldName.substring(oldName.lastIndexOf(DOT));
         Timestamp timestamp = new Timestamp(new Date().getTime());
         String newName = timestamp.toString().replaceAll(ANY_NOT_NUMERAL_SYMBOL, EMPTY);
-        item.write(new File(basePath + newName + fileType));
+        try {
+            item.write(new File(basePath + newName + fileType));
+        } catch (Exception exception) {
+            throw new CustomFileToJsonException();
+        }
         ImageDtoRequest image = new ImageDtoRequest();
         image.setName(newName);
         image.setFileFormat(fileType);
         return image;
     }
 
-    private CarAdDtoRequest getCarAdDTORequest(Integer ownerId, int inc, FileItem jsonFile) throws Exception {
+    private CarAdDtoRequest getCarAdDTORequest(Integer ownerId, int inc, FileItem jsonFile) throws JsonParserException, CustomFileToJsonException {
         CarAdDtoRequest carAdDTORequest;
+        BufferedReader reader;
         File fileForRead = new File(DEF_NAME);
-        jsonFile.write(fileForRead);
-        BufferedReader reader = new BufferedReader(new FileReader(fileForRead));
-        carAdDTORequest = objectMapper.readValue(reader, CarAdDtoRequest.class);
+        try {
+            jsonFile.write(fileForRead);
+            reader = new BufferedReader(new FileReader(fileForRead));
+        } catch (Exception exception) {
+            throw new CustomFileToJsonException();
+        }
+        try {
+            carAdDTORequest = objectMapper.readValue(reader, CarAdDtoRequest.class);
+        } catch (IOException e) {
+            throw new JsonParserException();
+        }
         Timestamp timestamp = new Timestamp(new Date().getTime());
         timestamp.setNanos(timestamp.getNanos() + 100000000 + inc * 2);
         carAdDTORequest.setCreationDate(timestamp);
@@ -240,13 +277,32 @@ public class CarAdServlet extends HttpServlet {
         return carAdDTORequest;
     }
 
+    @SneakyThrows
+    private void sendErrorJson(HttpServletResponse resp, AbstractException exception) {
+        PrintWriter out = resp.getWriter();
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorId(), exception.getErrorCode());
+        String jsonString = objectMapper.writeValueAsString(errorResponse);
+        resp.setContentType(JSON_FILE);
+        resp.setCharacterEncoding(UTF8);
+        out.print(jsonString);
+        out.flush();
+    }
+
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class GetResponseBody {
+    public static class ResponseBody {
         CarAdDtoResponse carAdDTOResponse;
         UserDaoResponse userDAOResponse;
         List<String> imageIds;
-    }//todo annotations
-    //todo excps
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ErrorResponse {
+        private String errorId;
+        private String errorCode;
+    }
 }

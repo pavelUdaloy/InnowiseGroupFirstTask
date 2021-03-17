@@ -5,6 +5,7 @@ import by.entity.dao.request.ImageDaoRequest;
 import by.entity.dao.response.ImageDaoResponse;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
+import by.exception.NullQueryException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,10 +31,10 @@ public class ImageRepositoryImpl implements ImageRepository {
     private Connection connection;
 
     @Override
-    public List<ImageDaoResponse> addAll(List<ImageDaoRequest> images) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<ImageDaoResponse> addAll(List<ImageDaoRequest> imageDaoRequests) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         List<ImageDaoResponse> imageDaoResponses = new ArrayList<>();
-        for (ImageDaoRequest image : images) {
+        for (ImageDaoRequest image : imageDaoRequests) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_TO_IMAGES)) {
                 preparedStatement.setInt(1, image.getOwnerId());
                 preparedStatement.setString(2, image.getName());
@@ -45,26 +46,29 @@ public class ImageRepositoryImpl implements ImageRepository {
             }
             imageDaoResponses.add(get(image));
         }
+        if (imageDaoResponses.size() == 0) {
+            throw new NullQueryException();
+        }
         return imageDaoResponses;
     }
 
     @Override
-    public ImageDaoResponse delete(ImageDaoRequest image) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public ImageDaoResponse delete(ImageDaoRequest imageDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
-        ImageDaoResponse imageDAOResponse = get(image);
+        ImageDaoResponse imageDaoResponse = get(imageDaoRequest);
         try (PreparedStatement statement = connection.prepareStatement(DELETE_IMAGE)) {
-            statement.setInt(1, image.getOwnerId());
-            statement.setString(2, image.getName());
+            statement.setInt(1, imageDaoRequest.getOwnerId());
+            statement.setString(2, imageDaoRequest.getName());
             statement.execute();
             connection.commit();
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return imageDAOResponse;
+        return imageDaoResponse;
     }
 
     @Override
-    public List<ImageDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<ImageDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         List<ImageDaoResponse> imageDaoResponses = getAll();
         try (Statement statement = connection.createStatement()) {
@@ -77,66 +81,74 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public ImageDaoResponse get(ImageDaoRequest imageDAORequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public ImageDaoResponse get(ImageDaoRequest imageDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE)) {
-            statement.setInt(1, imageDAORequest.getOwnerId());
-            statement.setString(2, imageDAORequest.getName());
+            statement.setInt(1, imageDaoRequest.getOwnerId());
+            statement.setString(2, imageDaoRequest.getName());
             ResultSet resultSet = statement.executeQuery();
             connection.commit();
             if (resultSet.next()) {
-                ImageDaoResponse image = new ImageDaoResponse();
-                image.setId(resultSet.getInt(ID));
-                image.setName(resultSet.getString(NAME));
-                image.setFileFormat(resultSet.getString(FILE_FORMAT));
-                image.setOwnerId(resultSet.getInt(OWNER_ID));
-                return image;
-            } else return null;
+                ImageDaoResponse imageDaoResponse = new ImageDaoResponse();
+                imageDaoResponse.setId(resultSet.getInt(ID));
+                imageDaoResponse.setName(resultSet.getString(NAME));
+                imageDaoResponse.setFileFormat(resultSet.getString(FILE_FORMAT));
+                imageDaoResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                return imageDaoResponse;
+            } else {
+                throw new NullQueryException();
+            }
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
     }
 
     @Override
-    public List<ImageDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<ImageDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
-        List<ImageDaoResponse> imageDaoResponse = new ArrayList<>();
+        List<ImageDaoResponse> imageDaoResponses = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE_BY_OWNER_ID)) {
             statement.setInt(1, ownerId);
             ResultSet resultSet = statement.executeQuery();
             connection.commit();
             while (resultSet.next()) {
-                ImageDaoResponse image = new ImageDaoResponse();
-                image.setId(resultSet.getInt(ID));
-                image.setName(resultSet.getString(NAME));
-                image.setFileFormat(resultSet.getString(FILE_FORMAT));
-                image.setOwnerId(resultSet.getInt(OWNER_ID));
-                imageDaoResponse.add(image);
+                ImageDaoResponse imageDaoResponse = new ImageDaoResponse();
+                imageDaoResponse.setId(resultSet.getInt(ID));
+                imageDaoResponse.setName(resultSet.getString(NAME));
+                imageDaoResponse.setFileFormat(resultSet.getString(FILE_FORMAT));
+                imageDaoResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                imageDaoResponses.add(imageDaoResponse);
             }
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return imageDaoResponse;
+        if (imageDaoResponses.size() == 0) {
+            throw new NullQueryException();
+        }
+        return imageDaoResponses;
     }
 
     @Override
-    public List<ImageDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException {
+    public List<ImageDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
-        List<ImageDaoResponse> imageDaoResponse = new ArrayList<>();
+        List<ImageDaoResponse> imageDaoResponses = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_IMAGES);
             connection.commit();
             while (resultSet.next()) {
-                ImageDaoResponse image = new ImageDaoResponse();
-                image.setId(resultSet.getInt(ID));
-                image.setName(resultSet.getString(NAME));
-                image.setFileFormat(resultSet.getString(FILE_FORMAT));
-                image.setOwnerId(resultSet.getInt(OWNER_ID));
-                imageDaoResponse.add(image);
+                ImageDaoResponse imageDaoResponse = new ImageDaoResponse();
+                imageDaoResponse.setId(resultSet.getInt(ID));
+                imageDaoResponse.setName(resultSet.getString(NAME));
+                imageDaoResponse.setFileFormat(resultSet.getString(FILE_FORMAT));
+                imageDaoResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                imageDaoResponses.add(imageDaoResponse);
             }
         } catch (SQLException e) {
             throw new IncorrectSQLParametersException(e);
         }
-        return imageDaoResponse;
+        if (imageDaoResponses.size() == 0) {
+            throw new NullQueryException();
+        }
+        return imageDaoResponses;
     }
 }
