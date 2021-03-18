@@ -26,7 +26,7 @@ public class ErrorUtils {
     @SneakyThrows
     void sendErrorJson(HttpServletResponse resp, AbstractException exception) {
         PrintWriter out = resp.getWriter();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorId(), exception.getErrorCode());
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorId(), exception.getErrorCode(), exception.getErrorStatusCode());
         String jsonString = objectMapper.writeValueAsString(errorResponse);
         resp.setContentType(JSON_FILE);
         resp.setCharacterEncoding(UTF8);
@@ -42,5 +42,6 @@ public class ErrorUtils {
     public static class ErrorResponse {
         private String errorId;
         private String errorCode;
+        private Integer errorStatusCode;
     }
 }

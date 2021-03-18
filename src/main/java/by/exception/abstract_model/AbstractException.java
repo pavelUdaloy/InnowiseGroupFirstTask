@@ -8,19 +8,22 @@ import java.util.UUID;
 public abstract class AbstractException extends Exception implements CommonException {
     private String errorId;
     private String errorCode;
+    private Integer errorStatusCode;
 
-    public AbstractException(Throwable cause, ExceptionErrorCode exceptionErrorCode) {
+    public AbstractException(Throwable cause,
+                             ExceptionErrorCode exceptionErrorCode, ExceptionStatusCode exceptionStatusCode) {
         super(cause);
-        init(exceptionErrorCode);
+        init(exceptionErrorCode, exceptionStatusCode);
     }
 
-    public AbstractException(ExceptionErrorCode exceptionErrorCode) {
-        init(exceptionErrorCode);
+    public AbstractException(ExceptionErrorCode exceptionErrorCode, ExceptionStatusCode exceptionStatusCode) {
+        init(exceptionErrorCode, exceptionStatusCode);
     }
 
-    private void init(ExceptionErrorCode exceptionErrorCode) {
+    private void init(ExceptionErrorCode exceptionErrorCode, ExceptionStatusCode exceptionStatusCode) {
         errorId = UUID.randomUUID().toString();
         errorCode = exceptionErrorCode.getCode();
+        errorStatusCode = exceptionStatusCode.getStatus();
     }
 
 }

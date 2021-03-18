@@ -43,15 +43,6 @@ public class MainFilter extends HttpFilter {
         LOGGER.log(Level.INFO, FILTER_DESTROY);
     }
 
-//    @Override
-//    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        request.
-//        if (request instanceof HttpServletRequest) {
-//            LOGGER.log(Level.INFO, ((HttpServletRequest) request).getRequestURL().toString());
-//        }
-//        chain.doFilter(request, response);
-//    }
-
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         LOGGER.log(Level.INFO, req.getRequestURL().toString() + HTTP_METHOD_MESSAGE + req.getMethod());

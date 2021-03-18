@@ -1,14 +1,16 @@
 package by.exception;
 
 import by.exception.abstract_model.AbstractException;
-import by.exception.abstract_model.BaseErrorCodes;
+
+import static by.exception.abstract_model.ErrorCodes.CONNECTION_WITH_DB_LOST_EXCEPTION;
+import static by.exception.abstract_model.ErrorStatusCodes.CONNECTION_WITH_DB_LOST_STATUS;
 
 public class ConnectionWithDBLostException extends AbstractException {
     public ConnectionWithDBLostException(Throwable cause) {
-        super(cause, BaseErrorCodes.CONNECTION_WITH_DB_LOST_EXCEPTION);
+        super(cause, CONNECTION_WITH_DB_LOST_EXCEPTION, CONNECTION_WITH_DB_LOST_STATUS);
     }
 
     public ConnectionWithDBLostException() {
-        super(BaseErrorCodes.CONNECTION_WITH_DB_LOST_EXCEPTION);
+        super(CONNECTION_WITH_DB_LOST_EXCEPTION, CONNECTION_WITH_DB_LOST_STATUS);
     }
 }

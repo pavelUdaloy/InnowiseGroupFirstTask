@@ -14,7 +14,7 @@ import static by.util.TextLabels.RESPONSE_EXCEPTION_LABEL;
 
 @Getter
 @RequiredArgsConstructor
-public enum BaseErrorCodes implements ExceptionErrorCode {
+public enum ErrorCodes implements ExceptionErrorCode {
     CONNECTION_WITH_DB_LOST_EXCEPTION(CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL),
     INCORRECT_SQL_PARAMETERS_EXCEPTION(INCORRECT_SQL_PARAMETERS_EXCEPTION_LABEL),
     NULL_SQL_QUERY_EXCEPTION(NULL_SQL_QUERY_EXCEPTION_LABEL),
