@@ -99,9 +99,11 @@ public class TextLabels {
     public static final String ENGINE_SIZE_PARAM = "engineSize";
     public static final String ENGINE_POWER_PARAM = "enginePower";
 
-    //filter
+    //logger messages
     public static final String FILTER_INIT = "MainFilter initialized";
     public static final String FILTER_DESTROY = "MainFilter destroyed";
+    public static final String EXCEPTION_MESSAGE = "Exception - ";
+    public static final String HTTP_METHOD_MESSAGE = " HTTP Method - ";
 
     //exception
     public static final String CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL = "Connection with db lost";
