@@ -52,7 +52,7 @@ public class CarAdServiceImpl implements CarAdService {
 
     @Override
     public CarAdServlet.ResponseBody delete(Integer carAdId, Integer userId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdId);
+        List<ImageDtoResponse> imageDtoResponses = imageService.getByCarAdId(carAdId);
         CarAdDaoResponse carAdDaoResponse = carAdRepository.delete(carAdId);
         CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDaoResponseToDtoResponse(carAdDaoResponse);
 
@@ -88,7 +88,7 @@ public class CarAdServiceImpl implements CarAdService {
 
         UserDaoResponse userDaoResponse = userService.get(carAdDtoResponse.getOwnerId());
 
-        List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdDtoResponse.getId());
+        List<ImageDtoResponse> imageDtoResponses = imageService.getByCarAdId(carAdDtoResponse.getId());
         carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
         List<String> imagesIds = new ArrayList<>();
         for (ImageDtoResponse imageDtoResponse : imageDtoResponses) {
@@ -125,7 +125,7 @@ public class CarAdServiceImpl implements CarAdService {
         CarAdDaoResponse carAdDaoResponse = carAdRepository.update(carAdDaoRequest);
         CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDaoResponseToDtoResponse(carAdDaoResponse);
 
-        List<ImageDtoResponse> imageDtoResponses = imageService.get(carAdDtoResponse.getId());
+        List<ImageDtoResponse> imageDtoResponses = imageService.getByCarAdId(carAdDtoResponse.getId());
         carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
         List<TelephoneDtoResponse> telephoneDtoResponses = telephoneService.get(carAdDtoResponse.getOwnerId());
         carAdDtoResponse.setTelephoneList(telephoneDtoResponses);
@@ -138,7 +138,7 @@ public class CarAdServiceImpl implements CarAdService {
         List<CarAdDaoResponse> carAdDaoResponse = carAdRepository.getWithPagination(size, page);
         List<CarAdDtoResponse> carAdDtoResponses = new CarAdMapper().convertDaoResponsesToDtoResponses(carAdDaoResponse);
         for (CarAdDtoResponse carAdDtoResponse : carAdDtoResponses) {
-            carAdDtoResponse.setImageQuantity(imageService.get(carAdDtoResponse.getId()).size());
+            carAdDtoResponse.setImageQuantity(imageService.getByCarAdId(carAdDtoResponse.getId()).size());
             carAdDtoResponse.setTelephoneList(telephoneService.get(carAdDtoResponse.getOwnerId()));
         }
         return carAdDtoResponses;

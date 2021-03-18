@@ -45,9 +45,15 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<ImageDtoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        List<ImageDaoResponse> imageDaoResponse = imageRepository.get(ownerId);
-        return new ImageMapper().convertDaoResponsesToDtoResponses(imageDaoResponse);
+    public List<ImageDtoResponse> getByCarAdId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        List<ImageDaoResponse> imageDaoResponses = imageRepository.getByOwnerId(ownerId);
+        return new ImageMapper().convertDaoResponsesToDtoResponses(imageDaoResponses);
+    }
+
+    @Override
+    public ImageDtoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        ImageDaoResponse imageDaoResponse = imageRepository.get(id);
+        return new ImageMapper().convertDaoResponseToDtoResponse(imageDaoResponse);
     }
 
     @Override

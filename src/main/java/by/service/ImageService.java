@@ -17,7 +17,9 @@ public interface ImageService {
 
     ImageDtoResponse get(ImageDtoRequest imageDtoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
 
-    List<ImageDtoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    List<ImageDtoResponse> getByCarAdId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+
+    ImageDtoResponse get(Integer imageId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
 
     List<ImageDtoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
 }

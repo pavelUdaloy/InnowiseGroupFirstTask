@@ -12,6 +12,7 @@ public class TextLabels {
     public static final String DELETE_IMAGE = "DELETE FROM simple.public.images WHERE (owner_id=? AND name=?)";
     public static final String SELECT_ALL_IMAGES = "SELECT * FROM simple.public.images";
     public static final String SELECT_IMAGE = "SELECT * FROM simple.public.images WHERE (owner_id=? AND name=?)";
+    public static final String SELECT_IMAGE_BY_ID = "SELECT * FROM simple.public.images WHERE id=?";
     public static final String SELECT_IMAGE_BY_OWNER_ID = "SELECT * FROM simple.public.images WHERE owner_id=?";
     public static final String DELETE_ALL_IMAGES = "DELETE FROM simple.public.images";
     public static final String NAME = "name";
@@ -87,8 +88,8 @@ public class TextLabels {
     public static final String SPLITTER = "&";
 
     //file
-    public static final String TEXT_FILE = "text/plain";
     public static final String JSON_FILE = "application/json";
+    public static final String IMAGE_FILE = "image/gif";
     public static final String DEF_NAME = "def";
     public static final String UTF8 = "UTF-8";
 

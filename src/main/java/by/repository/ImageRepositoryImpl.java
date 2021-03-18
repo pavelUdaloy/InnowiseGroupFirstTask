@@ -24,6 +24,7 @@ import static by.util.TextLabels.NAME;
 import static by.util.TextLabels.OWNER_ID;
 import static by.util.TextLabels.SELECT_ALL_IMAGES;
 import static by.util.TextLabels.SELECT_IMAGE;
+import static by.util.TextLabels.SELECT_IMAGE_BY_ID;
 import static by.util.TextLabels.SELECT_IMAGE_BY_OWNER_ID;
 
 public class ImageRepositoryImpl implements ImageRepository {
@@ -104,7 +105,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public List<ImageDaoResponse> get(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+    public List<ImageDaoResponse> getByOwnerId(Integer ownerId) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
         connection = ConnectionFactory.getConnection();
         List<ImageDaoResponse> imageDaoResponses = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE_BY_OWNER_ID)) {
@@ -126,6 +127,28 @@ public class ImageRepositoryImpl implements ImageRepository {
             throw new NullQueryException();
         }
         return imageDaoResponses;
+    }
+
+    @Override
+    public ImageDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
+        connection = ConnectionFactory.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_IMAGE_BY_ID)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            connection.commit();
+            if (resultSet.next()) {
+                ImageDaoResponse imageDaoResponse = new ImageDaoResponse();
+                imageDaoResponse.setId(id);
+                imageDaoResponse.setName(resultSet.getString(NAME));
+                imageDaoResponse.setFileFormat(resultSet.getString(FILE_FORMAT));
+                imageDaoResponse.setOwnerId(resultSet.getInt(OWNER_ID));
+                return imageDaoResponse;
+            } else {
+                throw new NullQueryException();
+            }
+        } catch (SQLException e) {
+            throw new IncorrectSQLParametersException(e);
+        }
     }
 
     @Override

@@ -12,7 +12,6 @@ import by.exception.IncorrectRequestParameterException;
 import by.exception.IncorrectSQLParametersException;
 import by.exception.JsonParserException;
 import by.exception.NullQueryException;
-import by.exception.abstract_model.AbstractException;
 import by.service.CarAdService;
 import by.service.CarAdServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.fileupload.FileItem;
@@ -77,6 +75,8 @@ public class CarAdServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final ErrorUtils errorUtils = new ErrorUtils();
+
     @SneakyThrows
     @Override
     public void init() {
@@ -116,13 +116,13 @@ public class CarAdServlet extends HttpServlet {
                 out.flush();
             }
         } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
-            sendErrorJson(response, ex);
+            errorUtils.sendErrorJson(response, ex);
         } catch (NumberFormatException ex) {
-            sendErrorJson(response, new IncorrectRequestParameterException());
+            errorUtils.sendErrorJson(response, new IncorrectRequestParameterException());
         } catch (JsonProcessingException ex) {
-            sendErrorJson(response, new JsonParserException());
+            errorUtils.sendErrorJson(response, new JsonParserException());
         } catch (IOException ex) {
-            sendErrorJson(response, new CustomResponseException());
+            errorUtils.sendErrorJson(response, new CustomResponseException());
         }
     }
 
@@ -156,13 +156,13 @@ public class CarAdServlet extends HttpServlet {
             out.print(jsonString);
             out.flush();
         } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
-            sendErrorJson(resp, ex);
+            errorUtils.sendErrorJson(resp, ex);
         } catch (NumberFormatException exception) {
-            sendErrorJson(resp, new IncorrectRequestParameterException());
+            errorUtils.sendErrorJson(resp, new IncorrectRequestParameterException());
         } catch (JsonProcessingException ex) {
-            sendErrorJson(resp, new JsonParserException());
+            errorUtils.sendErrorJson(resp, new JsonParserException());
         } catch (IOException ex) {
-            sendErrorJson(resp, new CustomResponseException());
+            errorUtils.sendErrorJson(resp, new CustomResponseException());
         }
     }
 
@@ -182,13 +182,13 @@ public class CarAdServlet extends HttpServlet {
             out.print(jsonString);
             out.flush();
         } catch (ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException ex) {
-            sendErrorJson(resp, ex);
+            errorUtils.sendErrorJson(resp, ex);
         } catch (NumberFormatException exception) {
-            sendErrorJson(resp, new IncorrectRequestParameterException());
+            errorUtils.sendErrorJson(resp, new IncorrectRequestParameterException());
         } catch (JsonProcessingException ex) {
-            sendErrorJson(resp, new JsonParserException());
+            errorUtils.sendErrorJson(resp, new JsonParserException());
         } catch (IOException ex) {
-            sendErrorJson(resp, new CustomResponseException());
+            errorUtils.sendErrorJson(resp, new CustomResponseException());
         }
     }
 
@@ -226,15 +226,15 @@ public class CarAdServlet extends HttpServlet {
             out.print(jsonString);
             out.flush();
         } catch (CustomFileToJsonException | CustomRequestException | ConnectionWithDBLostException | NullQueryException | IncorrectSQLParametersException | JsonParserException ex) {
-            sendErrorJson(resp, ex);
+            errorUtils.sendErrorJson(resp, ex);
         } catch (NumberFormatException exception) {
-            sendErrorJson(resp, new IncorrectRequestParameterException());
+            errorUtils.sendErrorJson(resp, new IncorrectRequestParameterException());
         } catch (JsonProcessingException ex) {
-            sendErrorJson(resp, new JsonParserException());
+            errorUtils.sendErrorJson(resp, new JsonParserException());
         } catch (IOException ex) {
-            sendErrorJson(resp, new CustomResponseException());
+            errorUtils.sendErrorJson(resp, new CustomResponseException());
         } catch (FileUploadException e) {
-            sendErrorJson(resp, new CustomRequestException());
+            errorUtils.sendErrorJson(resp, new CustomRequestException());
         }
     }
 
@@ -277,17 +277,6 @@ public class CarAdServlet extends HttpServlet {
         return carAdDTORequest;
     }
 
-    @SneakyThrows
-    private void sendErrorJson(HttpServletResponse resp, AbstractException exception) {
-        PrintWriter out = resp.getWriter();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorId(), exception.getErrorCode());
-        String jsonString = objectMapper.writeValueAsString(errorResponse);
-        resp.setContentType(JSON_FILE);
-        resp.setCharacterEncoding(UTF8);
-        out.print(jsonString);
-        out.flush();
-    }
-
     @AllArgsConstructor
     @Getter
     @Setter
@@ -295,14 +284,5 @@ public class CarAdServlet extends HttpServlet {
         CarAdDtoResponse carAdDTOResponse;
         UserDaoResponse userDAOResponse;
         List<String> imageIds;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ErrorResponse {
-        private String errorId;
-        private String errorCode;
     }
 }
