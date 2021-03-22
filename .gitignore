@@ -1,0 +1,8 @@
+.gradle
+.idea
+build
+out
+src/test
+src/main/resources/request.http
+/src/test/
+lib
