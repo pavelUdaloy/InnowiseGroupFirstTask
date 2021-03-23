@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
+//@Entity
+//@Table(name = "car_ads")
 public class CarAdDaoResponse extends AbstractCarAd {
     private Integer id;
     private Integer ownerId;
