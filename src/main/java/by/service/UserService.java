@@ -1,7 +1,6 @@
 package by.service;
 
-import by.entity.dao.request.UserDaoRequest;
-import by.entity.dao.response.UserDaoResponse;
+import by.entity.base.User;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
 import by.exception.NullQueryException;
@@ -9,15 +8,13 @@ import by.exception.NullQueryException;
 import java.util.List;
 
 public interface UserService {
-    UserDaoResponse add(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    User add(User user) throws IncorrectSQLParametersException, NullQueryException, ConnectionWithDBLostException;
 
-    UserDaoResponse delete(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    User delete(Integer id) throws IncorrectSQLParametersException, NullQueryException, ConnectionWithDBLostException;
 
-    List<UserDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    User get(String email) throws NullQueryException, ConnectionWithDBLostException;
 
-    UserDaoResponse get(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    User get(Integer id) throws NullQueryException, ConnectionWithDBLostException;
 
-    UserDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
-
-    List<UserDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    List<User> getWithPagination(Integer size, Integer page) throws NullQueryException, ConnectionWithDBLostException;
 }

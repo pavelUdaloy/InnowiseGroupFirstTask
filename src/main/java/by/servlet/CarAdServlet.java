@@ -1,6 +1,6 @@
 package by.servlet;
 
-import by.entity.dao.response.UserDaoResponse;
+import by.entity.base.User;
 import by.entity.dto.request.CarAdDtoRequest;
 import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
@@ -282,7 +282,7 @@ public class CarAdServlet extends HttpServlet {
     @Setter
     public static class ResponseBody {
         CarAdDtoResponse carAdDTOResponse;
-        UserDaoResponse userDAOResponse;
+        User user;
         List<String> imageIds;
     }
 }

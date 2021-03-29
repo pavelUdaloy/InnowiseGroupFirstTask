@@ -1,7 +1,7 @@
 package by.service;
 
-import by.entity.dao.request.UserDaoRequest;
-import by.entity.dao.response.UserDaoResponse;
+import by.db.EntityManagerProvider;
+import by.entity.base.User;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.IncorrectSQLParametersException;
 import by.exception.NullQueryException;
@@ -15,32 +15,71 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
-    public UserDaoResponse add(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.add(userDaoRequest);
+    public User add(User user) throws ConnectionWithDBLostException {
+        EntityManagerProvider.getEntityManager().getTransaction().begin();
+        User result = null;
+        try {
+            result = userRepository.add(user);
+            EntityManagerProvider.getEntityManager().getTransaction().commit();
+        } catch (IncorrectSQLParametersException | NullQueryException e) {
+            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+        } finally {
+            EntityManagerProvider.clear();
+        }
+        return result;
     }
 
     @Override
-    public UserDaoResponse delete(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.delete(userDaoRequest);
+    public User delete(Integer id) throws NullQueryException, ConnectionWithDBLostException {
+        EntityManagerProvider.getEntityManager().getTransaction().begin();
+        User result = null;
+        try {
+            result = userRepository.delete(id);
+            EntityManagerProvider.getEntityManager().getTransaction().commit();
+        } catch (IncorrectSQLParametersException | NullQueryException e) {
+            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+        } finally {
+            EntityManagerProvider.clear();
+        }
+        return result;
     }
 
     @Override
-    public List<UserDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.deleteAll();
+    public User get(String email) throws ConnectionWithDBLostException {
+        User result = null;
+        try {
+            result = userRepository.get(email);
+        } catch (NullQueryException e) {
+            System.out.println(e);
+        } finally {
+            EntityManagerProvider.clear();
+        }
+        return result;
     }
 
     @Override
-    public UserDaoResponse get(UserDaoRequest userDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.get(userDaoRequest);
+    public User get(Integer id) throws NullQueryException, ConnectionWithDBLostException {
+        User result = null;
+        try {
+            result = userRepository.get(id);
+        } catch (NullQueryException e) {
+            System.out.println(e);
+        } finally {
+            EntityManagerProvider.clear();
+        }
+        return result;
     }
 
     @Override
-    public UserDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.get(id);
-    }
-
-    @Override
-    public List<UserDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException {
-        return userRepository.getAll();
+    public List<User> getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException {
+        List<User> results = null;
+        try {
+            results = userRepository.getWithPagination(size, page);
+        } catch (NullQueryException e) {
+            System.out.println(e);
+        } finally {
+            EntityManagerProvider.clear();
+        }
+        return results;
     }
 }

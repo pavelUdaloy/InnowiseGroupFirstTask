@@ -1,8 +1,8 @@
 package by.service;
 
+import by.entity.base.User;
 import by.entity.dao.request.CarAdDaoRequest;
 import by.entity.dao.response.CarAdDaoResponse;
-import by.entity.dao.response.UserDaoResponse;
 import by.entity.dto.request.CarAdDtoRequest;
 import by.entity.dto.request.ImageDtoRequest;
 import by.entity.dto.response.CarAdDtoResponse;
@@ -14,6 +14,8 @@ import by.exception.NullQueryException;
 import by.mapper.CarAdMapper;
 import by.repository.CarAdRepository;
 import by.repository.CarAdRepositoryImpl;
+import by.repository.UserRepository;
+import by.repository.UserRepositoryImpl;
 import by.servlet.CarAdServlet;
 
 import java.sql.Timestamp;
@@ -24,6 +26,8 @@ import java.util.List;
 public class CarAdServiceImpl implements CarAdService {
 
     private final CarAdRepository carAdRepository = new CarAdRepositoryImpl();
+
+    private final UserRepository userRepository  = new UserRepositoryImpl();
 
     private final ImageService imageService = new ImageServiceImpl();
     private final TelephoneService telephoneService = new TelephoneServiceImpl();
@@ -56,7 +60,7 @@ public class CarAdServiceImpl implements CarAdService {
         CarAdDaoResponse carAdDaoResponse = carAdRepository.delete(carAdId);
         CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDaoResponseToDtoResponse(carAdDaoResponse);
 
-        UserDaoResponse userDaoResponse = userService.get(userId);
+        User user = userRepository.get(userId);
         List<String> imagesIds = new ArrayList<>();
         for (ImageDtoResponse imageDtoResponse : imageDtoResponses) {
             imagesIds.add(String.valueOf(imageDtoResponse.getId()));
@@ -65,7 +69,7 @@ public class CarAdServiceImpl implements CarAdService {
         carAdDtoResponse.setTelephoneList(telephoneDtoResponses);
         carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
 
-        return new CarAdServlet.ResponseBody(carAdDtoResponse, userDaoResponse, imagesIds);
+        return new CarAdServlet.ResponseBody(carAdDtoResponse, user, imagesIds);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class CarAdServiceImpl implements CarAdService {
         CarAdDaoResponse carAdDaoResponse = carAdRepository.get(carAdId);
         CarAdDtoResponse carAdDtoResponse = new CarAdMapper().convertDaoResponseToDtoResponse(carAdDaoResponse);
 
-        UserDaoResponse userDaoResponse = userService.get(carAdDtoResponse.getOwnerId());
+        User user = userRepository.get(carAdDtoResponse.getOwnerId());
 
         List<ImageDtoResponse> imageDtoResponses = imageService.getByCarAdId(carAdDtoResponse.getId());
         carAdDtoResponse.setImageQuantity(imageDtoResponses.size());
@@ -98,7 +102,7 @@ public class CarAdServiceImpl implements CarAdService {
         List<TelephoneDtoResponse> telephoneDtoResponse = telephoneService.get(carAdDtoResponse.getOwnerId());
         carAdDtoResponse.setTelephoneList(telephoneDtoResponse);
 
-        return new CarAdServlet.ResponseBody(carAdDtoResponse, userDaoResponse, imagesIds);
+        return new CarAdServlet.ResponseBody(carAdDtoResponse, user, imagesIds);
     }
 
     @Override

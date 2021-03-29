@@ -1,6 +1,6 @@
 package by.entity.dto.request;
 
-import by.entity.abstractive.AbstractUser;
+import by.entity.base.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDtoRequest extends AbstractUser {
+public class UserDtoRequest extends User {
 }
