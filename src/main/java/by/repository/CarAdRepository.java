@@ -1,29 +1,20 @@
 package by.repository;
 
-import by.entity.dao.request.CarAdDaoRequest;
-import by.entity.dao.response.CarAdDaoResponse;
+import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
-import by.exception.IncorrectSQLParametersException;
 import by.exception.NullQueryException;
+import by.servlet.requestentity.UpdateAdRequest;
 
 import java.util.List;
 
 public interface CarAdRepository {
-    CarAdDaoResponse add(CarAdDaoRequest carAdDaoRequest) throws ConnectionWithDBLostException, IncorrectSQLParametersException, NullQueryException;
+    Integer add(CarAd carAd) throws ConnectionWithDBLostException, NullQueryException;
 
-    CarAdDaoResponse delete(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    void delete(Integer id) throws ConnectionWithDBLostException, NullQueryException;
 
-    CarAdDaoResponse delete(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    CarAd get(Integer id) throws NullQueryException, ConnectionWithDBLostException;
 
-    List<CarAdDaoResponse> deleteAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    void update(UpdateAdRequest updateAdRequest) throws ConnectionWithDBLostException, NullQueryException;
 
-    CarAdDaoResponse get(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
-
-    CarAdDaoResponse get(Integer id) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
-
-    List<CarAdDaoResponse> getAll() throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
-
-    CarAdDaoResponse update(CarAdDaoRequest carAdDaoRequest) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
-
-    List<CarAdDaoResponse> getWithPagination(Integer size, Integer page) throws IncorrectSQLParametersException, ConnectionWithDBLostException, NullQueryException;
+    List<CarAd> getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException, NullQueryException;
 }

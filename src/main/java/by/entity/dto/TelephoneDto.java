@@ -1,6 +1,5 @@
-package by.entity.dto.request;
+package by.entity.dto;
 
-import by.entity.base.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,5 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDtoRequest extends User {
+public class TelephoneDto {
+    private String number;
+    private Integer id;
 }

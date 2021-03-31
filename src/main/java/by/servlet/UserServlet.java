@@ -1,6 +1,6 @@
 package by.servlet;
 
-import by.entity.dto.request.CarAdDtoRequest;
+import by.entity.dto.CarAdDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -49,8 +49,8 @@ public class UserServlet extends HttpServlet {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            CarAdDtoRequest carAdDTORequest = mapper.readValue(req.getReader(), CarAdDtoRequest.class);
-            System.out.println(carAdDTORequest);
+            CarAdDto carAdDTO = mapper.readValue(req.getReader(), CarAdDto.class);
+            System.out.println(carAdDTO);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -3,8 +3,6 @@ package by.filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +15,7 @@ import java.util.logging.Logger;
 import static by.util.TextLabels.FILTER_DESTROY;
 import static by.util.TextLabels.FILTER_INIT;
 import static by.util.TextLabels.HTTP_METHOD_MESSAGE;
+import static by.util.TextLabels.ID;
 import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.property;
 
@@ -46,6 +45,7 @@ public class MainFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         LOGGER.log(Level.INFO, req.getRequestURL().toString() + HTTP_METHOD_MESSAGE + req.getMethod());
+        req.getSession().setAttribute(ID, 4);
         super.doFilter(req, res, chain);
     }
 }

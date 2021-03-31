@@ -1,6 +1,5 @@
-package by.entity.dto.response;
+package by.entity.dto;
 
-import by.entity.base.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDtoResponse extends User {
+public class UserDto {
     private Integer id;
+    private String email;
+    private String firstName;
+    private String lastName;
 }

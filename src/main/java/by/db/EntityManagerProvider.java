@@ -14,7 +14,6 @@ public class EntityManagerProvider {
     public static EntityManager getEntityManager() throws ConnectionWithDBLostException {
         try {
             if (THREAD_LOCAL.get() == null) {
-
                 THREAD_LOCAL.set(sessionFactory.getEntityManager());
             }
             return THREAD_LOCAL.get();
@@ -25,11 +24,14 @@ public class EntityManagerProvider {
 
     public static void clear() throws ConnectionWithDBLostException {
         EntityManager entityManager = getEntityManager();
-
-        if (entityManager != null) {
-            entityManager.clear();
-            entityManager.close();
-            THREAD_LOCAL.remove();
+        try {
+            if (entityManager != null) {
+                entityManager.clear();
+                entityManager.close();
+                THREAD_LOCAL.remove();
+            }
+        } catch (IllegalStateException e) {
+            throw new ConnectionWithDBLostException();
         }
     }
 }

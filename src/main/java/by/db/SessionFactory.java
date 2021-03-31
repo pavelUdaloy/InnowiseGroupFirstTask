@@ -1,15 +1,23 @@
 package by.db;
 
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import javax.persistence.EntityManager;
 
 public class SessionFactory {
-    private final org.hibernate.SessionFactory sessionFactory;
+    private org.hibernate.SessionFactory sessionFactory;
 
     public SessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        sessionFactory = configuration.buildSessionFactory();
+
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure().build();
+        try {
+            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        } catch (Exception e) {
+            StandardServiceRegistryBuilder.destroy(registry);
+        }
     }
 
     public EntityManager getEntityManager() {

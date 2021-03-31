@@ -13,7 +13,7 @@
         <property name="connection.release_mode">after_transaction</property>
 
         <property name="hibernate.connection.provider_class">
-            com.zaxxer.hikari.hibernate.HikariConnectionProvider
+            org.hibernate.hikaricp.internal.HikariCPConnectionProvider
         </property>
         <property name="hibernate.hikari.dataSourceClassName">org.postgresql.ds.PGSimpleDataSource</property>
         <property name="hibernate.hikari.dataSource.url">jdbc:postgresql://localhost:5432/simple</property>
@@ -22,6 +22,9 @@
         <property name="hibernate.jdbc.lob.non_contextual_creation">true</property>
 
         <mapping class="by.entity.base.User"/>
+        <mapping class="by.entity.base.CarAd"/>
+        <mapping class="by.entity.base.Image"/>
+        <mapping class="by.entity.base.Telephone"/>
 
     </session-factory>
 </hibernate-configuration>
