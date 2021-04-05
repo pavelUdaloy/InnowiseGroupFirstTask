@@ -12,24 +12,23 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static by.util.TextLabels.FILTER_DESTROY;
-import static by.util.TextLabels.FILTER_INIT;
 import static by.util.TextLabels.HTTP_METHOD_MESSAGE;
-import static by.util.TextLabels.ID;
+import static by.util.TextLabels.LOG_FILTER_DESTROY;
+import static by.util.TextLabels.LOG_FILTER_INIT;
 import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.property;
 
-@WebFilter(filterName = "by/filter/MainFilter.java", servletNames =
-        {"by/servlet/CarAdServlet.java", "by/servlet/UserServlet.java", "by/servlet/ImageServlet.java"})
-public class MainFilter extends HttpFilter {
-    private static final Logger LOGGER = Logger.getLogger(String.valueOf(MainFilter.class));
+@WebFilter(filterName = "by/filter/LogFilter.java", servletNames =
+        {"by/servlet/RegServlet.java", "by/servlet/AdsServlet.java", "by/servlet/AuthServlet.java", "by/servlet/ImageServlet.java"})
+public class LogFilter extends HttpFilter {
+    private static final Logger LOGGER = Logger.getLogger(String.valueOf(LogFilter.class));
 
-    public MainFilter() {
+    public LogFilter() {
     }
 
     @Override
     public void init(FilterConfig fConfig) {
-        LOGGER.log(Level.INFO, FILTER_INIT);
+        LOGGER.log(Level.INFO, LOG_FILTER_INIT);
         try (FileInputStream fis = new FileInputStream(PROPERTIES_PATH)) {
             property.load(fis);
         } catch (IOException e) {
@@ -39,13 +38,12 @@ public class MainFilter extends HttpFilter {
 
     @Override
     public void destroy() {
-        LOGGER.log(Level.INFO, FILTER_DESTROY);
+        LOGGER.log(Level.INFO, LOG_FILTER_DESTROY);
     }
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        LOGGER.log(Level.INFO, req.getRequestURL().toString() + HTTP_METHOD_MESSAGE + req.getMethod());
-        req.getSession().setAttribute(ID, 4);
+        LOGGER.log(Level.INFO, req.getRequestURI() + HTTP_METHOD_MESSAGE + req.getServletPath());
         super.doFilter(req, res, chain);
     }
 }

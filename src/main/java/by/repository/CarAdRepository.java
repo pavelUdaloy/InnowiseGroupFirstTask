@@ -3,7 +3,7 @@ package by.repository;
 import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.requestentity.UpdateAdRequest;
+import by.servlet.request.UpdateAdRequest;
 
 import java.util.List;
 

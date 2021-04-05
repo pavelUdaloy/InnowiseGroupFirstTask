@@ -7,7 +7,9 @@ import by.exception.NullQueryException;
 import java.util.List;
 
 public interface UserRepository {
-    User add(User user) throws NullQueryException;
+    Integer add(User user) throws NullQueryException;
+
+    Boolean auth(String firstName, String lastName, String email) throws NullQueryException;
 
     void delete(Integer id) throws NullQueryException;
 

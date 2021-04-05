@@ -5,9 +5,9 @@ import by.entity.base.Image;
 import by.entity.base.User;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
-import by.servlet.requestentity.UpdateAdRequest;
-import by.servlet.responseentity.GetAdResponse;
-import by.servlet.responseentity.PaginationGetAdResponse;
+import by.servlet.request.UpdateAdRequest;
+import by.servlet.response.ad.GetAdResponse;
+import by.servlet.response.ad.PaginationGetAdResponse;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

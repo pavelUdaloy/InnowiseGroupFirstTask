@@ -41,8 +41,10 @@ public class TextLabels {
     public static final String PAGE_PARAM = "page";
 
     //logger messages
-    public static final String FILTER_INIT = "MainFilter initialized";
-    public static final String FILTER_DESTROY = "MainFilter destroyed";
+    public static final String LOG_FILTER_INIT = "LogFilter initialized";
+    public static final String LOG_FILTER_DESTROY = "LogFilter destroyed";
+    public static final String AUTH_FILTER_INIT = "AuthFilter initialized";
+    public static final String AUTH_FILTER_DESTROY = "AuthFilter destroyed";
     public static final String EXCEPTION_MESSAGE = "Exception - ";
     public static final String HTTP_METHOD_MESSAGE = " HTTP Method - ";
 
@@ -54,4 +56,6 @@ public class TextLabels {
     public static final String REQUEST_EXCEPTION_LABEL = "An input or output exception occurred in request";
     public static final String FILE_JSON_EXCEPTION_LABEL = "Cannot import this file to json";
     public static final String REQUEST_PARSER_EXCEPTION_LABEL = "Incorrect parameter(s) in request";
+    public static final String AUTH_EXCEPTION_LABEL = "Cannot auth(some user authed now)";
+    public static final String REQUEST_HEADER_EXCEPTION_LABEL = "Wrong header(s) in request";
 }

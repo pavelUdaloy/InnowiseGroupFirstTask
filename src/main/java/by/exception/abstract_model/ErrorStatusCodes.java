@@ -13,7 +13,9 @@ public enum ErrorStatusCodes implements ExceptionStatusCode {
     RESPONSE_STATUS(500),
     REQUEST_STATUS(400),
     FILE_JSON_STATUS(500),
-    REQUEST_PARSER_STATUS(400);
+    REQUEST_PARSER_STATUS(400),
+    REQUEST_HEADER_STATUS(400),
+    AUTH_STATUS(401);
 
     private final Integer status;
 }

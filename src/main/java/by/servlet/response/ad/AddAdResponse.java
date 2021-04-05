@@ -1,4 +1,4 @@
-package by.servlet.responseentity;
+package by.servlet.response.ad;
 
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetAdResponse {
-    private CarAdDto carAdDto = new CarAdDto();
-    private List<ImageDto> imageDtos = new ArrayList<>();
+public class AddAdResponse {
+    private CarAdDto carAdDto;
+    private List<ImageDto> imageDtos;
 }

@@ -1,10 +1,10 @@
 package by.repository;
 
-import by.db.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.requestentity.UpdateAdRequest;
+import by.provider.EntityManagerProvider;
+import by.servlet.request.UpdateAdRequest;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 

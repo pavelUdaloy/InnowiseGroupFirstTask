@@ -4,11 +4,11 @@ import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.responseentity.AddAdResponse;
-import by.servlet.responseentity.DeleteAdResponse;
-import by.servlet.responseentity.GetAdResponse;
-import by.servlet.responseentity.PaginationGetAdResponse;
-import by.servlet.responseentity.UpdateAdResponse;
+import by.servlet.response.ad.AddAdResponse;
+import by.servlet.response.ad.DeleteAdResponse;
+import by.servlet.response.ad.GetAdResponse;
+import by.servlet.response.ad.PaginationGetAdResponse;
+import by.servlet.response.ad.UpdateAdResponse;
 
 import java.util.List;
 

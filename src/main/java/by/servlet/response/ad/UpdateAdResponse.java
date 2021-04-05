@@ -1,4 +1,4 @@
-package by.servlet.responseentity;
+package by.servlet.response.ad;
 
 import by.entity.dto.CarAdDto;
 import lombok.Getter;
@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UpdateAdResponse {
-    private CarAdDto carAdDto = new CarAdDto();
+    private CarAdDto carAdDto;
 }

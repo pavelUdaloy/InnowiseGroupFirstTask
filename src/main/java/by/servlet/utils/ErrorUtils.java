@@ -1,11 +1,7 @@
-package by.servlet;
+package by.servlet.utils;
 
 import by.exception.abstract_model.AbstractException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.SneakyThrows;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +20,7 @@ public class ErrorUtils {
     private static final Logger LOGGER = Logger.getLogger(String.valueOf(ErrorUtils.class));
 
     @SneakyThrows
-    void sendErrorJson(HttpServletResponse resp, AbstractException exception) {
+    public void sendErrorJson(HttpServletResponse resp, AbstractException exception) {
         PrintWriter out = resp.getWriter();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorId(), exception.getErrorCode(), exception.getErrorStatusCode());
         String jsonString = objectMapper.writeValueAsString(errorResponse);
@@ -33,15 +29,5 @@ public class ErrorUtils {
         out.print(jsonString);
         out.flush();
         LOGGER.log(Level.SEVERE, EXCEPTION_MESSAGE + jsonString);
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ErrorResponse {
-        private String errorId;
-        private String errorCode;
-        private Integer errorStatusCode;
     }
 }

@@ -1,9 +1,9 @@
 package by.repository;
 
-import by.db.EntityManagerProvider;
 import by.entity.base.Image;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
+import by.provider.EntityManagerProvider;
 import org.hibernate.annotations.QueryHints;
 
 public class ImageRepositoryImpl implements ImageRepository {

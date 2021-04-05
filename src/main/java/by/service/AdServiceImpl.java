@@ -1,21 +1,22 @@
 package by.service;
 
-import by.db.EntityManagerProvider;
 import by.entity.base.CarAd;
-import by.entity.base.User;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
+import by.entity.dto.UserDto;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
 import by.mapper.CarAdMapper;
+import by.mapper.UserMapper;
+import by.provider.EntityManagerProvider;
 import by.repository.CarAdRepository;
 import by.repository.CarAdRepositoryImpl;
-import by.servlet.requestentity.UpdateAdRequest;
-import by.servlet.responseentity.AddAdResponse;
-import by.servlet.responseentity.DeleteAdResponse;
-import by.servlet.responseentity.GetAdResponse;
-import by.servlet.responseentity.PaginationGetAdResponse;
-import by.servlet.responseentity.UpdateAdResponse;
+import by.servlet.request.UpdateAdRequest;
+import by.servlet.response.ad.AddAdResponse;
+import by.servlet.response.ad.DeleteAdResponse;
+import by.servlet.response.ad.GetAdResponse;
+import by.servlet.response.ad.PaginationGetAdResponse;
+import by.servlet.response.ad.UpdateAdResponse;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -28,12 +29,12 @@ public class AdServiceImpl implements AdService {
     private final UserService userService = new UserServiceImpl();
 
     private final CarAdMapper carAdMapper = new CarAdMapper();
+    private final UserMapper userMapper = new UserMapper();
 
     @Override
     public AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos) throws ConnectionWithDBLostException, NullQueryException {
-        User user = userService.get(carAdDto.getOwnerId());
-
-        CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, user, imageDtos);
+        UserDto userDto = userService.get(carAdDto.getOwnerId());
+        CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, userMapper.convertDtoToUser(userDto), imageDtos);
 
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         Integer id = null;
@@ -42,6 +43,10 @@ public class AdServiceImpl implements AdService {
             EntityManagerProvider.getEntityManager().getTransaction().commit();
         } catch (NullQueryException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new NullQueryException();
+        } catch (RuntimeException e) {
+            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new ConnectionWithDBLostException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -68,6 +73,10 @@ public class AdServiceImpl implements AdService {
             EntityManagerProvider.getEntityManager().getTransaction().commit();
         } catch (NullQueryException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new NullQueryException();
+        } catch (RuntimeException e) {
+            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new ConnectionWithDBLostException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -91,7 +100,9 @@ public class AdServiceImpl implements AdService {
         } finally {
             EntityManagerProvider.clear();
         }
-        if (carAd == null) throw new NullQueryException();
+        if (carAd == null) {
+            throw new NullQueryException();
+        }
         return carAdMapper.convertCarAdToGetDto(carAd);
     }
 
@@ -106,6 +117,9 @@ public class AdServiceImpl implements AdService {
         } catch (NullQueryException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
             throw new NullQueryException();
+        } catch (RuntimeException e) {
+            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new ConnectionWithDBLostException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -131,7 +145,9 @@ public class AdServiceImpl implements AdService {
         } finally {
             EntityManagerProvider.clear();
         }
-        if (carAds == null) throw new NullQueryException();
+        if (carAds == null) {
+            throw new NullQueryException();
+        }
         return carAdMapper.convertCarAdToGetPaginationDto(carAds);
     }
 }

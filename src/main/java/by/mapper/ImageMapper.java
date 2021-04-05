@@ -2,7 +2,7 @@ package by.mapper;
 
 import by.entity.base.Image;
 import by.entity.dto.ImageDto;
-import by.servlet.responseentity.GetImageResponse;
+import by.servlet.response.ad.GetImageResponse;
 
 public class ImageMapper {
     public GetImageResponse convertImageToDtoResponse(Image image) {

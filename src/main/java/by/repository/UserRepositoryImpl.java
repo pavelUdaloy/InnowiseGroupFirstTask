@@ -1,10 +1,10 @@
 package by.repository;
 
-import by.db.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.entity.base.User;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
+import by.provider.EntityManagerProvider;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 
@@ -13,14 +13,32 @@ import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
     @Override
-    public User add(User user) throws NullQueryException {
+    public Integer add(User user) throws NullQueryException {
         Integer id;
         try {
             id = (Integer) EntityManagerProvider.getEntityManager().unwrap(Session.class).save(user);
         } catch (Exception e) {
             throw new NullQueryException(e);
         }
-        return get(id);
+        return id;
+    }
+
+    @Override
+    public Boolean auth(String firstName, String lastName, String email) throws NullQueryException {
+        try {
+            User user = EntityManagerProvider.getEntityManager()
+                    .createQuery("select distinct u from User u WHERE u.email = :email " +
+                            "AND u.lastName = :lastName AND u.firstName = :firstName", User.class)
+                    .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+                    .setParameter("email", email).setParameter("lastName", lastName)
+                    .setParameter("firstName", firstName).getSingleResult();
+            if (user != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            throw new NullQueryException(e);
+        }
+        return false;
     }
 
     @Override

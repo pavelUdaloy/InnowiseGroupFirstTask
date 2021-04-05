@@ -11,11 +11,12 @@ import by.exception.JsonParserException;
 import by.exception.NullQueryException;
 import by.service.AdService;
 import by.service.AdServiceImpl;
-import by.servlet.responseentity.AddAdResponse;
-import by.servlet.responseentity.DeleteAdResponse;
-import by.servlet.responseentity.GetAdResponse;
-import by.servlet.responseentity.PaginationGetAdResponse;
-import by.servlet.responseentity.UpdateAdResponse;
+import by.servlet.response.ad.AddAdResponse;
+import by.servlet.response.ad.DeleteAdResponse;
+import by.servlet.response.ad.GetAdResponse;
+import by.servlet.response.ad.PaginationGetAdResponse;
+import by.servlet.response.ad.UpdateAdResponse;
+import by.servlet.utils.ErrorUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
@@ -64,17 +65,17 @@ import static by.util.TextLabels.SPLITTER;
 import static by.util.TextLabels.UTF8;
 import static by.util.TextLabels.property;
 
-@WebServlet(name = "by/servlet/CarAdServlet.java", urlPatterns = "/ads")
+@WebServlet(name = "by/servlet/AdsServlet.java", urlPatterns = "/ads")
 public class AdsServlet extends HttpServlet {
-
-    private String basePath;
-    private ServletFileUpload upload;
 
     private final AdService adService = new AdServiceImpl();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ErrorUtils errorUtils = new ErrorUtils();
+
+    private String basePath;
+    private ServletFileUpload upload;
 
     @SneakyThrows
     @Override
@@ -192,7 +193,8 @@ public class AdsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            Integer ownerId = (Integer) req.getSession().getAttribute(ID);
+//            Integer ownerId = (Integer) req.getSession().getAttribute(ID);
+            Integer ownerId = 19;
             if (!ServletFileUpload.isMultipartContent(req)) {
                 throw new FileUploadException();
             }
@@ -211,7 +213,9 @@ public class AdsServlet extends HttpServlet {
                     }
                 } else throw new CustomRequestException();
             }
-            if (carAdDTO == null) throw new NullPointerException();
+            if (carAdDTO == null) {
+                throw new NullPointerException();
+            }
 
             AddAdResponse addAdResponse = adService.add(carAdDTO, imageDtos);
 

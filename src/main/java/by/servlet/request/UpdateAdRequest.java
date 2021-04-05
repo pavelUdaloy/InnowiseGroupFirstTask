@@ -1,4 +1,4 @@
-package by.servlet.requestentity;
+package by.servlet.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

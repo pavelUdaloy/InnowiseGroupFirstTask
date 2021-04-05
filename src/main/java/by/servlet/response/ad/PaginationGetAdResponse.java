@@ -1,15 +1,14 @@
-package by.servlet.responseentity;
+package by.servlet.response.ad;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class PaginationGetAdResponse {
-    List<GetAdResponse> responses = new ArrayList<>();
+    List<GetAdResponse> responses;
 }

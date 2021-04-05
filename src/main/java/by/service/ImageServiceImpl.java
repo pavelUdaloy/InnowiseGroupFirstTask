@@ -1,13 +1,13 @@
 package by.service;
 
-import by.db.EntityManagerProvider;
 import by.entity.base.Image;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
 import by.mapper.ImageMapper;
+import by.provider.EntityManagerProvider;
 import by.repository.ImageRepository;
 import by.repository.ImageRepositoryImpl;
-import by.servlet.responseentity.GetImageResponse;
+import by.servlet.response.ad.GetImageResponse;
 
 public class ImageServiceImpl implements ImageService {
 
@@ -30,7 +30,9 @@ public class ImageServiceImpl implements ImageService {
         } finally {
             EntityManagerProvider.clear();
         }
-        if (image == null) throw new NullQueryException();
+        if (image == null) {
+            throw new NullQueryException();
+        }
         return imageMapper.convertImageToDtoResponse(image);
     }
 }
