@@ -15,6 +15,9 @@ import by.servlet.response.user.AuthResponse;
 import by.servlet.utils.ErrorUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +31,10 @@ import static by.util.TextLabels.UTF8;
 
 @WebServlet(name = "by/servlet/AuthServlet.java", urlPatterns = "/auth")
 public class AuthServlet extends HttpServlet {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule()).findAndRegisterModules();
 
     private final UserService userService = new UserServiceImpl();
     private final UserMapper userMapper = new UserMapper();

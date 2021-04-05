@@ -19,6 +19,9 @@ import by.servlet.response.ad.UpdateAdResponse;
 import by.servlet.utils.ErrorUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.google.common.base.Splitter;
 import lombok.SneakyThrows;
 import org.apache.commons.fileupload.FileItem;
@@ -37,9 +40,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +72,10 @@ public class AdsServlet extends HttpServlet {
 
     private final AdService adService = new AdServiceImpl();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule()).findAndRegisterModules();
 
     private final ErrorUtils errorUtils = new ErrorUtils();
 
@@ -206,7 +211,7 @@ public class AdsServlet extends HttpServlet {
                 if (!fileItem.isFormField() && fileItem.getSize() <= upload.getSizeMax()) {
                     String contentType = fileItem.getContentType();
                     if (contentType.equals(JSON_FILE)) {
-                        carAdDTO = getCarAdDTORequest(ownerId, inc, fileItem);
+                        carAdDTO = getCarAdDTORequest(ownerId, fileItem);
                     } else {
                         ImageDto imageDTO = getImageDTORequest(fileItem);
                         imageDtos.add(imageDTO);
@@ -241,7 +246,7 @@ public class AdsServlet extends HttpServlet {
     private ImageDto getImageDTORequest(FileItem item) throws CustomFileToJsonException {
         String oldName = item.getName();
         String fileType = oldName.substring(oldName.lastIndexOf(DOT));
-        Timestamp timestamp = new Timestamp(new Date().getTime());
+        LocalDateTime timestamp = LocalDateTime.now();
         String newName = timestamp.toString().replaceAll(ANY_NOT_NUMERAL_SYMBOL, EMPTY);
         try {
             item.write(new File(basePath + newName + fileType));
@@ -254,7 +259,7 @@ public class AdsServlet extends HttpServlet {
         return image;
     }
 
-    private CarAdDto getCarAdDTORequest(Integer ownerId, int inc, FileItem jsonFile) throws JsonParserException, CustomFileToJsonException {
+    private CarAdDto getCarAdDTORequest(Integer ownerId, FileItem jsonFile) throws JsonParserException, CustomFileToJsonException {
         CarAdDto carAdDTO;
         BufferedReader reader;
         File fileForRead = new File(DEF_NAME);
@@ -269,8 +274,7 @@ public class AdsServlet extends HttpServlet {
         } catch (IOException e) {
             throw new JsonParserException();
         }
-        Timestamp timestamp = new Timestamp(new Date().getTime());
-        timestamp.setNanos(timestamp.getNanos() + (100000000 + inc * 2));
+        LocalDateTime timestamp = LocalDateTime.now();
         carAdDTO.setCreationDate(timestamp);
         carAdDTO.setLastEditDate(timestamp);
         carAdDTO.setOwnerId(ownerId);

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,5 +17,5 @@ public class UpdateAdRequest {
     private Integer mileage;
     private Integer engineSize;
     private Integer enginePower;
-    private Timestamp lastEditDate;
+    private LocalDateTime lastEditDate;
 }

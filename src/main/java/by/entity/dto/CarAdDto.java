@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class CarAdDto {
     private Integer mileage;
     private Integer engineSize;
     private Integer enginePower;
-    private Timestamp creationDate;
-    private Timestamp lastEditDate;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastEditDate;
     private CarAd.CarCondition condition;
 }

@@ -18,8 +18,7 @@ import by.servlet.response.ad.GetAdResponse;
 import by.servlet.response.ad.PaginationGetAdResponse;
 import by.servlet.response.ad.UpdateAdResponse;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AdServiceImpl implements AdService {
@@ -108,7 +107,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public UpdateAdResponse update(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage) throws ConnectionWithDBLostException, NullQueryException {
-        Timestamp lastEditDate = new Timestamp(new Date().getTime());
+        LocalDateTime lastEditDate = LocalDateTime.now();
         UpdateAdRequest updateAdRequest = carAdMapper.convertDataToUpdateReq(id, age, brand, model, engineSize, enginePower, mileage, lastEditDate);
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {

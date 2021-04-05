@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -48,10 +48,10 @@ public class CarAd {
     private Integer enginePower;
     @NotNull
     @Column(name = "creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
     @NotNull
     @Column(name = "last_edit_date")
-    private Timestamp lastEditDate;
+    private LocalDateTime lastEditDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User user;

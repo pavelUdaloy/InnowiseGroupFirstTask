@@ -9,7 +9,7 @@ import by.servlet.request.UpdateAdRequest;
 import by.servlet.response.ad.GetAdResponse;
 import by.servlet.response.ad.PaginationGetAdResponse;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class CarAdMapper {
         return carAd;
     }
 
-    public UpdateAdRequest convertDataToUpdateReq(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage, Timestamp lastEditDate) {
+    public UpdateAdRequest convertDataToUpdateReq(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage, LocalDateTime lastEditDate) {
         UpdateAdRequest updateAdRequest = new UpdateAdRequest();
         updateAdRequest.setId(id);
         updateAdRequest.setAge(age);
