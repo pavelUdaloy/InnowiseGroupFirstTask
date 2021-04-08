@@ -58,4 +58,7 @@ public class TextLabels {
     public static final String REQUEST_PARSER_EXCEPTION_LABEL = "Incorrect parameter(s) in request";
     public static final String AUTH_EXCEPTION_LABEL = "Cannot auth(some user authed now)";
     public static final String REQUEST_HEADER_EXCEPTION_LABEL = "Wrong header(s) in request";
+
+    //frame special keys
+    public static final String READ = "r";
 }

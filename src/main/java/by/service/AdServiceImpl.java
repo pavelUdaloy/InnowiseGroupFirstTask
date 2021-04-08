@@ -1,5 +1,12 @@
 package by.service;
 
+import by.controller.request.ad.UpdateAdRequest;
+import by.controller.response.ad.AddAdResponse;
+import by.controller.response.ad.DeleteAdResponse;
+import by.controller.response.ad.GetAdResponse;
+import by.controller.response.ad.PaginationGetAdResponse;
+import by.controller.response.ad.UpdateAdResponse;
+import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
@@ -8,27 +15,26 @@ import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
 import by.mapper.CarAdMapper;
 import by.mapper.UserMapper;
-import by.provider.EntityManagerProvider;
 import by.repository.CarAdRepository;
-import by.repository.CarAdRepositoryImpl;
-import by.servlet.request.UpdateAdRequest;
-import by.servlet.response.ad.AddAdResponse;
-import by.servlet.response.ad.DeleteAdResponse;
-import by.servlet.response.ad.GetAdResponse;
-import by.servlet.response.ad.PaginationGetAdResponse;
-import by.servlet.response.ad.UpdateAdResponse;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class AdServiceImpl implements AdService {
 
-    private final CarAdRepository carAdRepository = new CarAdRepositoryImpl();
+    private final CarAdRepository carAdRepository;
+    private final UserService userService;
+    private final CarAdMapper carAdMapper;
+    private final UserMapper userMapper;
 
-    private final UserService userService = new UserServiceImpl();
-
-    private final CarAdMapper carAdMapper = new CarAdMapper();
-    private final UserMapper userMapper = new UserMapper();
+    public AdServiceImpl(CarAdRepository carAdRepository, UserService userService, CarAdMapper carAdMapper, UserMapper userMapper) {
+        this.carAdRepository = carAdRepository;
+        this.userService = userService;
+        this.carAdMapper = carAdMapper;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos) throws ConnectionWithDBLostException, NullQueryException {
@@ -106,9 +112,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public UpdateAdResponse update(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage) throws ConnectionWithDBLostException, NullQueryException {
-        LocalDateTime lastEditDate = LocalDateTime.now();
-        UpdateAdRequest updateAdRequest = carAdMapper.convertDataToUpdateReq(id, age, brand, model, engineSize, enginePower, mileage, lastEditDate);
+    public UpdateAdResponse update(UpdateAdRequest updateAdRequest) throws ConnectionWithDBLostException, NullQueryException {
+        updateAdRequest.setLastEditDate(LocalDateTime.now());
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {
             carAdRepository.update(updateAdRequest);
@@ -122,7 +127,7 @@ public class AdServiceImpl implements AdService {
         } finally {
             EntityManagerProvider.clear();
         }
-        GetAdResponse getAdResponse = get(id);
+        GetAdResponse getAdResponse = get(updateAdRequest.getId());
         UpdateAdResponse updateAdResponse = new UpdateAdResponse();
         updateAdResponse.setCarAdDto(getAdResponse.getCarAdDto());
         return updateAdResponse;

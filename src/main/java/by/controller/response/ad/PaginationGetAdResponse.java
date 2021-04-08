@@ -1,4 +1,4 @@
-package by.servlet.response.ad;
+package by.controller.response.ad;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

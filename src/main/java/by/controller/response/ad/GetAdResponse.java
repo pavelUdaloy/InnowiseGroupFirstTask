@@ -1,4 +1,4 @@
-package by.servlet.response.ad;
+package by.controller.response.ad;
 
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddAdResponse {
+public class GetAdResponse {
     private CarAdDto carAdDto;
     private List<ImageDto> imageDtos;
 }

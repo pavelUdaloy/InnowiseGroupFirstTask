@@ -1,4 +1,4 @@
-package by.servlet.response.ad;
+package by.controller.response.ad;
 
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;

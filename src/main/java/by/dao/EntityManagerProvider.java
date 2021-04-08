@@ -1,6 +1,5 @@
-package by.provider;
+package by.dao;
 
-import by.db.SessionFactory;
 import by.exception.ConnectionWithDBLostException;
 import lombok.NoArgsConstructor;
 

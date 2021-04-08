@@ -1,10 +1,10 @@
 package by.service;
 
+import by.controller.response.user.AuthResponse;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.response.user.AuthResponse;
 
 import java.util.List;
 

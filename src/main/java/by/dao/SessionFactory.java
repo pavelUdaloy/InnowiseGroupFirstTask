@@ -1,4 +1,4 @@
-package by.db;
+package by.dao;
 
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -10,7 +10,6 @@ public class SessionFactory {
     private org.hibernate.SessionFactory sessionFactory;
 
     public SessionFactory() {
-
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure().build();
         try {

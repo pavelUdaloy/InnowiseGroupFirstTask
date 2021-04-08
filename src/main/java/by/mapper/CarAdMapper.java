@@ -1,18 +1,18 @@
 package by.mapper;
 
+import by.controller.response.ad.GetAdResponse;
+import by.controller.response.ad.PaginationGetAdResponse;
 import by.entity.base.CarAd;
 import by.entity.base.Image;
 import by.entity.base.User;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
-import by.servlet.request.UpdateAdRequest;
-import by.servlet.response.ad.GetAdResponse;
-import by.servlet.response.ad.PaginationGetAdResponse;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CarAdMapper {
 
     public CarAd convertDtoToCarAd(CarAdDto carAdDto, User user, List<ImageDto> imageDtos) {
@@ -41,19 +41,6 @@ public class CarAdMapper {
         carAd.setImages(images);
 
         return carAd;
-    }
-
-    public UpdateAdRequest convertDataToUpdateReq(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage, LocalDateTime lastEditDate) {
-        UpdateAdRequest updateAdRequest = new UpdateAdRequest();
-        updateAdRequest.setId(id);
-        updateAdRequest.setAge(age);
-        updateAdRequest.setBrand(brand);
-        updateAdRequest.setModel(model);
-        updateAdRequest.setEnginePower(enginePower);
-        updateAdRequest.setEngineSize(engineSize);
-        updateAdRequest.setMileage(mileage);
-        updateAdRequest.setLastEditDate(lastEditDate);
-        return updateAdRequest;
     }
 
     public PaginationGetAdResponse convertCarAdToGetPaginationDto(List<CarAd> carAds) {

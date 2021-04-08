@@ -2,7 +2,9 @@ package by.mapper;
 
 import by.entity.base.User;
 import by.entity.dto.UserDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
     public User convertDtoToUser(UserDto userDto) {
         User user = new User();

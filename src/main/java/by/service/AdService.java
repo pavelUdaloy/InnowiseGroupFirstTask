@@ -1,14 +1,15 @@
 package by.service;
 
+import by.controller.request.ad.UpdateAdRequest;
+import by.controller.response.ad.AddAdResponse;
+import by.controller.response.ad.DeleteAdResponse;
+import by.controller.response.ad.GetAdResponse;
+import by.controller.response.ad.PaginationGetAdResponse;
+import by.controller.response.ad.UpdateAdResponse;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.response.ad.AddAdResponse;
-import by.servlet.response.ad.DeleteAdResponse;
-import by.servlet.response.ad.GetAdResponse;
-import by.servlet.response.ad.PaginationGetAdResponse;
-import by.servlet.response.ad.UpdateAdResponse;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface AdService {
 
     GetAdResponse get(Integer carAdId) throws ConnectionWithDBLostException, NullQueryException;
 
-    UpdateAdResponse update(Integer id, Integer age, String brand, String model, Integer engineSize, Integer enginePower, Integer mileage) throws ConnectionWithDBLostException, NullQueryException;
+    UpdateAdResponse update(UpdateAdRequest updateAdRequest) throws ConnectionWithDBLostException, NullQueryException;
 
     PaginationGetAdResponse getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException, NullQueryException;
 }

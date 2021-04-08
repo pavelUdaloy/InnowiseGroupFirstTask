@@ -3,13 +3,15 @@ package by.repository;
 import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.provider.EntityManagerProvider;
-import by.servlet.request.UpdateAdRequest;
+import by.dao.EntityManagerProvider;
+import by.controller.request.ad.UpdateAdRequest;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class CarAdRepositoryImpl implements CarAdRepository {
 
     @Override

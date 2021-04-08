@@ -4,13 +4,15 @@ import by.entity.base.CarAd;
 import by.entity.base.User;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.provider.EntityManagerProvider;
+import by.dao.EntityManagerProvider;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserRepositoryImpl implements UserRepository {
     @Override
     public Integer add(User user) throws NullQueryException {

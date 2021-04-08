@@ -1,22 +1,27 @@
 package by.service;
 
+import by.controller.response.user.AuthResponse;
+import by.dao.EntityManagerProvider;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
 import by.mapper.UserMapper;
-import by.provider.EntityManagerProvider;
 import by.repository.UserRepository;
-import by.repository.UserRepositoryImpl;
-import by.servlet.response.user.AuthResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    private final UserMapper userMapper = new UserMapper();
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
 
     @Override
     public UserDto add(UserDto userDto) throws ConnectionWithDBLostException, NullQueryException {

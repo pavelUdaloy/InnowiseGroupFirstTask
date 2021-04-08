@@ -1,11 +1,13 @@
 package by.repository;
 
+import by.dao.EntityManagerProvider;
 import by.entity.base.Image;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.provider.EntityManagerProvider;
 import org.hibernate.annotations.QueryHints;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public Image get(Integer id) throws ConnectionWithDBLostException, NullQueryException {

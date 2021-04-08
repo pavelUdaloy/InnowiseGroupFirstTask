@@ -1,4 +1,4 @@
-package by.servlet.utils;
+package by.controller.response.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

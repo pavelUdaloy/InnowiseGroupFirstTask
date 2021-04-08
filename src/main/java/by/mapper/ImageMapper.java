@@ -1,9 +1,11 @@
 package by.mapper;
 
+import by.controller.response.ad.GetImageResponse;
 import by.entity.base.Image;
 import by.entity.dto.ImageDto;
-import by.servlet.response.ad.GetImageResponse;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ImageMapper {
     public GetImageResponse convertImageToDtoResponse(Image image) {
         GetImageResponse getImageResponse = new GetImageResponse();

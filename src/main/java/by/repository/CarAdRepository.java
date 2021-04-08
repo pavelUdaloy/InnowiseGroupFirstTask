@@ -1,9 +1,9 @@
 package by.repository;
 
+import by.controller.request.ad.UpdateAdRequest;
 import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
-import by.servlet.request.UpdateAdRequest;
 
 import java.util.List;
 

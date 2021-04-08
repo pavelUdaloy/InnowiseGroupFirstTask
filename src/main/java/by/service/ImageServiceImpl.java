@@ -1,18 +1,24 @@
 package by.service;
 
+import by.controller.response.ad.GetImageResponse;
+import by.dao.EntityManagerProvider;
 import by.entity.base.Image;
 import by.exception.ConnectionWithDBLostException;
 import by.exception.NullQueryException;
 import by.mapper.ImageMapper;
-import by.provider.EntityManagerProvider;
 import by.repository.ImageRepository;
-import by.repository.ImageRepositoryImpl;
-import by.servlet.response.ad.GetImageResponse;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ImageServiceImpl implements ImageService {
 
-    private final ImageRepository imageRepository = new ImageRepositoryImpl();
-    private final ImageMapper imageMapper = new ImageMapper();
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
+
+    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper) {
+        this.imageRepository = imageRepository;
+        this.imageMapper = imageMapper;
+    }
 
     @Override
     public GetImageResponse get(Integer id) throws ConnectionWithDBLostException, NullQueryException {

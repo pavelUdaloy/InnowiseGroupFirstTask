@@ -1,4 +1,4 @@
-package by.servlet.response.user;
+package by.controller.response.user;
 
 import by.entity.dto.UserDto;
 import lombok.Getter;
