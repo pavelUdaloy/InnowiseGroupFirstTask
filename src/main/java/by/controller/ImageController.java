@@ -1,11 +1,7 @@
 package by.controller;
 
-import by.controller.util.ErrorUtils;
 import by.entity.dto.ImageDto;
-import by.exception.ConnectionWithDBLostException;
 import by.exception.CustomFileToJsonException;
-import by.exception.IncorrectRequestParameterException;
-import by.exception.NullQueryException;
 import by.service.ImageService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,28 +24,22 @@ import static by.util.TextLabels.property;
 @RequestMapping(path = "/images")
 public class ImageController {
 
-    private final ErrorUtils errorUtils;
     private final ImageService imageService;
 
-    public ImageController(ErrorUtils errorUtils, ImageService imageService) {
-        this.errorUtils = errorUtils;
+    public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    ResponseEntity get(@PathVariable Integer id) {
+    ResponseEntity<byte[]> get(@PathVariable Integer id) {
+        ImageDto imageDto = imageService.get(id).getImageDto();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
         try {
-            ImageDto imageDto = imageService.get(id).getImageDto();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
-            return new ResponseEntity(getImageBytes(imageDto), headers, HttpStatus.ACCEPTED);
-        } catch (ConnectionWithDBLostException | NullQueryException ex) {
-            return errorUtils.getErrorResponse(ex);
-        } catch (NumberFormatException ex) {
-            return errorUtils.getErrorResponse(new IncorrectRequestParameterException());
+            return new ResponseEntity<>(getImageBytes(imageDto), headers, HttpStatus.OK);
         } catch (IOException e) {
-            return errorUtils.getErrorResponse(new CustomFileToJsonException());
+            throw new CustomFileToJsonException();
         }
     }
 

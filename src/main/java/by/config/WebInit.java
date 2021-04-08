@@ -9,6 +9,8 @@ import javax.servlet.ServletRegistration;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import static by.util.TextLabels.MAIN_SERVLET_MAPPING_PATH;
+import static by.util.TextLabels.MAIN_SERVLET_NAME;
 import static by.util.TextLabels.PROPERTIES_PATH;
 import static by.util.TextLabels.property;
 
@@ -20,9 +22,9 @@ public class WebInit implements WebApplicationInitializer {
         ctx.setServletContext(servletContext);
 
         ServletRegistration.Dynamic dispatcher
-                = servletContext.addServlet("mvc", new DispatcherServlet(ctx));
+                = servletContext.addServlet(MAIN_SERVLET_NAME, new DispatcherServlet(ctx));
         dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
+        dispatcher.addMapping(MAIN_SERVLET_MAPPING_PATH);
 
         try (FileInputStream fis = new FileInputStream(PROPERTIES_PATH)) {
             property.load(fis);

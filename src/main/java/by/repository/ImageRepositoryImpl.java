@@ -2,7 +2,7 @@ package by.repository;
 
 import by.dao.EntityManagerProvider;
 import by.entity.base.Image;
-import by.exception.ConnectionWithDBLostException;
+import by.exception.DaoOperationException;
 import by.exception.NullQueryException;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ImageRepositoryImpl implements ImageRepository {
     @Override
-    public Image get(Integer id) throws ConnectionWithDBLostException, NullQueryException {
+    public Image get(Integer id) {
         Image image;
         try {
             image = EntityManagerProvider.getEntityManager()
@@ -18,7 +18,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("id", id).getSingleResult();
         } catch (Exception e) {
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         }
         if (image == null) {
             throw new NullQueryException();

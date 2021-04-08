@@ -4,7 +4,7 @@ import by.controller.response.user.AuthResponse;
 import by.dao.EntityManagerProvider;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
-import by.exception.ConnectionWithDBLostException;
+import by.exception.DaoOperationException;
 import by.exception.NullQueryException;
 import by.mapper.UserMapper;
 import by.repository.UserRepository;
@@ -24,19 +24,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto add(UserDto userDto) throws ConnectionWithDBLostException, NullQueryException {
+    public UserDto add(UserDto userDto) {
         User user = userMapper.convertDtoToUser(userDto);
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         Integer id = null;
         try {
             id = userRepository.add(user);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -48,18 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthResponse auth(UserDto userDto) throws ConnectionWithDBLostException, NullQueryException {
+    public AuthResponse auth(UserDto userDto) {
         Boolean result = false;
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {
             result = userRepository.auth(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail());
             EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -71,29 +65,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Integer id) throws NullQueryException, ConnectionWithDBLostException {
+    public void delete(Integer id) {
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {
             userRepository.delete(id);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (NullQueryException | RuntimeException e) {
+        } catch (RuntimeException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
     }
 
     @Override
-    public UserDto get(String email) throws ConnectionWithDBLostException, NullQueryException {
+    public UserDto get(String email) {
+        EntityManagerProvider.getEntityManager().getTransaction().begin();
         User result = null;
         try {
             result = userRepository.get(email);
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -101,16 +93,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto get(Integer id) throws NullQueryException, ConnectionWithDBLostException {
+    public UserDto get(Integer id) {
+        EntityManagerProvider.getEntityManager().getTransaction().begin();
         User result = null;
         try {
             result = userRepository.get(id);
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -119,12 +108,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<User> getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException {
+    public List<User> getWithPagination(Integer size, Integer page) {
+        EntityManagerProvider.getEntityManager().getTransaction().begin();
         List<User> results = null;
         try {
             results = userRepository.getWithPagination(size, page);
-        } catch (NullQueryException e) {
-            System.out.println(e);
+        } catch (RuntimeException e) {
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
@@ -132,17 +122,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(User user) throws NullQueryException, ConnectionWithDBLostException {
+    public UserDto update(User user) {
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {
             userRepository.updateFirstAndLastName(user);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }

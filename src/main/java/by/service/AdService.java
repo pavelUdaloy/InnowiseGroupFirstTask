@@ -8,19 +8,17 @@ import by.controller.response.ad.PaginationGetAdResponse;
 import by.controller.response.ad.UpdateAdResponse;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
-import by.exception.ConnectionWithDBLostException;
-import by.exception.NullQueryException;
 
 import java.util.List;
 
 public interface AdService {
-    AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos) throws ConnectionWithDBLostException, NullQueryException;
+    AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos);
 
-    DeleteAdResponse delete(Integer carAdId) throws ConnectionWithDBLostException, NullQueryException;
+    DeleteAdResponse delete(Integer carAdId);
 
-    GetAdResponse get(Integer carAdId) throws ConnectionWithDBLostException, NullQueryException;
+    GetAdResponse get(Integer carAdId);
 
-    UpdateAdResponse update(UpdateAdRequest updateAdRequest) throws ConnectionWithDBLostException, NullQueryException;
+    UpdateAdResponse update(UpdateAdRequest updateAdRequest);
 
-    PaginationGetAdResponse getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException, NullQueryException;
+    PaginationGetAdResponse getWithPagination(Integer size, Integer page);
 }

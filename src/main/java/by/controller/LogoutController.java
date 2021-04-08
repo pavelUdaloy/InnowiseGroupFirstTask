@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LogoutController {
     @PostMapping(produces = "application/json")
     @ResponseBody
-    ResponseEntity post() {
+    ResponseEntity<LogoutResponse> post() {
         LogoutResponse logoutResponse = new LogoutResponse();
         logoutResponse.setLogout(true);
-        return new ResponseEntity(logoutResponse, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(logoutResponse, HttpStatus.ACCEPTED);
     }
 }

@@ -11,7 +11,7 @@ public class EntityManagerProvider {
     private static final ThreadLocal<EntityManager> THREAD_LOCAL = new ThreadLocal<>();
     private static final SessionFactory sessionFactory = new SessionFactory();
 
-    public static EntityManager getEntityManager() throws ConnectionWithDBLostException {
+    public static EntityManager getEntityManager() {
         try {
             if (THREAD_LOCAL.get() == null) {
                 THREAD_LOCAL.set(sessionFactory.getEntityManager());
@@ -22,7 +22,7 @@ public class EntityManagerProvider {
         }
     }
 
-    public static void clear() throws ConnectionWithDBLostException {
+    public static void clear() {
         EntityManager entityManager = getEntityManager();
         try {
             if (entityManager != null) {

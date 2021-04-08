@@ -1,10 +1,11 @@
 package by.repository;
 
+import by.controller.request.ad.UpdateAdRequest;
+import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.exception.ConnectionWithDBLostException;
+import by.exception.DaoOperationException;
 import by.exception.NullQueryException;
-import by.dao.EntityManagerProvider;
-import by.controller.request.ad.UpdateAdRequest;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -15,29 +16,29 @@ import java.util.List;
 public class CarAdRepositoryImpl implements CarAdRepository {
 
     @Override
-    public Integer add(CarAd carAd) throws ConnectionWithDBLostException, NullQueryException {
+    public Integer add(CarAd carAd){
         Integer id;
         try {
             id = (Integer) EntityManagerProvider.getEntityManager().unwrap(Session.class).save(carAd);
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
         return id;
     }
 
     @Override
-    public void delete(Integer id) throws ConnectionWithDBLostException, NullQueryException {
+    public void delete(Integer id){
         CarAd carAd = new CarAd();
         carAd.setId(id);
         try {
             EntityManagerProvider.getEntityManager().remove(carAd);
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public CarAd get(Integer id) throws NullQueryException, ConnectionWithDBLostException {
+    public CarAd get(Integer id){
         CarAd carAd;
         try {
             carAd = EntityManagerProvider.getEntityManager()
@@ -45,7 +46,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("id", id).getSingleResult();
         } catch (Exception e) {
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         }
         if (carAd == null) {
             throw new NullQueryException();
@@ -55,7 +56,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     }
 
     @Override
-    public void update(UpdateAdRequest updateAdRequest) throws ConnectionWithDBLostException, NullQueryException {
+    public void update(UpdateAdRequest updateAdRequest) {
         try {
             EntityManagerProvider.getEntityManager().unwrap(Session.class)
                     .createQuery("update CarAd c set c.age = :age," +
@@ -76,12 +77,12 @@ public class CarAdRepositoryImpl implements CarAdRepository {
                     .setParameter("id", updateAdRequest.getId())
                     .executeUpdate();
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public List<CarAd> getWithPagination(Integer size, Integer page) throws ConnectionWithDBLostException, NullQueryException {
+    public List<CarAd> getWithPagination(Integer size, Integer page) {
         List<CarAd> carAds;
         try {
             carAds = EntityManagerProvider.getEntityManager()
@@ -89,7 +90,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setFirstResult((page - 1) * size).setMaxResults(size).getResultList();
         } catch (Exception e) {
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         }
         if (carAds == null) {
             throw new NullQueryException();

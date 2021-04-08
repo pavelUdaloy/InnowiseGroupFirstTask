@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static by.util.TextLabels.HTTP_METHOD_MESSAGE;
+import static by.util.TextLabels.POST_INTERCEPTOR_HANDLER;
+import static by.util.TextLabels.PRE_INTERCEPTOR_HANDLER;
 
 @Component
 public class LogInterceptor implements HandlerInterceptor {
@@ -18,12 +20,12 @@ public class LogInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        LOGGER.log(Level.INFO, "pre method ----" + request.getRequestURI() + HTTP_METHOD_MESSAGE + request.getServletPath());
+        LOGGER.log(Level.INFO, PRE_INTERCEPTOR_HANDLER + request.getRequestURI() + HTTP_METHOD_MESSAGE + request.getServletPath());
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        LOGGER.log(Level.INFO, "post method ----" + request.getRequestURI() + HTTP_METHOD_MESSAGE + request.getServletPath());
+        LOGGER.log(Level.INFO, POST_INTERCEPTOR_HANDLER + request.getRequestURI() + HTTP_METHOD_MESSAGE + request.getServletPath());
     }
 }

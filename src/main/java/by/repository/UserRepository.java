@@ -1,23 +1,21 @@
 package by.repository;
 
 import by.entity.base.User;
-import by.exception.ConnectionWithDBLostException;
-import by.exception.NullQueryException;
 
 import java.util.List;
 
 public interface UserRepository {
-    Integer add(User user) throws NullQueryException;
+    Integer add(User user);
 
-    Boolean auth(String firstName, String lastName, String email) throws NullQueryException;
+    Boolean auth(String firstName, String lastName, String email);
 
-    void delete(Integer id) throws NullQueryException;
+    void delete(Integer id);
 
-    User get(String email) throws NullQueryException, ConnectionWithDBLostException;
+    User get(String email);
 
-    User get(Integer id) throws NullQueryException;
+    User get(Integer id);
 
-    List<User> getWithPagination(Integer size, Integer page) throws NullQueryException;
+    List<User> getWithPagination(Integer size, Integer page);
 
-    void updateFirstAndLastName(User user) throws NullQueryException;
+    void updateFirstAndLastName(User user);
 }

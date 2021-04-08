@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public abstract class AbstractException extends Exception implements CommonException {
+public abstract class AbstractException extends RuntimeException implements CommonException {
     private String errorId;
     private String errorCode;
     private Integer errorStatusCode;

@@ -1,10 +1,10 @@
 package by.repository;
 
+import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.entity.base.User;
-import by.exception.ConnectionWithDBLostException;
+import by.exception.DaoOperationException;
 import by.exception.NullQueryException;
-import by.dao.EntityManagerProvider;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -15,18 +15,18 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     @Override
-    public Integer add(User user) throws NullQueryException {
+    public Integer add(User user) {
         Integer id;
         try {
             id = (Integer) EntityManagerProvider.getEntityManager().unwrap(Session.class).save(user);
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
         return id;
     }
 
     @Override
-    public Boolean auth(String firstName, String lastName, String email) throws NullQueryException {
+    public Boolean auth(String firstName, String lastName, String email) {
         try {
             User user = EntityManagerProvider.getEntityManager()
                     .createQuery("select distinct u from User u WHERE u.email = :email " +
@@ -38,24 +38,24 @@ public class UserRepositoryImpl implements UserRepository {
                 return true;
             }
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
         return false;
     }
 
     @Override
-    public void delete(Integer id) throws NullQueryException {
+    public void delete(Integer id) {
         User user = new User();
         user.setId(id);
         try {
             EntityManagerProvider.getEntityManager().remove(user);
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public User get(String email) throws NullQueryException, ConnectionWithDBLostException {
+    public User get(String email) {
         try {
             User user = EntityManagerProvider.getEntityManager()
                     .createQuery("select distinct u from User u  LEFT JOIN FETCH u.telephones WHERE u.email = :email", User.class)
@@ -82,12 +82,12 @@ public class UserRepositoryImpl implements UserRepository {
                 return user;
             }
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public User get(Integer id) throws NullQueryException {
+    public User get(Integer id) {
         try {
             User user = EntityManagerProvider.getEntityManager()
                     .createQuery("select distinct u from User u  LEFT JOIN FETCH u.telephones WHERE u.id = :id", User.class)
@@ -114,12 +114,12 @@ public class UserRepositoryImpl implements UserRepository {
                 return user;
             }
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public List<User> getWithPagination(Integer size, Integer page) throws NullQueryException {
+    public List<User> getWithPagination(Integer size, Integer page) {
         try {
             List<User> users = EntityManagerProvider.getEntityManager()
                     .createQuery("select distinct u from User u LEFT JOIN FETCH u.telephones ORDER BY u.id desc", User.class)
@@ -148,12 +148,12 @@ public class UserRepositoryImpl implements UserRepository {
                 return users;
             }
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 
     @Override
-    public void updateFirstAndLastName(User user) throws NullQueryException {
+    public void updateFirstAndLastName(User user) {
         try {
             EntityManagerProvider.getEntityManager().unwrap(Session.class)
                     .createQuery("update User u set u.firstName = :newFirstName, u.lastName = :newLastName where u.id = :id")
@@ -161,7 +161,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .setParameter("newLastName", user.getLastName())
                     .setParameter("id", user.getId()).executeUpdate();
         } catch (Exception e) {
-            throw new NullQueryException(e);
+            throw new DaoOperationException(e);
         }
     }
 }

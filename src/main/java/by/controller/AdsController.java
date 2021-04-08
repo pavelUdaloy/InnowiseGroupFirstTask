@@ -5,9 +5,6 @@ import by.controller.response.ad.DeleteAdResponse;
 import by.controller.response.ad.GetAdResponse;
 import by.controller.response.ad.PaginationGetAdResponse;
 import by.controller.response.ad.UpdateAdResponse;
-import by.controller.util.ErrorUtils;
-import by.exception.ConnectionWithDBLostException;
-import by.exception.NullQueryException;
 import by.service.AdService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,55 +23,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AdsController {
 
     private final AdService adService;
-    private final ErrorUtils errorUtils;
 
-    public AdsController(AdService adService, ErrorUtils errorUtils) {
+    public AdsController(AdService adService) {
         this.adService = adService;
-        this.errorUtils = errorUtils;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     @ResponseBody
-    ResponseEntity get(@PathVariable Integer id) {
-        try {
-            GetAdResponse getAdResponse = adService.get(id);
-            return new ResponseEntity(getAdResponse, HttpStatus.ACCEPTED);
-        } catch (ConnectionWithDBLostException | NullQueryException ex) {
-            return errorUtils.getErrorResponse(ex);
-        }
+    ResponseEntity<GetAdResponse> get(@PathVariable Integer id) {
+        GetAdResponse getAdResponse = adService.get(id);
+        return new ResponseEntity<>(getAdResponse, HttpStatus.OK);
     }
 
     @GetMapping(produces = "application/json")
     @ResponseBody
-    ResponseEntity get(@RequestParam Integer page, Integer size) {
-        try {
-            PaginationGetAdResponse getAdResponse = adService.getWithPagination(size, page);
-            return new ResponseEntity(getAdResponse, HttpStatus.ACCEPTED);
-        } catch (ConnectionWithDBLostException | NullQueryException ex) {
-            return errorUtils.getErrorResponse(ex);
-        }
+    ResponseEntity<PaginationGetAdResponse> get(@RequestParam Integer page, Integer size) {
+        PaginationGetAdResponse getAdResponse = adService.getWithPagination(size, page);
+        return new ResponseEntity<>(getAdResponse, HttpStatus.OK);
     }
 
     @PutMapping(produces = "application/json")
     @ResponseBody
-    ResponseEntity put(@RequestBody UpdateAdRequest updateAdRequest) {
-        try {
-            UpdateAdResponse update = adService.update(updateAdRequest);
-            return new ResponseEntity(update, HttpStatus.ACCEPTED);
-        } catch (ConnectionWithDBLostException | NullQueryException ex) {
-            return errorUtils.getErrorResponse(ex);
-        }
+    ResponseEntity<UpdateAdResponse> put(@RequestBody UpdateAdRequest updateAdRequest) {
+        UpdateAdResponse update = adService.update(updateAdRequest);
+        return new ResponseEntity<>(update, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(produces = "application/json")
     @ResponseBody
-    ResponseEntity delete(@RequestParam Integer id) {
-        try {
-            DeleteAdResponse deleteAdResponse = adService.delete(id);
-            return new ResponseEntity(deleteAdResponse, HttpStatus.ACCEPTED);
-        } catch (ConnectionWithDBLostException | NullQueryException ex) {
-            return errorUtils.getErrorResponse(ex);
-        }
+    ResponseEntity<DeleteAdResponse> delete(@RequestParam Integer id) {
+        DeleteAdResponse deleteAdResponse = adService.delete(id);
+        return new ResponseEntity<>(deleteAdResponse, HttpStatus.ACCEPTED);
     }
 
 

@@ -3,7 +3,7 @@ package by.service;
 import by.controller.response.ad.GetImageResponse;
 import by.dao.EntityManagerProvider;
 import by.entity.base.Image;
-import by.exception.ConnectionWithDBLostException;
+import by.exception.DaoOperationException;
 import by.exception.NullQueryException;
 import by.mapper.ImageMapper;
 import by.repository.ImageRepository;
@@ -21,18 +21,15 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public GetImageResponse get(Integer id) throws ConnectionWithDBLostException, NullQueryException {
+    public GetImageResponse get(Integer id) {
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         Image image;
         try {
             image = imageRepository.get(id);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (NullQueryException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new NullQueryException();
         } catch (RuntimeException e) {
             EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new ConnectionWithDBLostException();
+            throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
         }
