@@ -127,9 +127,9 @@ public class AdsController implements InitializingBean {
             if (!fileItem.isFormField()) {
                 String contentType = fileItem.getContentType();
                 if (contentType.equals(JSON_FILE)) {
-                    carAdDTO = getCarAdDTORequest(ownerId, fileItem);
+                    carAdDTO = getCarAdDtoReqFromFile(ownerId, fileItem);
                 } else {
-                    ImageDto imageDTO = getImageDTORequest(fileItem);
+                    ImageDto imageDTO = getAndSaveImageDtoReq(fileItem);
                     imageDtos.add(imageDTO);
                 }
             } else throw new CustomRequestException();
@@ -142,7 +142,7 @@ public class AdsController implements InitializingBean {
         return new ResponseEntity<>(addAdResponse, HttpStatus.ACCEPTED);
     }
 
-    private ImageDto getImageDTORequest(FileItem item) {
+    private ImageDto getAndSaveImageDtoReq(FileItem item) {
         String oldName = item.getName();
         String fileType = oldName.substring(oldName.lastIndexOf(DOT));
         LocalDateTime timestamp = LocalDateTime.now();
@@ -158,7 +158,7 @@ public class AdsController implements InitializingBean {
         return image;
     }
 
-    private CarAdDto getCarAdDTORequest(Integer ownerId, FileItem jsonFile) {
+    private CarAdDto getCarAdDtoReqFromFile(Integer ownerId, FileItem jsonFile) {
         CarAdDto carAdDTO;
         BufferedReader reader;
         File fileForRead = new File(DEF_NAME);
