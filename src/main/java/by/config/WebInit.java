@@ -32,10 +32,5 @@ public class WebInit implements WebApplicationInitializer {
             e.printStackTrace();
         }
 
-//        Integer maxUploadSize = Integer.parseInt(property.getProperty(PROPERTIES_MAX_FILE_SIZE));
-//        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(property.getProperty(PROPERTIES_BASE_PATH),
-//                maxUploadSize, maxUploadSize * 2, maxUploadSize / 2);
-//
-//        dispatcher.setMultipartConfig(multipartConfigElement);
     }
 }
