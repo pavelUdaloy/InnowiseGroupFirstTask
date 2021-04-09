@@ -112,9 +112,7 @@ public class AdsController implements InitializingBean {
     @RequestMapping(consumes = {"multipart/form-data"})
     ResponseEntity<AddAdResponse> post(HttpServletRequest request) {
         Integer ownerId = 19; //todo пока нет реализации аутентификации айди хозяина задаю статикой
-        if (!ServletFileUpload.isMultipartContent(request)) {
-            throw new CustomRequestException();
-        }//todo need to delete
+        
         CarAdDto carAdDTO = null;
         List<ImageDto> imageDtos = new ArrayList<>();
         List<FileItem> fileItems;
