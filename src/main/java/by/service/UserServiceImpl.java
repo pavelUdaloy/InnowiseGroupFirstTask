@@ -5,7 +5,6 @@ import by.dao.EntityManagerProvider;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 import by.exception.DaoOperationException;
-import by.exception.NullQueryException;
 import by.mapper.UserMapper;
 import by.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
     public UserDto add(UserDto userDto) {
         User user = userMapper.convertDtoToUser(userDto);
         EntityManagerProvider.getEntityManager().getTransaction().begin();
-        Integer id = null;
+        Integer id;
         try {
             id = userRepository.add(user);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
@@ -37,16 +36,12 @@ public class UserServiceImpl implements UserService {
         } finally {
             EntityManagerProvider.clear();
         }
-        if (id == null) {
-            throw new NullQueryException();
-        } else {
-            return get(id);
-        }
+        return get(id);
     }
 
     @Override
     public AuthResponse auth(UserDto userDto) {
-        Boolean result = false;
+        Boolean result;
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         try {
             result = userRepository.auth(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail());
@@ -81,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto get(String email) {
         EntityManagerProvider.getEntityManager().getTransaction().begin();
-        User result = null;
+        User result;
         try {
             result = userRepository.get(email);
         } catch (RuntimeException e) {
@@ -95,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto get(Integer id) {
         EntityManagerProvider.getEntityManager().getTransaction().begin();
-        User result = null;
+        User result;
         try {
             result = userRepository.get(id);
         } catch (RuntimeException e) {

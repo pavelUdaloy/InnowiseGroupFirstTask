@@ -12,7 +12,6 @@ import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
 import by.entity.dto.UserDto;
 import by.exception.DaoOperationException;
-import by.exception.NullQueryException;
 import by.mapper.CarAdMapper;
 import by.mapper.UserMapper;
 import by.repository.CarAdRepository;
@@ -42,7 +41,7 @@ public class AdServiceImpl implements AdService {
         CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, userMapper.convertDtoToUser(userDto), imageDtos);
 
         EntityManagerProvider.getEntityManager().getTransaction().begin();
-        Integer id = null;
+        Integer id;
         try {
             id = carAdRepository.add(carAd);
             EntityManagerProvider.getEntityManager().getTransaction().commit();
@@ -51,9 +50,6 @@ public class AdServiceImpl implements AdService {
             throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
-        }
-        if (id == null) {
-            throw new NullQueryException();
         }
         GetAdResponse getAdResponse = get(id);
         AddAdResponse addAdResponse = new AddAdResponse();
@@ -96,9 +92,6 @@ public class AdServiceImpl implements AdService {
         } finally {
             EntityManagerProvider.clear();
         }
-        if (carAd == null) {
-            throw new NullQueryException();
-        }
         return carAdMapper.convertCarAdToGetDto(carAd);
     }
 
@@ -133,9 +126,6 @@ public class AdServiceImpl implements AdService {
             throw new DaoOperationException();
         } finally {
             EntityManagerProvider.clear();
-        }
-        if (carAds == null) {
-            throw new NullQueryException();
         }
         return carAdMapper.convertCarAdToGetPaginationDto(carAds);
     }

@@ -4,7 +4,7 @@ import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
 import by.entity.base.User;
 import by.exception.DaoOperationException;
-import by.exception.NullQueryException;
+import by.exception.EmptyDbAnswerException;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -22,7 +22,11 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (Exception e) {
             throw new DaoOperationException(e);
         }
-        return id;
+        if (id == null) {
+            throw new EmptyDbAnswerException();
+        } else{
+            return id;
+        }
     }
 
     @Override
@@ -34,13 +38,10 @@ public class UserRepositoryImpl implements UserRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("email", email).setParameter("lastName", lastName)
                     .setParameter("firstName", firstName).getSingleResult();
-            if (user != null) {
-                return true;
-            }
+            return user != null;
         } catch (Exception e) {
             throw new DaoOperationException(e);
         }
-        return false;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("user", user).getSingleResult();
             if (user == null) {
-                throw new NullQueryException();
+                throw new EmptyDbAnswerException();
             } else {
                 List<CarAd> carAdsFinal = new ArrayList<>();
                 for (CarAd carAd : user.getCarAds()) {
@@ -98,7 +99,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("user", user).getSingleResult();
             if (user == null) {
-                throw new NullQueryException();
+                throw new EmptyDbAnswerException();
             } else {
                 List<CarAd> carAdsFinal = new ArrayList<>();
                 for (CarAd carAd : user.getCarAds()) {
@@ -130,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("users", users).getResultList();
             if (users.size() == 0) {
-                throw new NullQueryException();
+                throw new EmptyDbAnswerException();
             } else {
                 for (User user : users) {
                     List<CarAd> carAdsFinal = new ArrayList<>();

@@ -3,7 +3,7 @@ package by.repository;
 import by.dao.EntityManagerProvider;
 import by.entity.base.Image;
 import by.exception.DaoOperationException;
-import by.exception.NullQueryException;
+import by.exception.EmptyDbAnswerException;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ public class ImageRepositoryImpl implements ImageRepository {
             throw new DaoOperationException();
         }
         if (image == null) {
-            throw new NullQueryException();
+            throw new EmptyDbAnswerException();
         } else {
             return image;
         }

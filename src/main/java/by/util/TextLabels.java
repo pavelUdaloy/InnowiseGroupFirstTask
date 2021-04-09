@@ -39,7 +39,7 @@ public class TextLabels {
 
     //exception
     public static final String CONNECTION_WITH_DB_LOST_EXCEPTION_LABEL = "Connection with db lost";
-    public static final String NULL_SQL_QUERY_EXCEPTION_LABEL = "Sql query for this parameter(s) returns null";
+    public static final String EMPTY_DB_ANSWER_EXCEPTION_LABEL = "DB query returns null";
     public static final String JSON_PARSER_EXCEPTION_LABEL = "Object can't parse to JSON format";
     public static final String RESPONSE_EXCEPTION_LABEL = "An input or output exception occurred in response";
     public static final String DAO_OPERATION_EXCEPTION_LABEL = "Sql statement dropped an exception";

@@ -3,9 +3,8 @@ package by.repository;
 import by.controller.request.ad.UpdateAdRequest;
 import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
-import by.exception.ConnectionWithDBLostException;
 import by.exception.DaoOperationException;
-import by.exception.NullQueryException;
+import by.exception.EmptyDbAnswerException;
 import org.hibernate.Session;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
@@ -16,18 +15,22 @@ import java.util.List;
 public class CarAdRepositoryImpl implements CarAdRepository {
 
     @Override
-    public Integer add(CarAd carAd){
+    public Integer add(CarAd carAd) {
         Integer id;
         try {
             id = (Integer) EntityManagerProvider.getEntityManager().unwrap(Session.class).save(carAd);
         } catch (Exception e) {
             throw new DaoOperationException(e);
         }
-        return id;
+        if (id == null) {
+            throw new EmptyDbAnswerException();
+        } else{
+            return id;
+        }
     }
 
     @Override
-    public void delete(Integer id){
+    public void delete(Integer id) {
         CarAd carAd = new CarAd();
         carAd.setId(id);
         try {
@@ -38,7 +41,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     }
 
     @Override
-    public CarAd get(Integer id){
+    public CarAd get(Integer id) {
         CarAd carAd;
         try {
             carAd = EntityManagerProvider.getEntityManager()
@@ -49,7 +52,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
             throw new DaoOperationException();
         }
         if (carAd == null) {
-            throw new NullQueryException();
+            throw new EmptyDbAnswerException();
         } else {
             return carAd;
         }
@@ -92,8 +95,8 @@ public class CarAdRepositoryImpl implements CarAdRepository {
         } catch (Exception e) {
             throw new DaoOperationException();
         }
-        if (carAds == null) {
-            throw new NullQueryException();
+        if (carAds == null || carAds.size() == 0) {
+            throw new EmptyDbAnswerException();
         } else {
             return carAds;
         }
