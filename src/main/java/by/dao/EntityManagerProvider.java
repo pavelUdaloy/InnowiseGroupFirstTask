@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 public class EntityManagerProvider {
 
     private static final ThreadLocal<EntityManager> THREAD_LOCAL = new ThreadLocal<>();
+    // todo надо по-другому(через бин скоуп это реализовать)
     private static final SessionFactory sessionFactory = new SessionFactory();
 
     public static EntityManager getEntityManager() {
