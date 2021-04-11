@@ -1,6 +1,5 @@
 package by.controller;
 
-import by.controller.request.ad.UpdateAdRequest;
 import by.controller.response.ad.AddAdResponse;
 import by.controller.response.ad.DeleteAdResponse;
 import by.controller.response.ad.GetAdResponse;
@@ -48,8 +47,8 @@ public class AdsController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    UpdateAdResponse put(@RequestBody UpdateAdRequest updateAdRequest) {
-        return adService.update(updateAdRequest);
+    UpdateAdResponse put(@RequestBody CarAdDto carAdDto) {
+        return adService.update(carAdDto);
     }
 
     @DeleteMapping

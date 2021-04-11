@@ -1,6 +1,5 @@
 package by.service;
 
-import by.controller.request.ad.UpdateAdRequest;
 import by.controller.response.ad.AddAdResponse;
 import by.controller.response.ad.DeleteAdResponse;
 import by.controller.response.ad.GetAdResponse;
@@ -129,17 +128,18 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public UpdateAdResponse update(UpdateAdRequest updateAdRequest) {
-        updateAdRequest.setLastEditDate(LocalDateTime.now());
+    public UpdateAdResponse update(CarAdDto carAdDto) {
+        carAdDto.setLastEditDate(LocalDateTime.now());
+        CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto);
         sessionFactory.getEntityManager().getTransaction().begin();
         try {
-            carAdRepository.update(updateAdRequest);
+            carAdRepository.update(carAd);
             sessionFactory.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
             sessionFactory.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
-        GetAdResponse getAdResponse = get(updateAdRequest.getId());
+        GetAdResponse getAdResponse = get(carAd.getId());
         UpdateAdResponse updateAdResponse = new UpdateAdResponse();
         updateAdResponse.setCarAdDto(getAdResponse.getCarAdDto());
         return updateAdResponse;

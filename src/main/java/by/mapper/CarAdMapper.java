@@ -16,20 +16,8 @@ import java.util.List;
 public class CarAdMapper {
 
     public CarAd convertDtoToCarAd(CarAdDto carAdDto, User user, List<ImageDto> imageDtos) {
-        CarAd carAd = new CarAd();
-
+        CarAd carAd = convertDtoToCarAd(carAdDto);
         carAd.setUser(user);
-
-        carAd.setAge(carAdDto.getAge());
-        carAd.setBrand(carAdDto.getBrand());
-        carAd.setModel(carAdDto.getModel());
-        carAd.setCondition(carAdDto.getCondition());
-        carAd.setMileage(carAdDto.getMileage());
-        carAd.setEngineSize(carAdDto.getEngineSize());
-        carAd.setEnginePower(carAdDto.getEnginePower());
-        carAd.setCreationDate(carAdDto.getCreationDate());
-        carAd.setLastEditDate(carAdDto.getLastEditDate());
-
         List<Image> images = new ArrayList<>();
         for (ImageDto imageDto : imageDtos) {
             Image image = new Image();
@@ -39,6 +27,22 @@ public class CarAdMapper {
             images.add(image);
         }
         carAd.setImages(images);
+        return carAd;
+    }
+
+    public CarAd convertDtoToCarAd(CarAdDto carAdDto) {
+        CarAd carAd = new CarAd();
+
+        carAd.setId(carAdDto.getId());
+        carAd.setAge(carAdDto.getAge());
+        carAd.setBrand(carAdDto.getBrand());
+        carAd.setModel(carAdDto.getModel());
+        carAd.setCondition(carAdDto.getCondition());
+        carAd.setMileage(carAdDto.getMileage());
+        carAd.setEngineSize(carAdDto.getEngineSize());
+        carAd.setEnginePower(carAdDto.getEnginePower());
+        carAd.setCreationDate(carAdDto.getCreationDate());
+        carAd.setLastEditDate(carAdDto.getLastEditDate());
 
         return carAd;
     }

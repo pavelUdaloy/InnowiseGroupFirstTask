@@ -1,6 +1,5 @@
 package by.repository;
 
-import by.controller.request.ad.UpdateAdRequest;
 import by.dao.SessionFactory;
 import by.entity.base.CarAd;
 import by.exception.DaoOperationException;
@@ -63,7 +62,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     }
 
     @Override
-    public void update(UpdateAdRequest updateAdRequest) {
+    public void update(CarAd carAd) {
         try {
             sessionFactory.getEntityManager().unwrap(Session.class)
                     .createQuery("update CarAd c set c.age = :age," +
@@ -74,14 +73,14 @@ public class CarAdRepositoryImpl implements CarAdRepository {
                             " c.enginePower = :enginePower, " +
                             " c.engineSize = :engineSize " +
                             "where c.id = :id")
-                    .setParameter("age", updateAdRequest.getAge())
-                    .setParameter("brand", updateAdRequest.getBrand())
-                    .setParameter("mileage", updateAdRequest.getMileage())
-                    .setParameter("model", updateAdRequest.getModel())
-                    .setParameter("lastEditDate", updateAdRequest.getLastEditDate())
-                    .setParameter("enginePower", updateAdRequest.getEnginePower())
-                    .setParameter("engineSize", updateAdRequest.getEngineSize())
-                    .setParameter("id", updateAdRequest.getId())
+                    .setParameter("age", carAd.getAge())
+                    .setParameter("brand", carAd.getBrand())
+                    .setParameter("mileage", carAd.getMileage())
+                    .setParameter("model", carAd.getModel())
+                    .setParameter("lastEditDate", carAd.getLastEditDate())
+                    .setParameter("enginePower", carAd.getEnginePower())
+                    .setParameter("engineSize", carAd.getEngineSize())
+                    .setParameter("id", carAd.getId())
                     .executeUpdate();
         } catch (Exception e) {
             throw new DaoOperationException(e);

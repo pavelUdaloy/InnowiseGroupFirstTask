@@ -1,6 +1,5 @@
 package by.service;
 
-import by.controller.request.ad.UpdateAdRequest;
 import by.controller.response.ad.AddAdResponse;
 import by.controller.response.ad.DeleteAdResponse;
 import by.controller.response.ad.GetAdResponse;
@@ -18,7 +17,7 @@ public interface AdService {
 
     GetAdResponse get(Integer carAdId);
 
-    UpdateAdResponse update(UpdateAdRequest updateAdRequest);
+    UpdateAdResponse update(CarAdDto carAdDto);
 
     PaginationGetAdResponse getWithPagination(Integer size, Integer page);
 }

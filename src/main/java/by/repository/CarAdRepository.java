@@ -1,6 +1,5 @@
 package by.repository;
 
-import by.controller.request.ad.UpdateAdRequest;
 import by.entity.base.CarAd;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public interface CarAdRepository {
 
     CarAd get(Integer id);
 
-    void update(UpdateAdRequest updateAdRequest);
+    void update(CarAd carAd);
 
     List<CarAd> getWithPagination(Integer size, Integer page);
 }
