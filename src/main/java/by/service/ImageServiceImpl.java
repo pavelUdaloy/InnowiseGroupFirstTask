@@ -1,6 +1,5 @@
 package by.service;
 
-import by.dao.SessionFactory;
 import by.entity.base.Image;
 import by.entity.dto.ImageDto;
 import by.exception.CustomFileToJsonException;
@@ -18,12 +17,10 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
-    private final SessionFactory sessionFactory;
 
-    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper, SessionFactory sessionFactory) {
+    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper) {
         this.imageRepository = imageRepository;
         this.imageMapper = imageMapper;
-        this.sessionFactory = sessionFactory;
     }
 
     @Override

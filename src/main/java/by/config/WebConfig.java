@@ -71,7 +71,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public ImageService imageService() {
-        return new ImageServiceImpl(imageRepository, imageMapper, sessionFactory());
+        return new ImageServiceImpl(imageRepository, imageMapper);
     }
 
     @Bean
