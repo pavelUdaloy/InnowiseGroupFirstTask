@@ -31,6 +31,5 @@ public class WebInit implements WebApplicationInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

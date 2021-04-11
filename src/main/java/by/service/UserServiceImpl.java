@@ -1,6 +1,7 @@
 package by.service;
 
 import by.controller.response.user.AuthResponse;
+import by.controller.response.user.LogoutResponse;
 import by.dao.EntityManagerProvider;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
@@ -57,6 +58,13 @@ public class UserServiceImpl implements UserService {
         authResponse.setUserDto(resultUserDto);
         authResponse.setAuth(result);
         return authResponse;
+    }
+
+    @Override
+    public LogoutResponse logout() {
+        LogoutResponse logoutResponse = new LogoutResponse();
+        logoutResponse.setLogout(true);
+        return logoutResponse;
     }
 
     @Override

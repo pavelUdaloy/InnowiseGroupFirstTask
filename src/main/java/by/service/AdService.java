@@ -7,12 +7,12 @@ import by.controller.response.ad.GetAdResponse;
 import by.controller.response.ad.PaginationGetAdResponse;
 import by.controller.response.ad.UpdateAdResponse;
 import by.entity.dto.CarAdDto;
-import by.entity.dto.ImageDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface AdService {
-    AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos);
+    AddAdResponse add(CarAdDto carAdDto, List<MultipartFile> files);
 
     DeleteAdResponse delete(Integer carAdId);
 

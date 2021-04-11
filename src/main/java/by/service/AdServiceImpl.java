@@ -8,17 +8,29 @@ import by.controller.response.ad.PaginationGetAdResponse;
 import by.controller.response.ad.UpdateAdResponse;
 import by.dao.EntityManagerProvider;
 import by.entity.base.CarAd;
+import by.entity.base.User;
 import by.entity.dto.CarAdDto;
 import by.entity.dto.ImageDto;
-import by.entity.dto.UserDto;
+import by.exception.CustomRequestException;
 import by.exception.DaoOperationException;
 import by.mapper.CarAdMapper;
 import by.mapper.UserMapper;
 import by.repository.CarAdRepository;
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import static by.util.TextLabels.ANY_NOT_NUMERAL_SYMBOL;
+import static by.util.TextLabels.DOT;
+import static by.util.TextLabels.EMPTY;
+import static by.util.TextLabels.PROPERTIES_BASE_PATH;
+import static by.util.TextLabels.property;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -36,9 +48,14 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AddAdResponse add(CarAdDto carAdDto, List<ImageDto> imageDtos) {
-        UserDto userDto = userService.get(carAdDto.getOwnerId());
-        CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, userMapper.convertDtoToUser(userDto), imageDtos);
+    public AddAdResponse add(CarAdDto carAdDto, List<MultipartFile> files) {
+        LocalDateTime timestamp = LocalDateTime.now();
+        carAdDto.setCreationDate(timestamp);
+        carAdDto.setLastEditDate(timestamp);
+
+        User user = userMapper.convertDtoToUser(userService.get(carAdDto.getOwnerId()));
+        List<ImageDto> imageDtos = saveFilesAndGetDto(files);
+        CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, user, imageDtos);
 
         EntityManagerProvider.getEntityManager().getTransaction().begin();
         Integer id;
@@ -56,6 +73,34 @@ public class AdServiceImpl implements AdService {
         addAdResponse.setCarAdDto(getAdResponse.getCarAdDto());
         addAdResponse.setImageDtos(getAdResponse.getImageDtos());
         return addAdResponse;
+    }
+
+    private List<ImageDto> saveFilesAndGetDto(List<MultipartFile> files) {
+        String basePath = property.getProperty(PROPERTIES_BASE_PATH);
+        List<ImageDto> imageDtos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (file instanceof CommonsMultipartFile) {
+                CommonsMultipartFile cmf = (CommonsMultipartFile) file;
+                FileItem item = cmf.getFileItem();
+
+                String oldName = item.getName();
+                String fileType = oldName.substring(oldName.lastIndexOf(DOT));
+                LocalDateTime timestamp = LocalDateTime.now();
+                String newName = timestamp.toString().replaceAll(ANY_NOT_NUMERAL_SYMBOL, EMPTY);
+
+                try {
+                    item.write(new File(basePath + newName + fileType));
+                } catch (Exception exception) {
+                    throw new CustomRequestException();
+                }
+
+                ImageDto imageDto = new ImageDto();
+                imageDto.setName(newName);
+                imageDto.setFileFormat(fileType);
+                imageDtos.add(imageDto);
+            }
+        }
+        return imageDtos;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package by.service;
 
 import by.controller.response.user.AuthResponse;
+import by.controller.response.user.LogoutResponse;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 
@@ -10,6 +11,8 @@ public interface UserService {
     UserDto add(UserDto userDto);
 
     AuthResponse auth(UserDto userDto);
+
+    LogoutResponse logout();
 
     void delete(Integer id);
 
