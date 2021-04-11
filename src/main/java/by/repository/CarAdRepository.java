@@ -8,7 +8,7 @@ import java.util.List;
 public interface CarAdRepository {
     Integer add(CarAd carAd);
 
-    void delete(Integer id);
+    void delete(CarAd carAd);
 
     CarAd get(Integer id);
 

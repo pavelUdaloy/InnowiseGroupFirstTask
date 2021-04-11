@@ -1,5 +1,6 @@
 package by.config;
 
+import by.dao.SessionFactory;
 import by.interseptor.LogInterceptor;
 import by.mapper.CarAdMapper;
 import by.mapper.ImageMapper;
@@ -20,6 +21,9 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -62,17 +66,17 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public UserService userService() {
-        return new UserServiceImpl(userRepository, userMapper);
+        return new UserServiceImpl(userRepository, userMapper, sessionFactory());
     }
 
     @Bean
     public ImageService imageService() {
-        return new ImageServiceImpl(imageRepository, imageMapper);
+        return new ImageServiceImpl(imageRepository, imageMapper, sessionFactory());
     }
 
     @Bean
     public AdService adService() {
-        return new AdServiceImpl(carAdRepository, userService(), carAdMapper, userMapper);
+        return new AdServiceImpl(carAdRepository, userService(), carAdMapper, userMapper, sessionFactory());
     }
 
     @Bean
@@ -81,5 +85,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .registerModule(new ParameterNamesModule())
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule()).findAndRegisterModules();
+    }
+
+    @Bean(destroyMethod = "preDestroy")
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public SessionFactory sessionFactory() {
+        return new SessionFactory();
     }
 }

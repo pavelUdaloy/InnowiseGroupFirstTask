@@ -1,10 +1,9 @@
 package by.service;
 
-import by.dao.EntityManagerProvider;
+import by.dao.SessionFactory;
 import by.entity.base.Image;
 import by.entity.dto.ImageDto;
 import by.exception.CustomFileToJsonException;
-import by.exception.DaoOperationException;
 import by.mapper.ImageMapper;
 import by.repository.ImageRepository;
 
@@ -19,25 +18,17 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
+    private final SessionFactory sessionFactory;
 
-    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper) {
+    public ImageServiceImpl(ImageRepository imageRepository, ImageMapper imageMapper, SessionFactory sessionFactory) {
         this.imageRepository = imageRepository;
         this.imageMapper = imageMapper;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public byte[] get(Integer id) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
-        Image image;
-        try {
-            image = imageRepository.get(id);
-            EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
-        }
+        Image image = imageRepository.get(id);
         ImageDto imageDto = imageMapper.convertImageToImageDto(image);
         try {
             return getImageBytes(imageDto);

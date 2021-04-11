@@ -2,7 +2,7 @@ package by.service;
 
 import by.controller.response.user.AuthResponse;
 import by.controller.response.user.LogoutResponse;
-import by.dao.EntityManagerProvider;
+import by.dao.SessionFactory;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 import by.exception.DaoOperationException;
@@ -15,42 +15,32 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final SessionFactory sessionFactory;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, SessionFactory sessionFactory) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public UserDto add(UserDto userDto) {
         User user = userMapper.convertDtoToUser(userDto);
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
+        sessionFactory.getEntityManager().getTransaction().begin();
         Integer id;
         try {
             id = userRepository.add(user);
-            EntityManagerProvider.getEntityManager().getTransaction().commit();
+            sessionFactory.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            sessionFactory.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
         }
         return get(id);
     }
 
     @Override
     public AuthResponse auth(UserDto userDto) {
-        Boolean result;
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
-        try {
-            result = userRepository.auth(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail());
-            EntityManagerProvider.getEntityManager().getTransaction().commit();
-        } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
-            throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
-        }
+        Boolean result = userRepository.auth(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail());
         UserDto resultUserDto = get(userDto.getEmail());
         AuthResponse authResponse = new AuthResponse();
         authResponse.setUserDto(resultUserDto);
@@ -67,72 +57,44 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Integer id) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
+        sessionFactory.getEntityManager().getTransaction().begin();
         try {
             userRepository.delete(id);
-            EntityManagerProvider.getEntityManager().getTransaction().commit();
+            sessionFactory.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            sessionFactory.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
         }
     }
 
     @Override
     public UserDto get(String email) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
-        User result;
-        try {
-            result = userRepository.get(email);
-        } catch (RuntimeException e) {
-            throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
-        }
+        User result = userRepository.get(email);
         return userMapper.convertUserToDto(result);
     }
 
     @Override
     public UserDto get(Integer id) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
-        User result;
-        try {
-            result = userRepository.get(id);
-        } catch (RuntimeException e) {
-            throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
-        }
+        User result = userRepository.get(id);
         return userMapper.convertUserToDto(result);
     }
 
 
     @Override
     public List<User> getWithPagination(Integer size, Integer page) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
-        List<User> results = null;
-        try {
-            results = userRepository.getWithPagination(size, page);
-        } catch (RuntimeException e) {
-            throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
-        }
+        List<User> results = userRepository.getWithPagination(size, page);
         return results;
     }
 
     @Override
     public UserDto update(User user) {
-        EntityManagerProvider.getEntityManager().getTransaction().begin();
+        sessionFactory.getEntityManager().getTransaction().begin();
         try {
             userRepository.updateFirstAndLastName(user);
-            EntityManagerProvider.getEntityManager().getTransaction().commit();
+            sessionFactory.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            EntityManagerProvider.getEntityManager().getTransaction().rollback();
+            sessionFactory.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
-        } finally {
-            EntityManagerProvider.clear();
         }
         return get(user.getId());
     }

@@ -19,6 +19,9 @@
         <property name="hibernate.hikari.dataSource.url">jdbc:postgresql://localhost:5432/simple</property>
         <property name="hibernate.hikari.dataSource.user">docker</property>
         <property name="hibernate.hikari.dataSource.password">docker</property>
+        <property name="hibernate.hikari.minimumIdle">1</property>
+        <property name="hibernate.hikari.maximumPoolSize">50</property>
+        <property name="hibernate.hikari.idleTimeout">30000</property>
         <property name="hibernate.jdbc.lob.non_contextual_creation">true</property>
 
         <mapping class="by.entity.base.User"/>
