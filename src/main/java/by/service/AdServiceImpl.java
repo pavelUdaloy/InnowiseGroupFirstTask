@@ -17,7 +17,6 @@ import by.mapper.CarAdMapper;
 import by.mapper.UserMapper;
 import by.repository.CarAdRepository;
 import org.apache.commons.fileupload.FileItem;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -32,7 +31,6 @@ import static by.util.TextLabels.EMPTY;
 import static by.util.TextLabels.PROPERTIES_BASE_PATH;
 import static by.util.TextLabels.property;
 
-@Service
 public class AdServiceImpl implements AdService {
 
     private final CarAdRepository carAdRepository;

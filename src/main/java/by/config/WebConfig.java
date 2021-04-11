@@ -1,6 +1,18 @@
 package by.config;
 
 import by.interseptor.LogInterceptor;
+import by.mapper.CarAdMapper;
+import by.mapper.ImageMapper;
+import by.mapper.UserMapper;
+import by.repository.CarAdRepository;
+import by.repository.ImageRepository;
+import by.repository.UserRepository;
+import by.service.AdService;
+import by.service.AdServiceImpl;
+import by.service.ImageService;
+import by.service.ImageServiceImpl;
+import by.service.UserService;
+import by.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,9 +33,21 @@ import static by.util.TextLabels.INTERCEPTOR_PATH_PATTERN;
 @ComponentScan(basePackages = "by")
 public class WebConfig implements WebMvcConfigurer {
     private final LogInterceptor logInterceptor;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final CarAdRepository carAdRepository;
+    private final CarAdMapper carAdMapper;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
-    public WebConfig(LogInterceptor logInterceptor) {
+    public WebConfig(LogInterceptor logInterceptor, UserRepository userRepository, UserMapper userMapper, CarAdRepository carAdRepository, CarAdMapper carAdMapper, ImageRepository imageRepository, ImageMapper imageMapper) {
         this.logInterceptor = logInterceptor;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.carAdRepository = carAdRepository;
+        this.carAdMapper = carAdMapper;
+        this.imageRepository = imageRepository;
+        this.imageMapper = imageMapper;
     }
 
     @Override
@@ -34,6 +58,21 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
+    }
+
+    @Bean
+    public UserService userService() {
+        return new UserServiceImpl(userRepository, userMapper);
+    }
+
+    @Bean
+    public ImageService imageService() {
+        return new ImageServiceImpl(imageRepository, imageMapper);
+    }
+
+    @Bean
+    public AdService adService() {
+        return new AdServiceImpl(carAdRepository, userService(), carAdMapper, userMapper);
     }
 
     @Bean

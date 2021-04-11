@@ -7,7 +7,6 @@ import by.exception.CustomFileToJsonException;
 import by.exception.DaoOperationException;
 import by.mapper.ImageMapper;
 import by.repository.ImageRepository;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -16,7 +15,6 @@ import static by.util.TextLabels.PROPERTIES_BASE_PATH;
 import static by.util.TextLabels.READ;
 import static by.util.TextLabels.property;
 
-@Service
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
