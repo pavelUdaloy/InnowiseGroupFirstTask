@@ -11,6 +11,7 @@ import by.service.AdService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,7 +49,10 @@ public class AdsController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    UpdateAdResponse put(@RequestBody CarAdDto carAdDto) {
+    UpdateAdResponse put(@Valid @RequestBody CarAdDto carAdDto, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new CustomRequestException();
+        }
         return adService.update(carAdDto);
     }
 

@@ -18,6 +18,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.30.Final'
     implementation group: 'org.hibernate', name: 'hibernate-proxool', version: '5.4.30.Final'
     implementation group: 'org.hibernate', name: 'hibernate-infinispan', version: '5.4.30.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.10.Final'
     implementation group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.4.30.Final'
     implementation group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.4.30.Final'
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '4.0.3'
