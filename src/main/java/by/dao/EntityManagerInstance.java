@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 
 @Getter
 public class EntityManagerInstance {
-    private EntityManager entityManager;
-    private SessionFactory sessionFactory;
+    private final EntityManager entityManager;
+    private final SessionFactory sessionFactory;
 
     public EntityManagerInstance(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
