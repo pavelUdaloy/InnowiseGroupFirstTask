@@ -1,6 +1,6 @@
 package by.repository;
 
-import by.dao.SessionFactory;
+import by.dao.EntityManagerInstance;
 import by.entity.base.Image;
 import by.exception.DaoOperationException;
 import by.exception.EmptyDbAnswerException;
@@ -10,17 +10,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ImageRepositoryImpl implements ImageRepository {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManagerInstance entityManagerInstance;
 
-    public ImageRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public ImageRepositoryImpl(EntityManagerInstance entityManagerInstance) {
+        this.entityManagerInstance = entityManagerInstance;
     }
 
     @Override
     public Image get(Integer id) {
         Image image;
         try {
-            image = sessionFactory.getEntityManager()
+            image = entityManagerInstance.getEntityManager()
                     .createQuery("select distinct i from Image i WHERE i.id = :id", Image.class)
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("id", id).getSingleResult();

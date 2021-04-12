@@ -5,7 +5,7 @@ import by.controller.response.ad.DeleteAdResponse;
 import by.controller.response.ad.GetAdResponse;
 import by.controller.response.ad.PaginationGetAdResponse;
 import by.controller.response.ad.UpdateAdResponse;
-import by.dao.SessionFactory;
+import by.dao.EntityManagerInstance;
 import by.entity.base.CarAd;
 import by.entity.base.User;
 import by.entity.dto.CarAdDto;
@@ -36,14 +36,14 @@ public class AdServiceImpl implements AdService {
     private final UserService userService;
     private final CarAdMapper carAdMapper;
     private final UserMapper userMapper;
-    private final SessionFactory sessionFactory;
+    private final EntityManagerInstance entityManagerInstance;
 
-    public AdServiceImpl(CarAdRepository carAdRepository, UserService userService, CarAdMapper carAdMapper, UserMapper userMapper, SessionFactory sessionFactory) {
+    public AdServiceImpl(CarAdRepository carAdRepository, UserService userService, CarAdMapper carAdMapper, UserMapper userMapper, EntityManagerInstance entityManagerInstance) {
         this.carAdRepository = carAdRepository;
         this.userService = userService;
         this.carAdMapper = carAdMapper;
         this.userMapper = userMapper;
-        this.sessionFactory = sessionFactory;
+        this.entityManagerInstance = entityManagerInstance;
     }
 
     @Override
@@ -56,13 +56,13 @@ public class AdServiceImpl implements AdService {
         List<ImageDto> imageDtos = saveFilesAndGetDto(files);
         CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto, user, imageDtos);
 
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         Integer id;
         try {
             id = carAdRepository.add(carAd);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
         GetAdResponse getAdResponse = get(id);
@@ -109,12 +109,12 @@ public class AdServiceImpl implements AdService {
 
         CarAd carAd = carAdRepository.get(carAdId);
 
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         try {
             carAdRepository.delete(carAd);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
 
@@ -131,12 +131,12 @@ public class AdServiceImpl implements AdService {
     public UpdateAdResponse update(CarAdDto carAdDto) {
         carAdDto.setLastEditDate(LocalDateTime.now());
         CarAd carAd = carAdMapper.convertDtoToCarAd(carAdDto);
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         try {
             carAdRepository.update(carAd);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
         GetAdResponse getAdResponse = get(carAd.getId());

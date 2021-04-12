@@ -2,7 +2,7 @@ package by.service;
 
 import by.controller.response.user.AuthResponse;
 import by.controller.response.user.LogoutResponse;
-import by.dao.SessionFactory;
+import by.dao.EntityManagerInstance;
 import by.entity.base.User;
 import by.entity.dto.UserDto;
 import by.exception.DaoOperationException;
@@ -15,24 +15,24 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final SessionFactory sessionFactory;
+    private final EntityManagerInstance entityManagerInstance;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, SessionFactory sessionFactory) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, EntityManagerInstance entityManagerInstance) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.sessionFactory = sessionFactory;
+        this.entityManagerInstance = entityManagerInstance;
     }
 
     @Override
     public UserDto add(UserDto userDto) {
         User user = userMapper.convertDtoToUser(userDto);
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         Integer id;
         try {
             id = userRepository.add(user);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
         return get(id);
@@ -57,12 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Integer id) {
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         try {
             userRepository.delete(id);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
     }
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(User user) {
-        sessionFactory.getEntityManager().getTransaction().begin();
+        entityManagerInstance.getEntityManager().getTransaction().begin();
         try {
             userRepository.updateFirstAndLastName(user);
-            sessionFactory.getEntityManager().getTransaction().commit();
+            entityManagerInstance.getEntityManager().getTransaction().commit();
         } catch (RuntimeException e) {
-            sessionFactory.getEntityManager().getTransaction().rollback();
+            entityManagerInstance.getEntityManager().getTransaction().rollback();
             throw new DaoOperationException();
         }
         return get(user.getId());

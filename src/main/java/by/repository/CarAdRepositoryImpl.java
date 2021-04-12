@@ -1,6 +1,6 @@
 package by.repository;
 
-import by.dao.SessionFactory;
+import by.dao.EntityManagerInstance;
 import by.entity.base.CarAd;
 import by.exception.DaoOperationException;
 import by.exception.EmptyDbAnswerException;
@@ -13,17 +13,17 @@ import java.util.List;
 @Repository
 public class CarAdRepositoryImpl implements CarAdRepository {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManagerInstance entityManagerInstance;
 
-    public CarAdRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public CarAdRepositoryImpl(EntityManagerInstance entityManagerInstance) {
+        this.entityManagerInstance = entityManagerInstance;
     }
 
     @Override
     public Integer add(CarAd carAd) {
         Integer id;
         try {
-            id = (Integer) sessionFactory.getEntityManager().unwrap(Session.class).save(carAd);
+            id = (Integer) entityManagerInstance.getEntityManager().unwrap(Session.class).save(carAd);
         } catch (Exception e) {
             throw new DaoOperationException(e);
         }
@@ -37,7 +37,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     @Override
     public void delete(CarAd carAd) {
         try {
-            sessionFactory.getEntityManager().remove(carAd);
+            entityManagerInstance.getEntityManager().remove(carAd);
         } catch (Exception e) {
             throw new DaoOperationException(e);
         }
@@ -47,7 +47,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     public CarAd get(Integer id) {
         CarAd carAd;
         try {
-            carAd = sessionFactory.getEntityManager()
+            carAd = entityManagerInstance.getEntityManager()
                     .createQuery("select distinct c from CarAd c  LEFT JOIN FETCH c.images WHERE c.id = :id", CarAd.class)
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setParameter("id", id).getSingleResult();
@@ -64,7 +64,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     @Override
     public void update(CarAd carAd) {
         try {
-            sessionFactory.getEntityManager().unwrap(Session.class)
+            entityManagerInstance.getEntityManager().unwrap(Session.class)
                     .createQuery("update CarAd c set c.age = :age," +
                             " c.brand = :brand, " +
                             " c.mileage = :mileage, " +
@@ -91,7 +91,7 @@ public class CarAdRepositoryImpl implements CarAdRepository {
     public List<CarAd> getWithPagination(Integer size, Integer page) {
         List<CarAd> carAds;
         try {
-            carAds = sessionFactory.getEntityManager()
+            carAds = entityManagerInstance.getEntityManager()
                     .createQuery("select distinct c from CarAd c LEFT JOIN FETCH c.images ORDER BY c.lastEditDate desc", CarAd.class)
                     .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                     .setFirstResult((page - 1) * size).setMaxResults(size).getResultList();

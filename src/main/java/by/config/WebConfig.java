@@ -1,5 +1,6 @@
 package by.config;
 
+import by.dao.EntityManagerInstance;
 import by.dao.SessionFactory;
 import by.interseptor.LogInterceptor;
 import by.mapper.CarAdMapper;
@@ -66,7 +67,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public UserService userService() {
-        return new UserServiceImpl(userRepository, userMapper, sessionFactory());
+        return new UserServiceImpl(userRepository, userMapper, entityManagerInstance());
     }
 
     @Bean
@@ -76,7 +77,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public AdService adService() {
-        return new AdServiceImpl(carAdRepository, userService(), carAdMapper, userMapper, sessionFactory());
+        return new AdServiceImpl(carAdRepository, userService(), carAdMapper, userMapper, entityManagerInstance());
     }
 
     @Bean
@@ -88,8 +89,13 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean(destroyMethod = "preDestroy")
-    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public SessionFactory sessionFactory() {
         return new SessionFactory();
+    }
+
+    @Bean(destroyMethod = "preDestroy")
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public EntityManagerInstance entityManagerInstance() {
+        return new EntityManagerInstance(sessionFactory());
     }
 }
