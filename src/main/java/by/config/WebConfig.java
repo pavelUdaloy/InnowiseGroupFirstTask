@@ -1,5 +1,6 @@
 package by.config;
 
+import by.controller.UserDtoResolver;
 import by.dao.EntityManagerInstance;
 import by.dao.SessionFactory;
 import by.interseptor.LogInterceptor;
@@ -25,11 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 import static by.util.TextLabels.INTERCEPTOR_PATH_PATTERN;
 
@@ -58,6 +62,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(logInterceptor).addPathPatterns(INTERCEPTOR_PATH_PATTERN);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new UserDtoResolver(objectMapper()));
     }
 
     @Bean
