@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CarAdDtoValidatorTest {
@@ -18,20 +20,17 @@ public class CarAdDtoValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1121212, 312121212, 1, 3, 111111115, Integer.MAX_VALUE})
-    void simplePositiveNumber(Integer number) {
-        Assertions.assertTrue(validator.isValid(number, null));
+    @MethodSource("validatorParams")
+    void simplePositiveNumber(Integer number, boolean expected) {
+        Assertions.assertEquals(validator.isValid(number, null), expected);
     }
 
-    @ParameterizedTest
-    @NullSource
-    void simpleNegativeNumber(Integer number) {
-        Assertions.assertFalse(validator.isValid(number, null));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {-1121212, -312121212, -1, -3, -111111115, Integer.MIN_VALUE})
-    void simpleNull(Integer number) {
-        Assertions.assertFalse(validator.isValid(number, null));
+    private Stream<Arguments> validatorParams() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(1, true),
+                Arguments.of(-1, false),
+                Arguments.of(null, false)
+        );
     }
 }
