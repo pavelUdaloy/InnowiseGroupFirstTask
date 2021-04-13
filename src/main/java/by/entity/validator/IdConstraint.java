@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IdConstraint {
-    String message() default "Invalid phone number";
+    String message() default "Invalid id";
 
     Class<?>[] groups() default {};
 
