@@ -49,6 +49,7 @@ dependencies {
     testCompile "org.junit.jupiter:junit-jupiter-engine:5.7.0"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testCompile "org.springframework:spring-test:5.3.3"
+    testCompile "org.junit.jupiter:junit-jupiter-params:5.7.0"
 
     testCompile "org.hibernate:hibernate-validator:5.2.4.Final"
     testCompile "javax.el:javax.el-api:3.0.0"
